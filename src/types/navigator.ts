@@ -29,5 +29,6 @@ export type MyPageScreens = {
     OtherProfile: {props: UserProfile};
     Followee: undefined;
     Follower: undefined;
+    Setting: undefined;
 }
 

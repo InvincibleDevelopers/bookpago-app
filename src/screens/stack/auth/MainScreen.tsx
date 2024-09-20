@@ -20,23 +20,21 @@ const MainScreen = ({navigation}: Props) => {
     
     
     useOnStart(async ()=> {
-        // const username = await EncryptedStorage.getItem("username");
-        // if(!username) {
-        //     return;
-        // }
+        const username = await EncryptedStorage.getItem("username");
+        if(!username) {
+            return;
+        }
 
-        // const result = await axios.get(`${DOMAIN}/user/login?username=${username}`);
-        // if(result.data !== "error") {
-        //     setUser({
-        //         username: Number(username),
-        //         nickname: result.data.nickname,
-        //     });
-
-        //     setLogin(true);
-        // }
-
-
-        setLogin(true);
+        const result = await axios.get(`${DOMAIN}/user/login?username=${username}`);
+        if(result.data !== "error") {
+            console.log(result.data);
+            setUser({
+                username: Number(username),
+                nickname: result.data.nickname,
+                image: result.data.imageUrl,
+            });
+            setLogin(true);
+        }
 
     });
 

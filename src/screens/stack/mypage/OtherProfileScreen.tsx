@@ -48,6 +48,7 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
           justifyContent: 'space-between',
         }}>
         <CustomButton
+          onPress={()=>navigation.navigate("Followee")}
           textstyle={{marginBottom: 30}}
           containerstyle={{
             zIndex: 10,
@@ -55,7 +56,7 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
             width: 'auto',
             height: 'auto',
           }}
-          text={'MY'}
+          text={'My'}
         />
         <CustomButton
           imageprops={{

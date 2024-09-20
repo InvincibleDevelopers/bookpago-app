@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import CustomButton from "./CustomButton";
 import { UserProfile } from "@src/types";
 import axios from "axios";
@@ -9,18 +9,22 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ParamListBase } from "@react-navigation/native";
 import { MyPageScreens } from "@src/types";
+import useAPI from "@src/hooks/useAPI";
 
 const UserCard = ({OnClick, username, nickname, kakaoOauthToken, gender, age, genre, introduce}: UserProfile) => {
     const {user} = useContext(MainContext);
+    const {postMutation} = useAPI();
 
-    const Submit = async () => {
-        const result = await axios.post(`${DOMAIN}/profile/updatefollowing`, 
-            {
-                follower: username,
-                followee: user.username,
-            },
-        );
-        
+    const Submit = () => {
+        postMutation.mutate({path: "/profile/follow", body: {
+            follower: String(username),
+            followee: String(user.username),
+        }},
+    {
+        onSuccess: ()=>{
+            Alert.alert("처리되었습니다");
+        },
+    });
     };
 
 

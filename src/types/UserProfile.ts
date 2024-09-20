@@ -6,6 +6,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 export interface UserProfile {
     username: number;
     nickname: string;
+    image?: string;
     serverToken?: string;
     kakaoOauthToken?: string;
     gender?: string;

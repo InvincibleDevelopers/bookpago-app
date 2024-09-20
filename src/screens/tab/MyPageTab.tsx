@@ -15,6 +15,7 @@ import ProfileScreen from '../stack/mypage/ProfileScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import FollowingScreen from '../stack/mypage/FollowingScreen';
 import OtherProfileScreen from '../stack/mypage/OtherProfileScreen';
+import SettingScreen from '../stack/mypage/SettingScreen';
 
 type Props = BottomTabScreenProps<MainTabs, 'MyPage'>;
 const Stack = createStackNavigator<MyPageScreens>();
@@ -54,6 +55,19 @@ const MyPageTab = ({navigation}: Props) => {
           },
         }}
         component={OtherProfileScreen}
+      />
+
+<Stack.Screen
+        name="Setting"
+        options={{
+          headerShown: false,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
+        }}
+        component={SettingScreen}
       />
       
     </Stack.Navigator>

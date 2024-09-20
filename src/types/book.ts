@@ -8,3 +8,10 @@ export type SearchBookItem = {
   pubdate: string;
   average_rating: number;
 };
+
+
+export type RecentBookProps = {
+  path: string;
+  title: string;
+  detail: string;
+}
