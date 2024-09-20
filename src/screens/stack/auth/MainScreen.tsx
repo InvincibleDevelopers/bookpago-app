@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<AuthScreens, "Main">;
 
 const MainScreen = ({navigation}: Props) => {
     const {setLogin, user, setUser } = useContext(MainContext);
-    
+    const {getMutation} = useAPI();
     
     
     useOnStart(async ()=> {
@@ -25,16 +25,16 @@ const MainScreen = ({navigation}: Props) => {
             return;
         }
 
-        const result = await axios.get(`${DOMAIN}/user/login?username=${username}`);
-        if(result.data !== "error") {
-            console.log(result.data);
-            setUser({
-                username: Number(username),
-                nickname: result.data.nickname,
-                image: result.data.imageUrl,
-            });
-            setLogin(true);
-        }
+        getMutation.mutate({path: `/user/login?username=${username}`}, {
+            onSuccess: (res) => {
+                setUser({
+                    username: Number(username),
+                    nickname: res.nickname,
+                    image: res.imageUrl,
+                });
+                setLogin(true);
+            },
+        });
 
     });
 
