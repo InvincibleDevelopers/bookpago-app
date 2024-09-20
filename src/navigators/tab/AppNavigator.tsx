@@ -54,7 +54,7 @@ const SocialIcon = ({focused}: {focused: boolean}) => {
 const CalendarIcon = ({focused}: {focused: boolean}) => {
   return (
     <Image
-      style={{width: 50, height: 50}}
+      style={{width: 40, height: 40}}
       resizeMode="cover"
       source={
         focused
