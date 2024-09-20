@@ -104,9 +104,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
               <GroupCard members={5} clubName="Hello" time={"투썸 앞 14:00"} location={"서울대학교"}/>
             </ScrollView>
           </View>
-          <View style={{marginTop: "10%"}}>
+          <ScrollView horizontal={true} style={{marginTop: "10%"}} contentContainerStyle={{gap: 20}}>
             <RecentBook path={"https://front-umber-omega.vercel.app/_next/image?url=%2Fimage.jpg&w=1080&q=75"} title={"해리포터: 죽음의 성물과 아즈카반의 죄수 뭐시기들"} detail={"Rowling, J.K 저자"}/>
-          </View>
+          </ScrollView>
         </View>
       </ScrollView>
     </SafeAreaView>

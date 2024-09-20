@@ -17,7 +17,7 @@ const RecentBook = ({path, title, detail}: RecentBookProps) => {
 const styles = StyleSheet.create({
     container: {
         height: 250,
-        width: "50%",
+        width: 150,
     },
     image: {
         width: "100%",
