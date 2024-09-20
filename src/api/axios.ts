@@ -11,7 +11,6 @@ const get = async ({path, header}: axiosTypes) => {
         const {data} = await axiosInstance.get(`${path}`, {
             headers: header,
         });
-    
         return data;
     }
     else {

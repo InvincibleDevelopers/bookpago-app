@@ -13,4 +13,5 @@ export interface UserProfile {
     genre?: string;
     introduce?: string | "소개글을 입력해주세요";
     OnClick?: Function;
+    isMine?: boolean;
 }

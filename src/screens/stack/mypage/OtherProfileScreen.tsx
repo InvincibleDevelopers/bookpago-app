@@ -4,7 +4,7 @@ import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import {MainContext} from '@src/utils/Context';
-import {useContext, useEffect, useMemo, useState} from 'react';
+import {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import { MyPageScreens, UserProfile } from '@src/types';
 import useOnStart from '@src/hooks/useOnStart';
@@ -13,18 +13,30 @@ import { DOMAIN } from '@env';
 import useAPI from '@src/hooks/useAPI';
 import { useFocusEffect } from '@react-navigation/native';
 
-type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
+type Props = NativeStackScreenProps<MyPageScreens, 'OtherProfile'>;
 
-const ProfileScreen = ({navigation, route}: Props) => {
+const OtherProfileScreen = ({navigation, route}: Props) => {
   const {getMutation, postMutation} = useAPI();
   const [profile, setProfile] = useState<UserProfile>({nickname: "", username: -1});
 
   const {user, token} = useContext(MainContext);
   
   useEffect(()=>{
-      setProfile(user);
-    
+    const temp: UserProfile = {
+      nickname: route.params.props.nickname,
+      username: route.params.props.username,
+      isMine: false,
+    };
+    setProfile(temp);
   },[]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        navigation.navigate("Profile");
+      };
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,7 +84,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
               <View
                 style={{borderWidth: 1, height: '50%', borderColor: 'gray'}}
               />
-              <CustomButton onPress={()=>navigation.navigate("Followee")} bApplyCommonStyle={false} text={"팔로잉"} textprops={{style: {fontSize: 15}}} />
+              <CustomButton bApplyCommonStyle={false} text={"팔로잉"} textprops={{style: {fontSize: 15}}} />
             </View>
           </View>
           {/*-------------------------------------------------*/}
@@ -127,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default OtherProfileScreen;

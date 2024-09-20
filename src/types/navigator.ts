@@ -1,4 +1,5 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { UserProfile } from "./UserProfile";
 
 export type MainTabs = {
     Home: undefined;
@@ -24,7 +25,8 @@ export type HomeScreens = {
 
 
 export type MyPageScreens = {
-    Profile: {userId: string};
+    Profile: undefined;
+    OtherProfile: {props: UserProfile};
     Followee: undefined;
     Follower: undefined;
 }
