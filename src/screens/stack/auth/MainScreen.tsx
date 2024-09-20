@@ -10,11 +10,13 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { Image, SafeAreaView, StyleSheet } from "react-native";
 import EncryptedStorage from "react-native-encrypted-storage";
+import useAPI from "@src/hooks/useAPI";
 
 type Props = NativeStackScreenProps<AuthScreens, "Main">;
 
 const MainScreen = ({navigation}: Props) => {
     const {setLogin, user, setUser } = useContext(MainContext);
+    
     
     
     useOnStart(async ()=> {
@@ -37,6 +39,8 @@ const MainScreen = ({navigation}: Props) => {
         setLogin(true);
 
     });
+
+
     
 
     return(

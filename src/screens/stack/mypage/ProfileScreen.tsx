@@ -10,10 +10,22 @@ import { MyPageScreens } from '@src/types';
 import useOnStart from '@src/hooks/useOnStart';
 import axios from 'axios';
 import { DOMAIN } from '@env';
+import useAPI from '@src/hooks/useAPI';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
 
 const ProfileScreen = ({navigation, route}: Props) => {
+
+  const {getMutation} = useAPI();
+
+
+  useOnStart(()=>{
+    getMutation.mutate({path: "/"}, {
+      onSuccess: (res)=>console.log(res),
+  });
+  });
+    
+
   const {user, token} = useContext(MainContext);
   let userId = user.nickname;
   if(route.params){
