@@ -49,6 +49,10 @@ const MainScreen = ({navigation}: Props) => {
     },
   });
 
+  const onChangeText = (text: string) => {
+    setInputValue(() => text.replace('\n', '')); // 개행문자 제거
+  };
+
   const onSearch = () => {
     Keyboard.dismiss();
     const trimmedInput = inputValue.trim();
@@ -56,7 +60,7 @@ const MainScreen = ({navigation}: Props) => {
       Alert.alert('검색어를 입력해주세요.');
       return;
     }
-    setSearchValue(() => inputValue);
+    setSearchValue(() => trimmedInput);
     setNonce(pre => pre + 1);
   };
 
@@ -70,13 +74,14 @@ const MainScreen = ({navigation}: Props) => {
         <SearchHeader
           isShowAiButton
           aiButtonType="book"
-          onChangeText={setInputValue}
+          value={inputValue}
+          onChangeText={onChangeText}
           onPressBack={() => navigation.goBack()}
           onPressAi={() => console.log('ai')}
           onPressSearch={onSearch}
           onSubmitEditing={onSearch}
           returnKeyType="search"
-          multiline={false} // \n 입력 불가처리
+          multiline={false}
         />
         <BookList
           isLoading={isPending}

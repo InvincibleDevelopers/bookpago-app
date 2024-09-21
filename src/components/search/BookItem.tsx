@@ -1,8 +1,17 @@
 import {BookItem as BookItemType} from '@src/types';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Line from '../Line';
 import CustomText from '../CustomText';
 import {colors} from '@src/constants/colors';
+import {useState} from 'react';
+import ToggleStar from '../ToggleStar';
 
 interface BookItemProps {
   item: BookItemType;
@@ -17,6 +26,12 @@ const BookItem = ({
   onToggleFavorite,
   openDetail,
 }: BookItemProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite(pre => !pre);
+  };
+
   return (
     <Pressable onPress={() => openDetail(item)}>
       <View style={styles.container}>
@@ -52,18 +67,7 @@ const BookItem = ({
                 {item.author}
               </CustomText>
             </View>
-            <View>
-              <Pressable
-                onPress={() =>
-                  onToggleFavorite({
-                    isbn: item.isbn,
-                    isFavorite: true,
-                  })
-                }>
-                {/* <Image /> */}
-                <Text>버튼</Text>
-              </Pressable>
-            </View>
+            <ToggleStar isActive={isFavorite} onPress={toggleFavorite} />
           </View>
           <View style={styles.hashtagBox}>
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>
@@ -88,6 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 14,
+    alignItems: 'center',
   },
   imageBox: {
     marginRight: 16,
@@ -102,10 +107,12 @@ const styles = StyleSheet.create({
   },
   titleBox: {
     marginBottom: 20,
+    width: Dimensions.get('screen').width - 160,
   },
   hashtagBox: {
     flexDirection: 'row',
     color: colors.GRAY,
+    gap: 7,
   },
 });
 
