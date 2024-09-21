@@ -1,15 +1,15 @@
 import CustomText from '@src/components/CustomText';
 import Line from '@src/components/Line';
 import {colors} from '@src/constants/colors';
-import {SearchBookItem} from '@src/types';
+import {BookItem} from '@src/types';
 import {memo, useCallback} from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 interface SearchBookListProps {
   isLoading: boolean;
   search: string;
-  data: SearchBookItem[];
-  enabled: boolean;
+  data: BookItem[];
+  nonce: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
 }
 
@@ -17,11 +17,11 @@ const SearchBookList = ({
   isLoading,
   search,
   data,
-  enabled,
+  nonce,
   onToggleFavorite,
 }: SearchBookListProps) => {
   const renderItem = useCallback(
-    ({item, index}: {item: SearchBookItem; index: number}) => {
+    ({item, index}: {item: BookItem; index: number}) => {
       // console.log('item', item.image);
       return (
         <View style={styles.itemBox}>
@@ -88,7 +88,7 @@ const SearchBookList = ({
     [onToggleFavorite],
   );
 
-  if (!enabled) {
+  if (nonce === 0) {
     // 검색하기 전
     return null;
   }
@@ -102,7 +102,7 @@ const SearchBookList = ({
     );
   }
 
-  if (enabled && data.length === 0) {
+  if (nonce > 0 && data.length === 0) {
     // 검색 결과가 없을때
     return (
       <View>
