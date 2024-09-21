@@ -3,6 +3,7 @@ import {get} from '@src/api/axios';
 import DismissKeyboardView from '@src/components/DismissKeyboardView';
 import BookList from '@src/components/search/BookList';
 import SearchHeader from '@src/components/SearchHeader';
+import {SEARCH_PAGE_SIZE} from '@src/constants';
 import {BookItem, SearchScreens} from '@src/types';
 import {waitfor} from '@src/utils/waitfor';
 import {
@@ -15,8 +16,6 @@ import {Alert, Keyboard, SafeAreaView} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
-const PAGE_SIZE = 20;
-
 const MainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
@@ -28,18 +27,17 @@ const MainScreen = ({navigation}: Props) => {
     queryKey: ['book', searchValue, nonce],
     queryFn: async ({pageParam = 1}) => {
       const body: {books: BookItem[]} = await get({
-        path: `/books/search?query=${searchValue}&page=${pageParam}&size=${PAGE_SIZE}`,
+        path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}`,
       });
-      if (pageParam === 3) {
-        return [];
-      }
       return body.books;
     },
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, lastPageParam, allPageParams) => {
       // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
-      return lastPage.length === PAGE_SIZE ? allPage.length + 1 : undefined;
+      return lastPage.length === SEARCH_PAGE_SIZE
+        ? allPage.length + 1
+        : undefined;
     },
   });
 
