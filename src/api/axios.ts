@@ -13,6 +13,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   error => {
+    console.error('Axios interceptors error: ', error);
     const hasErrorKey = 'error' in error;
     if (!hasErrorKey) {
       // 네트워크 에러인 경우
