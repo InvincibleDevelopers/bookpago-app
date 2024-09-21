@@ -1,23 +1,23 @@
 import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
-import {BookItem} from '@src/types';
+import {BookItem as BookItemType} from '@src/types';
 import {memo, useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import SearchBookItem from './SearchBookItem';
+import BookItem from './BookItem';
 
-interface SearchBookListProps {
+interface BookListProps {
   isLoading: boolean;
   search: string;
-  data: BookItem[];
+  data: BookItemType[];
   nonce: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
-  openDetail: (arg: BookItem) => void;
+  openDetail: (arg: BookItemType) => void;
   onRefresh: () => void;
   onEndReached: () => void;
   error: Error | null;
 }
 
-const SearchBookList = ({
+const BookList = ({
   isLoading,
   search,
   data,
@@ -27,7 +27,7 @@ const SearchBookList = ({
   onRefresh,
   onEndReached,
   error,
-}: SearchBookListProps) => {
+}: BookListProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = () => {
@@ -37,9 +37,9 @@ const SearchBookList = ({
   };
 
   const renderItem = useCallback(
-    ({item, index}: {item: BookItem; index: number}) => {
+    ({item, index}: {item: BookItemType; index: number}) => {
       return (
-        <SearchBookItem
+        <BookItem
           item={item}
           index={index}
           onToggleFavorite={onToggleFavorite}
@@ -79,7 +79,7 @@ const SearchBookList = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchResult}>
+      <View style={styles.result}>
         <CustomText style={{fontSize: 14}}>'</CustomText>
         <CustomText style={{fontSize: 14, color: colors.THEME}}>
           {search}
@@ -92,7 +92,7 @@ const SearchBookList = ({
         keyExtractor={(item, index) => item.isbn.toString() + index}
         renderItem={renderItem}
         data={data}
-        contentContainerStyle={styles.listBox}
+        contentContainerStyle={styles.list}
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
         onEndReached={onEndReached}
@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  searchResult: {
+  result: {
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
-  listBox: {
+  list: {
     backgroundColor: colors.WHITE,
   },
 });
 
-export default memo(SearchBookList);
+export default memo(BookList);

@@ -1,17 +1,17 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import DismissKeyboardView from '@src/components/DismissKeyboardView';
-import SearchBookList from '@src/components/SeachBookList';
+import BookList from '@src/components/search/BookList';
 import SearchHeader from '@src/components/SearchHeader';
 import {BookItem, SearchScreens} from '@src/types';
 import {waitfor} from '@src/utils/waitfor';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useState} from 'react';
-import {Keyboard, SafeAreaView, View} from 'react-native';
+import {Keyboard, SafeAreaView} from 'react-native';
 
-type Props = NativeStackScreenProps<SearchScreens>;
+type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
-const SearchScreen = ({navigation}: Props) => {
+const MainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
@@ -72,7 +72,7 @@ const SearchScreen = ({navigation}: Props) => {
           onSubmitEditing={onSearch}
           returnKeyType="search"
         />
-        <SearchBookList
+        <BookList
           isLoading={isPending}
           data={data || []}
           search={searchValue}
@@ -90,4 +90,4 @@ const SearchScreen = ({navigation}: Props) => {
   );
 };
 
-export default SearchScreen;
+export default MainScreen;

@@ -1,25 +1,25 @@
-import {BookItem} from '@src/types';
+import {BookItem as BookItemType} from '@src/types';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import Line from './Line';
-import CustomText from './CustomText';
+import Line from '../Line';
+import CustomText from '../CustomText';
 import {colors} from '@src/constants/colors';
 
-interface SearchBookItemProps {
-  item: BookItem;
+interface BookItemProps {
+  item: BookItemType;
   index: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
-  openDetail: (arg: BookItem) => void;
+  openDetail: (arg: BookItemType) => void;
 }
 
-const SearchBookItem = ({
+const BookItem = ({
   item,
   index,
   onToggleFavorite,
   openDetail,
-}: SearchBookItemProps) => {
+}: BookItemProps) => {
   return (
     <Pressable onPress={() => openDetail(item)}>
-      <View style={styles.itemBox}>
+      <View style={styles.container}>
         <Line
           style={{
             position: 'absolute',
@@ -29,7 +29,7 @@ const SearchBookItem = ({
             right: 10,
           }}
         />
-        <View style={styles.itemImageBox}>
+        <View style={styles.imageBox}>
           <Image
             style={{width: 68, height: 103, borderRadius: 3}}
             source={{uri: item.image}}
@@ -38,9 +38,9 @@ const SearchBookItem = ({
             }}
           />
         </View>
-        <View style={styles.itemDetailBox}>
-          <View style={styles.itemDescBox}>
-            <View style={styles.itemTitleBox}>
+        <View style={styles.detailBox}>
+          <View style={styles.descBox}>
+            <View style={styles.titleBox}>
               <CustomText style={{fontSize: 14, marginBottom: 7}}>
                 {item.title + index}
               </CustomText>
@@ -65,7 +65,7 @@ const SearchBookItem = ({
               </Pressable>
             </View>
           </View>
-          <View style={styles.itemHashtagBox}>
+          <View style={styles.hashtagBox}>
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>
               #판타지
             </CustomText>
@@ -83,30 +83,30 @@ const SearchBookItem = ({
 };
 
 const styles = StyleSheet.create({
-  itemBox: {
+  container: {
     position: 'relative',
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 14,
   },
-  itemImageBox: {
+  imageBox: {
     marginRight: 16,
   },
-  itemDetailBox: {
+  detailBox: {
     flex: 1,
     marginTop: 10,
   },
-  itemDescBox: {
+  descBox: {
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  itemTitleBox: {
+  titleBox: {
     marginBottom: 20,
   },
-  itemHashtagBox: {
+  hashtagBox: {
     flexDirection: 'row',
     color: colors.GRAY,
   },
 });
 
-export default SearchBookItem;
+export default BookItem;

@@ -4,8 +4,8 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import {MainTabs, SearchScreens} from '@src/types';
-import SearchScreen from '../stack/book/SearchScreen';
-import DetailScreen from '../stack/book/DetailScreen';
+import MainScreen from '../stack/search/MainScreen';
+import DetailScreen from '../stack/search/DetailScreen';
 
 type Props = BottomTabScreenProps<MainTabs, 'Search'>;
 
@@ -17,7 +17,7 @@ const SearchTab = ({navigation}: Props) => {
       <Stack.Screen
         name="Main"
         options={{headerShown: false}}
-        component={SearchScreen}
+        component={MainScreen}
       />
 
       <Stack.Screen
