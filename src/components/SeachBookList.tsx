@@ -12,6 +12,9 @@ interface SearchBookListProps {
   nonce: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
   openDetail: (arg: BookItem) => void;
+  onRefresh: () => void;
+  onEndReached: () => void;
+  error: Error | null;
 }
 
 const SearchBookList = ({
@@ -21,6 +24,8 @@ const SearchBookList = ({
   nonce,
   onToggleFavorite,
   openDetail,
+  onRefresh,
+  error,
 }: SearchBookListProps) => {
   const renderItem = useCallback(
     ({item, index}: {item: BookItem; index: number}) => {
@@ -91,6 +96,10 @@ const SearchBookList = ({
     [onToggleFavorite, openDetail],
   );
 
+  if (error) {
+    return <CustomText>{error.message}</CustomText>;
+  }
+
   if (nonce === 0) {
     // 검색하기 전
     return null;
@@ -115,7 +124,7 @@ const SearchBookList = ({
   }
 
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.searchResult}>
         <CustomText style={{fontSize: 14}}>'</CustomText>
         <CustomText style={{fontSize: 14, color: colors.THEME}}>
@@ -125,19 +134,22 @@ const SearchBookList = ({
         <CustomText
           style={{fontSize: 14}}>{`검색 결과(${data.length})`}</CustomText>
       </View>
-      {/* BUG: 네비게이션 하단바랑 겹침 */}
-      <View style={styles.listBox}>
-        <FlatList
-          keyExtractor={(item, index) => item.isbn.toString() + index}
-          renderItem={renderItem}
-          data={data}
-        />
-      </View>
-    </>
+      <FlatList
+        keyExtractor={(item, index) => item.isbn.toString() + index}
+        renderItem={renderItem}
+        data={data}
+        contentContainerStyle={styles.listBox}
+        onRefresh={onRefresh}
+        onEndReached={onRefresh}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   searchResult: {
     flexDirection: 'row',
     paddingVertical: 10,

@@ -7,7 +7,7 @@ import {BookItem, SearchScreens} from '@src/types';
 import {waitfor} from '@src/utils/waitfor';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useState} from 'react';
-import {Keyboard, SafeAreaView} from 'react-native';
+import {Keyboard, SafeAreaView, View} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens>;
 
@@ -18,7 +18,7 @@ const SearchScreen = ({navigation}: Props) => {
 
   const queryClient = useQueryClient();
 
-  const {data, isPending} = useQuery({
+  const {data, isPending, error} = useQuery({
     queryKey: ['book', searchValue, nonce],
     queryFn: async () => {
       const body: {books: BookItem[]} = await get({
@@ -61,7 +61,7 @@ const SearchScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <DismissKeyboardView>
+      <DismissKeyboardView style={{flex: 1}}>
         <SearchHeader
           isShowAiButton
           aiButtonType="book"
@@ -79,6 +79,11 @@ const SearchScreen = ({navigation}: Props) => {
           nonce={nonce}
           onToggleFavorite={mutate.mutate}
           openDetail={openDetail}
+          onRefresh={onSearch}
+          onEndReached={() => {
+            console.log('onEndReached');
+          }}
+          error={error}
         />
       </DismissKeyboardView>
     </SafeAreaView>

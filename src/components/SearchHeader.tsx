@@ -27,12 +27,11 @@ const SearchHeader = ({
 }: SearchHeaderProps) => {
   return (
     <View style={styles.container}>
-      {/* BUG: 자꾸 포커스가 가서 색이 변함 */}
       <Pressable style={styles.backButton} onPress={onPressBack}>
         <Image
           style={{width: 20, height: 20}}
           source={require('@src/assets/icons/hback.png')}
-          // resizeMode="center"
+          resizeMode="center"
         />
       </Pressable>
       <View style={styles.inputBox}>
@@ -46,7 +45,7 @@ const SearchHeader = ({
                   : require('@src/assets/icons/hbook.png')
               }
               style={styles.buttonImage}
-              // resizeMode="center"
+              resizeMode="center"
             />
           </Pressable>
         )}
@@ -54,7 +53,7 @@ const SearchHeader = ({
           <Image
             source={require('@src/assets/icons/hsearch.png')}
             style={styles.buttonImage}
-            // resizeMode="center"
+            resizeMode="center"
           />
         </Pressable>
       </View>
