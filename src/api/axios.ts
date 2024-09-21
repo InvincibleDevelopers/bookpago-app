@@ -1,6 +1,6 @@
 import {DOMAIN} from '@env';
 import {axiosTypes} from '@src/types/api';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: `${DOMAIN}`,
@@ -13,7 +13,10 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   error => {
-    console.error('Axios interceptors error: ', error);
+    if (error instanceof AxiosError) {
+      console.error('Axios interceptors error: ', error.response?.data);
+    }
+
     const hasErrorKey = 'error' in error;
     if (!hasErrorKey) {
       // 네트워크 에러인 경우

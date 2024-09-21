@@ -7,7 +7,7 @@ import {BookItem, SearchScreens} from '@src/types';
 import {waitfor} from '@src/utils/waitfor';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useState} from 'react';
-import {Keyboard, SafeAreaView} from 'react-native';
+import {Alert, Keyboard, SafeAreaView} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
@@ -18,7 +18,7 @@ const MainScreen = ({navigation}: Props) => {
 
   const queryClient = useQueryClient();
 
-  const {data, isPending, error} = useQuery({
+  const {data, isPending, error} = useQuery<BookItem[], {error: string}>({
     queryKey: ['book', searchValue, nonce],
     queryFn: async () => {
       const body: {books: BookItem[]} = await get({
@@ -51,7 +51,12 @@ const MainScreen = ({navigation}: Props) => {
 
   const onSearch = () => {
     Keyboard.dismiss();
-    setSearchValue(() => inputValue.trim());
+    const trimmedInput = inputValue.trim();
+    if (!trimmedInput) {
+      Alert.alert('검색어를 입력해주세요.');
+      return;
+    }
+    setSearchValue(() => inputValue);
     setNonce(pre => pre + 1);
   };
 

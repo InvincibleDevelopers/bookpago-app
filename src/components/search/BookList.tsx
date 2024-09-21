@@ -14,7 +14,7 @@ interface BookListProps {
   openDetail: (arg: BookItemType) => void;
   onRefresh: () => void;
   onEndReached: () => void;
-  error: Error | null;
+  error: {error: string} | null;
 }
 
 const BookList = ({
@@ -51,7 +51,7 @@ const BookList = ({
   );
 
   if (error) {
-    return <CustomText>{error.message}</CustomText>;
+    return <CustomText style={{fontSize: 14}}>{error.error}</CustomText>;
   }
 
   if (nonce === 0) {
