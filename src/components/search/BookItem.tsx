@@ -10,7 +10,7 @@ import {
 import Line from '../Line';
 import CustomText from '../CustomText';
 import {colors} from '@src/constants/colors';
-import {useState} from 'react';
+import {memo, useState} from 'react';
 import ToggleStar from '../ToggleStar';
 
 interface BookItemProps {
@@ -116,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookItem;
+export default memo(BookItem);

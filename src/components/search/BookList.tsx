@@ -96,6 +96,8 @@ const BookList = ({
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
         onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        scrollIndicatorInsets={{right: 1}} //ios 스크롤바 버그방지
       />
     </View>
   );
