@@ -76,6 +76,7 @@ const MainScreen = ({navigation}: Props) => {
           onPressSearch={onSearch}
           onSubmitEditing={onSearch}
           returnKeyType="search"
+          multiline={false} // \n 입력 불가처리
         />
         <BookList
           isLoading={isPending}

@@ -2,7 +2,7 @@ import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import {BookItem as BookItemType} from '@src/types';
 import {memo, useCallback, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import BookItem from './BookItem';
 
 interface BookListProps {
@@ -80,13 +80,13 @@ const BookList = ({
   return (
     <View style={styles.container}>
       <View style={styles.result}>
-        <CustomText style={{fontSize: 14}}>'</CustomText>
-        <CustomText style={{fontSize: 14, color: colors.THEME}}>
-          {search}
+        <CustomText style={{fontSize: 14}} numberOfLines={1}>
+          '
+          <CustomText style={{fontSize: 14, color: colors.THEME}}>
+            {search}
+          </CustomText>
+          '{` 검색 결과(${data.length})`}
         </CustomText>
-        <CustomText style={{fontSize: 14, marginRight: 7}}>'</CustomText>
-        <CustomText
-          style={{fontSize: 14}}>{`검색 결과(${data.length})`}</CustomText>
       </View>
       <FlatList
         keyExtractor={(item, index) => item.isbn.toString() + index}
