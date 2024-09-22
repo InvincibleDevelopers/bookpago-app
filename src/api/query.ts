@@ -14,5 +14,4 @@ const usePost = () => {
     });
 };
 
-
 export {usePost, useGet};

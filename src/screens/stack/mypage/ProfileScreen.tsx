@@ -1,18 +1,15 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import GroupCard from '@src/components/GroupCard';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import {colors} from '@src/constants/colors';
-import {MainContext} from '@src/utils/Context';
-import {useContext, useEffect, useMemo, useState} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {MyPageScreens, UserProfile} from '@src/types';
-import useOnStart from '@src/hooks/useOnStart';
-import axios from 'axios';
-import {DOMAIN} from '@env';
-import useAPI from '@src/hooks/useAPI';
-import {useFocusEffect} from '@react-navigation/native';
+import GroupCard from '@src/components/GroupCard';
 import RecentBook from '@src/components/RecentBook';
+import { colors } from '@src/constants/colors';
+import useAPI from '@src/hooks/useAPI';
+import useOnStart from '@src/hooks/useOnStart';
+import { MyPageScreens, UserProfile } from '@src/types';
+import { MainContext } from '@src/utils/Context';
+import { useContext, useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
 

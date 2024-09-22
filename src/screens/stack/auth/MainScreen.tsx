@@ -1,16 +1,13 @@
-import { DOMAIN } from "@env";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CustomButton from "@src/components/CustomButton";
 import { colors } from "@src/constants/colors";
+import useAPI from "@src/hooks/useAPI";
 import useOnStart from "@src/hooks/useOnStart";
-import { UserProfile } from "@src/types/UserProfile";
-import { AuthScreens, TabNavigators } from "@src/types";
+import { AuthScreens } from "@src/types";
 import { MainContext } from "@src/utils/Context";
-import axios from "axios";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Image, SafeAreaView, StyleSheet } from "react-native";
 import EncryptedStorage from "react-native-encrypted-storage";
-import useAPI from "@src/hooks/useAPI";
 
 type Props = NativeStackScreenProps<AuthScreens, "Main">;
 

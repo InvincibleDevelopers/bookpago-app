@@ -1,20 +1,20 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { DOMAIN } from '@env';
+import {
+  getProfile,
+  login,
+} from '@react-native-seoul/kakao-login';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import InputField from '@src/components/InputField';
-import {colors} from '@src/constants/colors';
-import {MainContext} from '@src/utils/Context';
-import axios from 'axios';
-import {useContext, useState} from 'react';
-import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
-import {
-  login,
-  getProfile,
-} from '@react-native-seoul/kakao-login';
-import {UserProfile} from '@src/types/UserProfile';
-import { DOMAIN } from '@env';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import { colors } from '@src/constants/colors';
 import { AuthScreens } from '@src/types';
+import { UserProfile } from '@src/types/UserProfile';
+import { MainContext } from '@src/utils/Context';
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 type Props = NativeStackScreenProps<AuthScreens, 'Login'>;
 

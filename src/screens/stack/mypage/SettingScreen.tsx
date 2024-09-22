@@ -2,6 +2,7 @@ import { DOMAIN } from '@env';
 import CustomButton from '@src/components/CustomButton';
 import InputField from '@src/components/InputField';
 import useAPI from '@src/hooks/useAPI';
+import useList from '@src/hooks/useList';
 import {UserProfile} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import axios from 'axios';
@@ -103,6 +104,7 @@ const SettingScreen = () => {
       },
     );
   };
+
 
   return (
     <SafeAreaView style={styles.container}>

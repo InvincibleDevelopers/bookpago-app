@@ -1,24 +1,19 @@
+import useAPI from "@src/hooks/useAPI";
+import { UserProfile } from "@src/types";
+import { MainContext } from "@src/utils/Context";
+import { useContext } from "react";
 import { Alert, Image, StyleSheet, View } from "react-native";
 import CustomButton from "./CustomButton";
-import { UserProfile } from "@src/types";
-import axios from "axios";
-import { DOMAIN } from "@env";
-import { useContext } from "react";
-import { MainContext } from "@src/utils/Context";
-import EncryptedStorage from "react-native-encrypted-storage";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ParamListBase } from "@react-navigation/native";
-import { MyPageScreens } from "@src/types";
-import useAPI from "@src/hooks/useAPI";
 
 const UserCard = ({OnClick, username, nickname, kakaoOauthToken, gender, age, genre, introduce}: UserProfile) => {
     const {user} = useContext(MainContext);
     const {postMutation} = useAPI();
+    
 
     const Submit = () => {
         postMutation.mutate({path: "/profile/follow", body: {
-            follower: String(username),
-            followee: String(user.username),
+            follower: username.toString(),
+            followee: user.username.toString(),
         }},
     {
         onSuccess: ()=>{

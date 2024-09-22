@@ -1,41 +1,40 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import GroupCard from '@src/components/GroupCard';
+import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import {colors} from '@src/constants/colors';
-import {MainContext} from '@src/utils/Context';
-import {useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import { MyPageScreens, UserProfile } from '@src/types';
-import useOnStart from '@src/hooks/useOnStart';
-import axios from 'axios';
-import { DOMAIN } from '@env';
+import { colors } from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
-import { useFocusEffect } from '@react-navigation/native';
+import { MyPageScreens, UserProfile } from '@src/types';
+import { MainContext } from '@src/utils/Context';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'OtherProfile'>;
 
 const OtherProfileScreen = ({navigation, route}: Props) => {
   const {getMutation, postMutation} = useAPI();
-  const [profile, setProfile] = useState<UserProfile>({nickname: "", username: -1});
+  const [profile, setProfile] = useState<UserProfile>({
+    nickname: '',
+    username: -1,
+  });
 
   const {user, token} = useContext(MainContext);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     const temp: UserProfile = {
       nickname: route.params.props.nickname,
       username: route.params.props.username,
       isMine: false,
     };
     setProfile(temp);
-  },[]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       return () => {
-        navigation.navigate("Profile");
+        navigation.navigate('Profile');
       };
-    }, [])
+    }, []),
   );
 
   return (
@@ -48,7 +47,7 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
           justifyContent: 'space-between',
         }}>
         <CustomButton
-          onPress={()=>navigation.navigate("Followee")}
+          onPress={() => navigation.navigate('Followee')}
           textstyle={{marginBottom: 30}}
           containerstyle={{
             zIndex: 10,
@@ -78,21 +77,25 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
           {/*-------------------------------------------------*/}
           <View style={styles.username}>
             <View>
-              <CustomText style={{marginTop: 20}}>{profile.nickname}</CustomText>
+              <CustomText style={{marginTop: 20}}>
+                {profile.nickname}
+              </CustomText>
             </View>
             <View style={styles.follow}>
               <CustomText style={{fontSize: 15}}>팔로워</CustomText>
               <View
                 style={{borderWidth: 1, height: '50%', borderColor: 'gray'}}
               />
-              <CustomButton bApplyCommonStyle={false} text={"팔로잉"} textprops={{style: {fontSize: 15}}} />
+              <CustomButton
+                bApplyCommonStyle={false}
+                text={'팔로잉'}
+                textprops={{style: {fontSize: 15}}}
+              />
             </View>
           </View>
           {/*-------------------------------------------------*/}
           <View style={{marginTop: 20}}>
-            <CustomText style={{fontSize: 15}}>
-               {profile.introduce}
-            </CustomText>
+            <CustomText style={{fontSize: 15}}>{profile.introduce}</CustomText>
           </View>
           {/*-------------------------------------------------*/}
           <View style={{borderWidth: 0.5, width: '100%', marginTop: '5%'}} />
@@ -102,8 +105,7 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
           <CustomText>{`참여중인 독서모임`}</CustomText>
         </View>
         <View>
-          <ScrollView horizontal={true} style={{marginTop: 10}}>
-          </ScrollView>
+          <ScrollView horizontal={true} style={{marginTop: 10}}></ScrollView>
         </View>
       </View>
     </SafeAreaView>
