@@ -8,9 +8,9 @@ const useGet = () => {
     });
 };
 
-const usePost = () => {
+const usePost = <T>() => {
     return useMutation({
-        mutationFn: post,
+        mutationFn: post<T>,
     });
 };
 

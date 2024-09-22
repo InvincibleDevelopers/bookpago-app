@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-const get = async ({path, header}: axiosTypes) => {
+const get = async ({path, header}: axiosTypes<undefined>) => {
   const {data} = await axiosInstance.get(`${path}`, {
     headers: header,
   });
@@ -35,7 +35,7 @@ const get = async ({path, header}: axiosTypes) => {
   return data;
 };
 
-const post = async ({path, header, body}: axiosTypes) => {
+const post = async <T>({path, header, body}: axiosTypes<T>) => {
   const {data} = await axiosInstance.post(`${path}`, body, {
     headers: header,
   });
