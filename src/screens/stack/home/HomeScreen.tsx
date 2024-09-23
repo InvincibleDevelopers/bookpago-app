@@ -1,8 +1,8 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import GroupCard from '@src/components/GroupCard';
 import BorderButton from '@src/components/common/button/BorderButton';
+import MypageButton from '@src/components/common/button/MypageButton';
 import BookCard from '@src/components/common/card/BookCard';
 import RecommendBookCard from '@src/components/common/card/RecommandBookCard';
 import Header from '@src/components/common/header/Header';
@@ -18,18 +18,7 @@ const HomeScreen = ({navigation, route}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        buttons={[
-          <CustomButton
-            onPress={() => tabnav?.navigate('MyPage')}
-            bApplyCommonStyle={false}
-            style={styles.buttons}
-            imageprops={{
-              style: {width: 30, height: 30},
-              resizeMode: 'contain',
-              source: require('@src/assets/buttons/my.png'),
-            }}
-          />,
-        ]}
+        buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
       />
       <ScrollView style={styles.scrollBox}>
         <View style={styles.inner}>
@@ -181,10 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACKGROUND,
   },
-  buttons: {
-    width: 30,
-    height: 30,
-  },
+  buttons: {},
   scrollBox: {
     flex: 1,
   },

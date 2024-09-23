@@ -1,5 +1,6 @@
 import {HEADER_HEIGHT} from '@src/constants';
 import {colors} from '@src/constants/colors';
+import React, {Children} from 'react';
 import {
   Image,
   ViewProps,
@@ -32,7 +33,14 @@ const Header = ({style, buttons, imageProps}: HeaderProps) => {
           />
         </TouchableWithoutFeedback>
       )}
-      {buttons}
+      {Children.map(buttons, (button, index) => {
+        // key값을 넣어주기 위해 React.Fragment 사용
+        return (
+          <React.Fragment key={`header_button_${index}`}>
+            {button}
+          </React.Fragment>
+        );
+      })}
     </View>
   );
 };
@@ -45,6 +53,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: colors.WHITE,
+
+    borderBottomColor: colors.GRAY,
+    borderBottomWidth: 1,
   },
   image: {
     width: 80,

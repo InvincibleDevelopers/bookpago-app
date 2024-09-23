@@ -1,7 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
+import MypageButton from '@src/components/common/button/MypageButton';
 import ToggleStar from '@src/components/common/button/ToggleStar';
+import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import {BookDetail, SearchScreens} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
@@ -62,6 +64,9 @@ const DetailScreen = ({navigation, route}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header
+        buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
+      />
       <ScrollView>
         <View>
           <View style={styles.imageBox}>
