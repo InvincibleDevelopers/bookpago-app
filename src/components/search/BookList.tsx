@@ -2,13 +2,14 @@ import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import {BookItem as BookItemType} from '@src/types';
 import {memo, useCallback, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
 import BookItem from './BookItem';
 
 interface BookListProps {
   isLoading: boolean;
   search: string;
-  data: BookItemType[];
+  total?: number;
+  bookItemList: BookItemType[];
   nonce: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
   openDetail: (arg: BookItemType) => void;
@@ -20,7 +21,8 @@ interface BookListProps {
 const BookList = ({
   isLoading,
   search,
-  data,
+  total,
+  bookItemList,
   nonce,
   onToggleFavorite,
   openDetail,
@@ -56,23 +58,44 @@ const BookList = ({
 
   if (nonce === 0) {
     // 검색하기 전
-    return null;
+    return <View style={styles.container}></View>;
   }
 
   if (isLoading) {
     // 검색중
     return (
-      <View>
-        <CustomText>로딩중...</CustomText>
+      <View style={styles.container}>
+        <CustomText
+          style={{
+            fontSize: 17,
+            color: colors.GRAY_300,
+          }}>
+          로딩중...
+        </CustomText>
       </View>
     );
   }
 
-  if (nonce > 0 && data.length === 0) {
+  if (nonce > 0 && bookItemList.length === 0) {
     // 검색 결과가 없을때
     return (
-      <View>
-        <CustomText>검색 결과가 없습니다.</CustomText>
+      <View style={styles.container}>
+        <View style={styles.nodataBox}>
+          <Image
+            style={{
+              width: Dimensions.get('screen').width * 0.5,
+              height: Dimensions.get('screen').width * 0.5,
+            }}
+            source={require('@src/assets/logo/logo-translucent.png')}
+            resizeMode="center"></Image>
+          <CustomText
+            style={{
+              fontSize: 17,
+              color: colors.GRAY_300,
+            }}>
+            해당 검색어에 맞는 책이 없어요
+          </CustomText>
+        </View>
       </View>
     );
   }
@@ -85,13 +108,13 @@ const BookList = ({
           <CustomText style={{fontSize: 14, color: colors.THEME}}>
             {search}
           </CustomText>
-          '{` 검색 결과(${data.length})`}
+          '{` 검색 결과(${total})`}
         </CustomText>
       </View>
       <FlatList
         keyExtractor={(item, index) => item.isbn.toString() + index}
         renderItem={renderItem}
-        data={data}
+        data={bookItemList}
         contentContainerStyle={styles.list}
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
@@ -114,6 +137,11 @@ const styles = StyleSheet.create({
   },
   list: {
     backgroundColor: colors.WHITE,
+  },
+  nodataBox: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

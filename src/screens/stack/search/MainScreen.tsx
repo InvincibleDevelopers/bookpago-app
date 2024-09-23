@@ -11,7 +11,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {Alert, Keyboard, SafeAreaView} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
@@ -23,19 +23,22 @@ const MainScreen = ({navigation}: Props) => {
 
   const queryClient = useQueryClient();
 
-  const query = useInfiniteQuery<BookItem[], {error: string}>({
+  const query = useInfiniteQuery<
+    {total: number; books: BookItem[]},
+    {error: string}
+  >({
     queryKey: ['book', searchValue, nonce],
     queryFn: async ({pageParam = 1}) => {
-      const body: {books: BookItem[]} = await get({
+      const body: {books: BookItem[]; total: number} = await get({
         path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}`,
       });
-      return body.books;
+      return body;
     },
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, lastPageParam, allPageParams) => {
       // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
-      return lastPage.length === SEARCH_PAGE_SIZE
+      return lastPage.books.length === SEARCH_PAGE_SIZE
         ? allPage.length + 1
         : undefined;
     },
@@ -85,6 +88,13 @@ const MainScreen = ({navigation}: Props) => {
     }
   };
 
+  const bookItemList = useMemo(
+    () => query.data?.pages.map(d => d.books).flat() || [],
+    [query.data],
+  );
+
+  const total = query.data?.pages.at(-1)?.total;
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <DismissKeyboardView style={{flex: 1}}>
@@ -102,7 +112,8 @@ const MainScreen = ({navigation}: Props) => {
         />
         <BookList
           isLoading={query.isPending}
-          data={query.data?.pages.flat() || []}
+          total={total}
+          bookItemList={bookItemList}
           search={searchValue}
           nonce={nonce}
           onToggleFavorite={mutate.mutate}
