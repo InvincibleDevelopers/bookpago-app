@@ -1,4 +1,4 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {BottomTabNavigationOptions, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeTab from '@src/screens/tab/HomeTab';
 import {MainTabs} from '@src/types';
 import MyPageTab from '@src/screens/tab/MyPageTab';
@@ -6,6 +6,8 @@ import SearchTab from '@src/screens/tab/SearchTab';
 import SocialTab from '@src/screens/tab/SocialTab';
 import CalendarTab from '@src/screens/tab/CalendarTab';
 import {Image} from 'react-native';
+import { useContext } from 'react';
+import { MainContext } from '@src/utils/Context';
 
 const Tab = createBottomTabNavigator<MainTabs>();
 
@@ -66,6 +68,7 @@ const CalendarIcon = ({focused}: {focused: boolean}) => {
 };
 
 const MyPageIcon = ({focused}: {focused: boolean}) => {
+
   return (
     <Image
       style={{width: 50, height: 50}}
@@ -80,16 +83,37 @@ const MyPageIcon = ({focused}: {focused: boolean}) => {
 };
 
 const AppNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
+
+  const {isTabVisible} = useContext(MainContext);
+
+  const visible: BottomTabNavigationOptions = {
+    headerShown: false,
         tabBarStyle: {
-          height: '11%',
+          top: 0,
+          height: "11%",
           borderTopRightRadius: 25,
           borderTopLeftRadius: 25,
         },
-      }}>
+  };
+
+  const invisible: BottomTabNavigationOptions = {
+    headerShown: false,
+        tabBarStyle: {
+          top: 10,
+          height: 0,
+          borderTopRightRadius: 25,
+          borderTopLeftRadius: 25,
+        },
+  };
+
+
+  return (
+    <Tab.Navigator
+      screenOptions={
+        isTabVisible ? visible : invisible
+      }
+      
+      >
       <Tab.Screen
         name="Home"
         options={{

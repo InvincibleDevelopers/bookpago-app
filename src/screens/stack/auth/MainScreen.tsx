@@ -17,21 +17,22 @@ const MainScreen = ({navigation}: Props) => {
     
     
     useOnStart(async ()=> {
-        const username = await EncryptedStorage.getItem("username");
-        if(!username) {
-            return;
-        }
+        // const username = await EncryptedStorage.getItem("username");
+        // if(!username) {
+        //     return;
+        // }
 
-        getMutation.mutate({path: `/user/login?username=${username}`}, {
-            onSuccess: (res) => {
-                setUser({
-                    username: Number(username),
-                    nickname: res.nickname,
-                    image: res.imageUrl,
-                });
-                setLogin(true);
-            },
-        });
+        // getMutation.mutate({path: `/user/login?username=${username}`}, {
+        //     onSuccess: (res) => {
+        //         setUser({
+        //             username: Number(username),
+        //             nickname: res.nickname,
+        //             image: res.imageUrl,
+        //         });
+        //         setLogin(true);
+        //     },
+        // });
+        setLogin(true);
 
     });
 
