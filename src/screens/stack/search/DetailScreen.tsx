@@ -1,7 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
-import ToggleStar from '@src/components/ToggleStar';
+import ToggleStar from '@src/components/common/button/ToggleStar';
 import {colors} from '@src/constants/colors';
 import {BookDetail, SearchScreens} from '@src/types';
 import {useQuery} from '@tanstack/react-query';

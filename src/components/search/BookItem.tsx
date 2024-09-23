@@ -7,11 +7,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import Line from '../Line';
+import Line from '../common/Line';
 import CustomText from '../CustomText';
 import {colors} from '@src/constants/colors';
 import {memo, useState} from 'react';
-import ToggleStar from '../ToggleStar';
+import ToggleStar from '../common/button/ToggleStar';
 
 interface BookItemProps {
   item: BookItemType;

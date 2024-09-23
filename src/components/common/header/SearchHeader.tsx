@@ -1,3 +1,4 @@
+import {HEADER_HEIGHT} from '@src/constants';
 import {colors} from '@src/constants/colors';
 import {
   Image,
@@ -64,8 +65,10 @@ const SearchHeader = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.WHITE,
-    paddingHorizontal: 20,
     paddingVertical: 10,
+    paddingLeft: 10,
+    paddingRight: 20,
+    height: HEADER_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
   },

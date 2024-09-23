@@ -1,8 +1,8 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
-import DismissKeyboardView from '@src/components/DismissKeyboardView';
+import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import BookList from '@src/components/search/BookList';
-import SearchHeader from '@src/components/SearchHeader';
+import SearchHeader from '@src/components/common/header/SearchHeader';
 import {SEARCH_PAGE_SIZE} from '@src/constants';
 import useAPI from '@src/hooks/useAPI';
 import {BookDetail, BookItem, SearchScreens} from '@src/types';
