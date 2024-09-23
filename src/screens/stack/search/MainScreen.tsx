@@ -4,15 +4,18 @@ import DismissKeyboardView from '@src/components/DismissKeyboardView';
 import BookList from '@src/components/search/BookList';
 import SearchHeader from '@src/components/SearchHeader';
 import {SEARCH_PAGE_SIZE} from '@src/constants';
-import {BookItem, SearchScreens} from '@src/types';
+import useAPI from '@src/hooks/useAPI';
+import {BookDetail, BookItem, SearchScreens} from '@src/types';
 import {waitfor} from '@src/utils/waitfor';
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import {AxiosResponse} from 'axios';
 import {useMemo, useState} from 'react';
-import {Alert, Keyboard, SafeAreaView} from 'react-native';
+import {Alert, findNodeHandle, Keyboard, SafeAreaView} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
@@ -20,14 +23,15 @@ const MainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const query = useInfiniteQuery<
+  const searchQuery = useInfiniteQuery<
     {total: number; books: BookItem[]},
     {error: string}
   >({
-    queryKey: ['book', searchValue, nonce],
+    queryKey: ['/books/search', searchValue, nonce],
     queryFn: async ({pageParam = 1}) => {
       const body: {books: BookItem[]; total: number} = await get({
         path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}`,
@@ -78,22 +82,22 @@ const MainScreen = ({navigation}: Props) => {
     setNonce(pre => pre + 1); //refetch와 동일한 효과
   };
 
-  const openDetail = (item: BookItem) => {
-    navigation.navigate('Detail', {props: item});
+  const openDetail = async (item: BookItem) => {
+    navigation.navigate('Detail', {props: {isbn: item.isbn}});
   };
 
   const onEndReached = () => {
-    if (query.hasNextPage && !query.isFetchingNextPage) {
-      query.fetchNextPage();
+    if (searchQuery.hasNextPage && !searchQuery.isFetchingNextPage) {
+      searchQuery.fetchNextPage();
     }
   };
 
   const bookItemList = useMemo(
-    () => query.data?.pages.map(d => d.books).flat() || [],
-    [query.data],
+    () => searchQuery.data?.pages.map(d => d.books).flat() || [],
+    [searchQuery.data],
   );
 
-  const total = query.data?.pages.at(-1)?.total;
+  const total = searchQuery.data?.pages.at(-1)?.total;
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -111,7 +115,7 @@ const MainScreen = ({navigation}: Props) => {
           multiline={false}
         />
         <BookList
-          isLoading={query.isPending}
+          isLoading={searchQuery.isPending}
           total={total}
           bookItemList={bookItemList}
           search={searchValue}
@@ -120,7 +124,7 @@ const MainScreen = ({navigation}: Props) => {
           openDetail={openDetail}
           onRefresh={onSearch}
           onEndReached={onEndReached}
-          error={query.error}
+          error={searchQuery.error}
         />
       </DismissKeyboardView>
     </SafeAreaView>

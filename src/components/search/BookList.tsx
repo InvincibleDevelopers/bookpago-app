@@ -53,7 +53,11 @@ const BookList = ({
   );
 
   if (error) {
-    return <CustomText style={{fontSize: 14}}>{error.error}</CustomText>;
+    return (
+      <View style={styles.container}>
+        <CustomText style={styles.messageText}>{error.error}</CustomText>
+      </View>
+    );
   }
 
   if (nonce === 0) {
@@ -65,13 +69,7 @@ const BookList = ({
     // 검색중
     return (
       <View style={styles.container}>
-        <CustomText
-          style={{
-            fontSize: 17,
-            color: colors.GRAY_300,
-          }}>
-          로딩중...
-        </CustomText>
+        <CustomText style={styles.messageText}>로딩중...</CustomText>
       </View>
     );
   }
@@ -87,12 +85,9 @@ const BookList = ({
               height: Dimensions.get('screen').width * 0.5,
             }}
             source={require('@src/assets/logo/logo-translucent.png')}
-            resizeMode="center"></Image>
-          <CustomText
-            style={{
-              fontSize: 17,
-              color: colors.GRAY_300,
-            }}>
+            resizeMode="center"
+          />
+          <CustomText style={styles.messageText}>
             해당 검색어에 맞는 책이 없어요
           </CustomText>
         </View>
@@ -142,6 +137,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  messageText: {
+    fontSize: 17,
+    color: colors.GRAY_300,
   },
 });
 

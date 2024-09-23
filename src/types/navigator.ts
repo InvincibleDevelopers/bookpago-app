@@ -34,5 +34,5 @@ export type MyPageScreens = {
 
 export type SearchScreens = {
   Main: undefined;
-  Detail: {props: BookItem};
+  Detail: {props: {isbn: number}};
 };

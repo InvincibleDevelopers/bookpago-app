@@ -1,9 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
 import ToggleStar from '@src/components/ToggleStar';
 import {colors} from '@src/constants/colors';
-import {SearchScreens} from '@src/types';
-import {waitfor} from '@src/utils/waitfor';
+import {BookDetail, SearchScreens} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {useState} from 'react';
 import {
@@ -24,17 +24,14 @@ const DetailScreen = ({navigation, route}: Props) => {
   const [isShow, setIsShow] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  console.log('DetailScreen', props);
-
-  const {} = useQuery({
-    queryKey: ['detail', props.isbn],
+  const detailQuery = useQuery<BookDetail, {error: string}>({
+    queryKey: ['/books/:isbn', props.isbn],
     queryFn: async () => {
-      // const body = await get({});
-      // return body;
-
-      await waitfor(2000);
+      const body: BookDetail = await get({
+        path: `/books/${props.isbn}`,
+      });
+      return body;
     },
-    enabled: false,
   });
 
   const toggleShow = () => {
@@ -44,6 +41,24 @@ const DetailScreen = ({navigation, route}: Props) => {
   const toggleFavorite = () => {
     setIsFavorite(pre => !pre);
   };
+
+  if (detailQuery.error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <CustomText style={styles.messageText}>
+          {detailQuery.error.error}
+        </CustomText>
+      </SafeAreaView>
+    );
+  }
+
+  if (detailQuery.isPending) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <CustomText style={styles.messageText}>로딩중...</CustomText>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,7 +71,7 @@ const DetailScreen = ({navigation, route}: Props) => {
                 height: (Dimensions.get('screen').width / 2) * 1.5,
                 borderRadius: 3,
               }}
-              source={{uri: props.image}}
+              source={{uri: detailQuery.data?.image}}
               resizeMode="contain"
             />
           </View>
@@ -83,14 +98,14 @@ const DetailScreen = ({navigation, route}: Props) => {
                     paddingBottom: 7,
                     color: colors.BLACK,
                   }}>
-                  {props.title}
+                  {detailQuery.data?.title}
                 </CustomText>
                 <CustomText
                   style={{
                     fontSize: 14,
                     color: colors.GRAY_300,
                   }}>
-                  {props.author}
+                  {detailQuery.data?.author}
                 </CustomText>
               </View>
               <ToggleStar isActive={isFavorite} onPress={toggleFavorite} />
@@ -113,10 +128,7 @@ const DetailScreen = ({navigation, route}: Props) => {
                     fontWeight: 500,
                   }}
                   numberOfLines={isShow ? undefined : 2}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Similique ea labore laboriosam. Reiciendis nam, quae doloribus
-                  nihil voluptas sequi, provident porro suscipit ea excepturi
-                  nemo culpa, non voluptate nobis odit.
+                  {detailQuery.data?.description}
                 </CustomText>
               </Pressable>
             </View>
@@ -125,21 +137,25 @@ const DetailScreen = ({navigation, route}: Props) => {
             <View style={styles.row}>
               <View style={styles.cell}>
                 <CustomText style={styles.cellTitle}>저자</CustomText>
-                <CustomText style={styles.cellValue}>J.K 롤링</CustomText>
+                <CustomText style={styles.cellValue}>
+                  {detailQuery.data?.author}
+                </CustomText>
               </View>
               <View style={styles.cell}>
                 <CustomText style={styles.cellTitle}>발행</CustomText>
-                <CustomText style={styles.cellValue}>파주</CustomText>
+                <CustomText style={styles.cellValue}>
+                  {detailQuery.data?.publisher}
+                </CustomText>
               </View>
             </View>
             <View style={styles.row}>
               <View style={styles.cell}>
                 <CustomText style={styles.cellTitle}>가격</CustomText>
-                <CustomText style={styles.cellValue}>12,000</CustomText>
+                <CustomText style={styles.cellValue}>"미정"</CustomText>
               </View>
               <View style={styles.cell}>
                 <CustomText style={styles.cellTitle}>자료유형</CustomText>
-                <CustomText style={styles.cellValue}>단행본</CustomText>
+                <CustomText style={styles.cellValue}>"미정"</CustomText>
               </View>
             </View>
           </View>
@@ -220,6 +236,10 @@ const styles = StyleSheet.create({
   smilerBox: {
     marginVertical: 25,
     padding: 20,
+  },
+  messageText: {
+    fontSize: 17,
+    color: colors.GRAY_300,
   },
 });
 
