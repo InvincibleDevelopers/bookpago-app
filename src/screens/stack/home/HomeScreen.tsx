@@ -3,8 +3,8 @@ import CustomText from '@src/components/CustomText';
 import GroupCard from '@src/components/GroupCard';
 import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
-import BookCard from '@src/components/common/card/BookCard';
-import RecommendBookCard from '@src/components/common/card/RecommandBookCard';
+import BookCardWithFavorite from '@src/components/common/card/BookCardWithFavorite';
+import WideBookCard from '@src/components/common/card/WideBookCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import {HomeScreens} from '@src/types';
@@ -36,7 +36,7 @@ const HomeScreen = ({navigation, route}: Props) => {
               horizontal>
               {Array.from({length: 6}).map((_, index) => {
                 return (
-                  <BookCard
+                  <BookCardWithFavorite
                     key={index}
                     isbn={index}
                     isFavorite={false}
@@ -60,12 +60,12 @@ const HomeScreen = ({navigation, route}: Props) => {
               overScrollMode="never" // Android
               bounces={false} // iOS
               horizontal>
-              <RecommendBookCard />
-              <RecommendBookCard />
-              <RecommendBookCard />
-              <RecommendBookCard />
-              <RecommendBookCard />
-              <RecommendBookCard />
+              <WideBookCard />
+              <WideBookCard />
+              <WideBookCard />
+              <WideBookCard />
+              <WideBookCard />
+              <WideBookCard />
             </ScrollView>
           </View>
           <View style={styles.section}>
@@ -110,7 +110,7 @@ const HomeScreen = ({navigation, route}: Props) => {
               horizontal>
               {Array.from({length: 6}).map((_, index) => {
                 return (
-                  <BookCard
+                  <BookCardWithFavorite
                     key={index}
                     isbn={index}
                     isFavorite={false}

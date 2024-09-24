@@ -15,7 +15,7 @@ const SearchTab = ({navigation}: Props) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Main__hide"
+        name="Main"
         options={{headerShown: false}}
         component={MainScreen}
       />

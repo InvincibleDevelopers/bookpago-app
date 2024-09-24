@@ -4,19 +4,19 @@ import {colors} from '@src/constants';
 import {useState} from 'react';
 import ToggleStar from '../button/ToggleStar';
 
-interface BookCardProps {
+interface BookCardWithFavoriteProps {
   isbn: number;
   isFavorite: boolean;
   onToggleFavorite: (isbn: number) => void;
   onPress: (isbn: number) => void;
 }
 
-const BookCard = ({
+const BookCardWithFavorite = ({
   isbn,
   isFavorite,
   onToggleFavorite,
   onPress,
-}: BookCardProps) => {
+}: BookCardWithFavoriteProps) => {
   const [v, s] = useState(false);
   return (
     <View style={styles.container}>
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookCard;
+export default BookCardWithFavorite;

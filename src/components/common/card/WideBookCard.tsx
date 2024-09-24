@@ -2,7 +2,7 @@ import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 
-const RecommendBookCard = () => {
+const WideBookCard = () => {
   return (
     <View style={styles.container}>
       <View style={styles.imageBox}>
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecommendBookCard;
+export default WideBookCard;

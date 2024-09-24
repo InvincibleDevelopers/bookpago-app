@@ -17,7 +17,7 @@ import {AxiosResponse} from 'axios';
 import {useMemo, useState} from 'react';
 import {Alert, findNodeHandle, Keyboard, SafeAreaView} from 'react-native';
 
-type Props = NativeStackScreenProps<SearchScreens, 'Main__hide'>;
+type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
