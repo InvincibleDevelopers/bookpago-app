@@ -8,17 +8,19 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
 
-interface HeaderProps extends ViewProps {
+interface BackHeaderProps extends ViewProps {
   imageProps?: ImageProps & {
     isShow?: boolean;
     onPress?: () => void;
   };
+  title?: string;
   buttons?: React.ReactNode[];
 }
 
-const Header = ({style, buttons, imageProps}: HeaderProps) => {
+const BackHeader = ({style, title, buttons, imageProps}: BackHeaderProps) => {
   const isShowImage = imageProps?.isShow || true; // 기본적으로는 보여준다.
 
   return (
@@ -27,20 +29,23 @@ const Header = ({style, buttons, imageProps}: HeaderProps) => {
         <TouchableWithoutFeedback onPress={imageProps?.onPress}>
           <Image
             style={[styles.image, imageProps?.style]}
-            source={require('@src/assets/logo/title.png')}
+            source={require('@src/assets/icons/hback.png')}
             resizeMode="center"
             {...imageProps}
           />
         </TouchableWithoutFeedback>
       )}
-      {Children.map(buttons, (button, index) => {
-        // key값을 넣어주기 위해 React.Fragment 사용
-        return (
-          <React.Fragment key={`header_button_${index}`}>
-            {button}
-          </React.Fragment>
-        );
-      })}
+      <Text style={styles.title}>{title}</Text>
+      <View>
+        {Children.map(buttons, (button, index) => {
+          // key값을 넣어주기 위해 React.Fragment 사용
+          return (
+            <React.Fragment key={`header_button_${index}`}>
+              {button}
+            </React.Fragment>
+          );
+        })}
+      </View>
     </View>
   );
 };
@@ -58,9 +63,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   image: {
-    width: 80,
+    width: 30,
     height: 30,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
-export default Header;
+export default BackHeader;

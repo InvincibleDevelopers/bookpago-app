@@ -36,3 +36,10 @@ export type SearchScreens = {
   Main: undefined;
   Detail: {props: {isbn: number}};
 };
+
+export type SocialScreens = {
+  Main: undefined;
+  Category__hide: undefined;
+  Detail: undefined;
+  Form: undefined;
+};
