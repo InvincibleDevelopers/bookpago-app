@@ -33,6 +33,6 @@ export type MyPageScreens = {
 };
 
 export type SearchScreens = {
-  Main: undefined;
+  Main__hide: undefined;
   Detail: {props: {isbn: number}};
 };

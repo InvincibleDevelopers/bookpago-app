@@ -1,5 +1,8 @@
 import React, {useContext} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  NavigationContainer,
+} from '@react-navigation/native';
 import {TabNavigators} from '@src/types';
 import {
   CardStyleInterpolators,
@@ -11,11 +14,19 @@ import AppNavigator from './tab/AppNavigator';
 
 const Stack = createStackNavigator<TabNavigators>();
 
+const ref = createNavigationContainerRef();
+
 const RootNavigator = () => {
-  const {bIsLogin} = useContext(MainContext);
+  const {bIsLogin, setTabVisibility} = useContext(MainContext);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={ref}
+      onStateChange={() => {
+        const name = ref.getCurrentRoute()?.name;
+        const isHide = name?.split('__')[1] === 'hide' ? false : true;
+        setTabVisibility(isHide);
+      }}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
