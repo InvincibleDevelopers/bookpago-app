@@ -57,7 +57,7 @@ const BookItem = ({
           <View style={styles.descBox}>
             <View style={styles.titleBox}>
               <CustomText style={{fontSize: 14, marginBottom: 7}}>
-                {item.title + index}
+                {item.title}
               </CustomText>
               <CustomText
                 style={{
@@ -69,7 +69,7 @@ const BookItem = ({
             </View>
             <ToggleStar isActive={isFavorite} onPress={toggleFavorite} />
           </View>
-          <View style={styles.hashtagBox}>
+          {/* <View style={styles.hashtagBox}>
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>
               #판타지
             </CustomText>
@@ -79,7 +79,7 @@ const BookItem = ({
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>
               #베스트셀러
             </CustomText>
-          </View>
+          </View> */}
         </View>
       </View>
     </Pressable>

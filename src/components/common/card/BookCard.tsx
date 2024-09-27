@@ -1,7 +1,7 @@
-import {Image, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
-import CustomText from '../../CustomText';
 import {colors} from '@src/constants';
-import {useState} from 'react';
+import {Image, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import CustomText from '../../CustomText';
 import ToggleStar from '../button/ToggleStar';
 
 interface BookCardWithFavoriteProps {
@@ -11,7 +11,7 @@ interface BookCardWithFavoriteProps {
   title?: string;
   isShowFavorite?: boolean;
   isFavorite: boolean;
-  onPress?: (isbn: number) => void;
+  onPress?: () => void;
   onToggleFavorite?: (isbn: number) => void;
   style?: StyleProp<ViewStyle>;
 }
@@ -27,36 +27,37 @@ const BookCard = ({
   onPress,
   style,
 }: BookCardWithFavoriteProps) => {
-  const [v, s] = useState(false);
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.imageBox}>
-        <Image
-          style={{width: '100%', height: '100%'}}
-          source={{uri: image}}
-          resizeMode="cover"
-        />
-        {isShowFavorite && (
-          <ToggleStar
-            style={styles.toggleStar}
-            isActive={v}
-            onPress={() => onToggleFavorite?.(isbn)}
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={[styles.container, style]}>
+        <View style={styles.imageBox}>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={{uri: image}}
+            resizeMode="cover"
           />
+          {isShowFavorite && (
+            <ToggleStar
+              style={styles.toggleStar}
+              isActive={isFavorite}
+              onPress={() => onToggleFavorite?.(isbn)}
+            />
+          )}
+        </View>
+        {title !== undefined && (
+          <CustomText style={{fontSize: 14, marginBottom: 7}} numberOfLines={1}>
+            {title}
+          </CustomText>
+        )}
+        {author !== undefined && (
+          <CustomText
+            style={{fontSize: 12, color: colors.GRAY_300}}
+            numberOfLines={1}>
+            {author}
+          </CustomText>
         )}
       </View>
-      {title !== undefined && (
-        <CustomText style={{fontSize: 14, marginBottom: 7}} numberOfLines={1}>
-          {title}
-        </CustomText>
-      )}
-      {author !== undefined && (
-        <CustomText
-          style={{fontSize: 12, color: colors.GRAY_300}}
-          numberOfLines={1}>
-          {author}
-        </CustomText>
-      )}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

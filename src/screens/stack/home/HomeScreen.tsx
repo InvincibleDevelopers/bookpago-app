@@ -80,7 +80,16 @@ const HomeScreen = ({navigation, route}: Props) => {
                       author={item.author}
                       isFavorite={false}
                       isShowFavorite={true}
-                      onPress={e => console.log(item.isbn)}
+                      onPress={() =>
+                        tabnav?.navigate('Search', {
+                          screen: 'Detail',
+                          params: {
+                            props: {
+                              isbn: item.isbn,
+                            },
+                          },
+                        })
+                      }
                       onToggleFavorite={e => console.log(e)}
                     />
                   );
@@ -166,6 +175,9 @@ const HomeScreen = ({navigation, route}: Props) => {
                       meetingTime={item.meetingTime}
                       location={item.location}
                       description="asdasdasdasd"
+                      onPress={() =>
+                        tabnav?.navigate('Social', {screen: 'Detail'})
+                      }
                     />
                   );
                 })}
