@@ -1,5 +1,4 @@
 import {colors} from '@src/constants';
-import {useState} from 'react';
 import {
   Pressable,
   PressableProps,
@@ -24,14 +23,14 @@ const BorderButton = ({
   style,
   ...props
 }: BorderButtonProps) => {
-  const [v, s] = useState(false);
-  const toggle = () => s(p => !p);
   return (
     <Pressable
-      style={[styles.container, v && styles.containerActive, style]}
-      onPress={toggle}
+      style={[styles.container, isActive && styles.containerActive, style]}
+      onPress={onPress}
       {...props}>
-      <Text style={[styles.name, v && styles.nameActive]}>{children}</Text>
+      <Text style={[styles.name, isActive && styles.nameActive]}>
+        {children}
+      </Text>
     </Pressable>
   );
 };

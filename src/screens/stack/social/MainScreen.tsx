@@ -84,42 +84,56 @@ const MainScreen = ({navigation}: Props) => {
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
           <GroupCard
             members={5}
             clubName="Hello"
             time={'투썸 앞 14:00'}
             location={'서울대학교'}
+            row={2}
+            style={{width: '100%'}}
           />
         </View>
       </ScrollView>
