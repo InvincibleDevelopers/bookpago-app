@@ -2,7 +2,14 @@ import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import {BookItem as BookItemType} from '@src/types';
 import {memo, useCallback, useState} from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+} from 'react-native';
 import BookItem from './BookItem';
 
 interface BookListProps {
@@ -69,7 +76,11 @@ const BookList = ({
     // 검색중
     return (
       <View style={styles.container}>
-        <CustomText style={styles.messageText}>로딩중...</CustomText>
+        <ActivityIndicator
+          size="large"
+          style={{flex: 1}}
+          color={colors.THEME}
+        />
       </View>
     );
   }
