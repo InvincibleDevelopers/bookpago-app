@@ -107,7 +107,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
               <GroupCard
                 members={5}
                 clubName="Hello"
-                time={'투썸 앞 14:00'}
+                meetingTime={new Date()}
+                description="asdasdasdasd"
                 location={'서울대학교'}
               />
             </ScrollView>

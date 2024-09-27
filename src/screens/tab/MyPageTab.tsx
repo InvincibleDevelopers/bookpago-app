@@ -1,20 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import GroupCard from '@src/components/common/card/GroupCard';
-import CustomButton from '@src/components/CustomButton';
-import CustomText from '@src/components/CustomText';
-import {colors} from '@src/constants/colors';
-import {MainContext} from '@src/utils/Context';
-import {useContext, useEffect} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {MyPageScreens, MainTabs} from '@src/types';
-import {
-  BottomTabBarButtonProps,
-  BottomTabScreenProps,
-} from '@react-navigation/bottom-tabs';
-import ProfileScreen from '../stack/mypage/ProfileScreen';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
+import {colors} from '@src/constants/colors';
+import {MainTabs, MyPageScreens} from '@src/types';
+import {MainContext} from '@src/utils/Context';
+import {useContext} from 'react';
+import {StyleSheet} from 'react-native';
 import FollowingScreen from '../stack/mypage/FollowingScreen';
 import OtherProfileScreen from '../stack/mypage/OtherProfileScreen';
+import ProfileScreen from '../stack/mypage/ProfileScreen';
 import SettingScreen from '../stack/mypage/SettingScreen';
 
 type Props = BottomTabScreenProps<MainTabs, 'MyPage'>;
