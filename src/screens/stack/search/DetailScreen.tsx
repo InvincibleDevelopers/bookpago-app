@@ -1,5 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
+import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
 import ToggleStar from '@src/components/common/button/ToggleStar';
@@ -16,6 +17,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Detail'>;
@@ -47,9 +49,26 @@ const DetailScreen = ({navigation, route}: Props) => {
   if (detailQuery.error) {
     return (
       <SafeAreaView style={styles.container}>
-        <CustomText style={styles.messageText}>
-          {detailQuery.error.error}
-        </CustomText>
+        <Header
+          buttons={[
+            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
+          ]}
+        />
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <CustomText style={styles.messageText}>
+            {detailQuery.error.error}
+          </CustomText>
+          <CustomButton
+            bApplyCommonStyle={true}
+            containerstyle={{
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 3,
+            }}
+            text="뒤로가기"
+            onPress={() => navigation.navigate('Main')}
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -57,7 +76,14 @@ const DetailScreen = ({navigation, route}: Props) => {
   if (detailQuery.isPending) {
     return (
       <SafeAreaView style={styles.container}>
-        <CustomText style={styles.messageText}>로딩중...</CustomText>
+        <Header
+          buttons={[
+            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
+          ]}
+        />
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={colors.THEME} />
+        </View>
       </SafeAreaView>
     );
   }
@@ -81,7 +107,7 @@ const DetailScreen = ({navigation, route}: Props) => {
             />
           </View>
           <View style={styles.descBox}>
-            <View style={styles.hashTagBox}>
+            {/* <View style={styles.hashTagBox}>
               <CustomText style={{fontSize: 14, color: colors.THEME}}>
                 #베스트샐러
               </CustomText>
@@ -91,7 +117,7 @@ const DetailScreen = ({navigation, route}: Props) => {
               <CustomText style={{fontSize: 14, color: colors.THEME}}>
                 #현대소설
               </CustomText>
-            </View>
+            </View> */}
             <View style={styles.titleBox}>
               <View
                 style={{
