@@ -40,6 +40,6 @@ export type SearchScreens = {
 export type SocialScreens = {
   Main: undefined;
   Category__hide: undefined;
-  Detail: undefined;
+  Detail: {props: SocialGroup};
   Form: undefined;
 };

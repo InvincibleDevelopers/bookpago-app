@@ -103,7 +103,6 @@ const MainScreen = ({navigation}: Props) => {
     <SafeAreaView style={{flex: 1}}>
       <DismissKeyboardView style={{flex: 1}}>
         <SearchHeader
-          isShowAiButton
           aiButtonType="book"
           value={inputValue}
           onChangeText={onChangeText}

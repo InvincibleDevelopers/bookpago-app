@@ -1,5 +1,7 @@
 import {Picker} from '@react-native-picker/picker';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {get} from '@src/api/axios';
+import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
@@ -7,6 +9,7 @@ import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants';
 import {SocialScreens} from '@src/types';
+import {useQuery} from '@tanstack/react-query';
 import {useState} from 'react';
 import {
   Image,
@@ -15,6 +18,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  ActivityIndicator,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SocialScreens, 'Main'>;
@@ -23,13 +27,68 @@ const MainScreen = ({navigation}: Props) => {
   const tabnav = navigation.getParent();
   const [v, s] = useState(0);
 
+  const socialClubQuery = useQuery<SocialGroup[], {error: string}>({
+    queryKey: ['/social/clubs'],
+    queryFn: async () => {
+      //page가 0부터 시작
+      const body: {content: {meetingTime: string} & SocialGroup[]} = await get({
+        path: '/social/clubs?page=0&size=10',
+      });
+      return body.content;
+    },
+    select: datas => {
+      return datas.map(data => ({
+        ...data,
+        meetingTime: new Date(data.meetingTime),
+      }));
+    },
+  });
+
+  if (socialClubQuery.error) {
+    <SafeAreaView style={styles.container}>
+      <Header
+        buttons={[<MypageButton onPress={() => tabnav?.navigate('Mypage')} />]}
+      />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <CustomText style={styles.messageText}>
+          {socialClubQuery.error.error}
+        </CustomText>
+        <CustomButton
+          bApplyCommonStyle={true}
+          containerstyle={{
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 3,
+          }}
+          text="뒤로가기"
+          onPress={() => navigation.goBack()}
+        />
+      </View>
+    </SafeAreaView>;
+  }
+
+  if (socialClubQuery.isPending) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Header
+          buttons={[
+            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
+          ]}
+        />
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={colors.THEME} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
         buttons={[<MypageButton onPress={() => tabnav?.navigate('Mypage')} />]}
       />
-      <ScrollView style={styles.scrollBox}>
-        <View style={styles.inner}>
+      <View style={styles.content}>
+        <View style={styles.topBox}>
           <View style={styles.pickerBox}>
             <Picker
               selectedValue={v}
@@ -78,71 +137,25 @@ const MainScreen = ({navigation}: Props) => {
               <BorderButton>기타등등</BorderButton>
             </ScrollView>
           </View>
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
-          <GroupCard
-            members={5}
-            clubName="Hello"
-            meetingTime={new Date()}
-            location={'서울대학교'}
-            row={2}
-            style={{width: '100%'}}
-            description="asdasdasdasd"
-          />
         </View>
-      </ScrollView>
+        <ScrollView
+          style={styles.scrollBox}
+          contentContainerStyle={styles.inner}>
+          {socialClubQuery.data?.map((data, index) => (
+            <GroupCard
+              key={index}
+              clubName={data.clubName}
+              style={{width: '100%'}}
+              members={data.members}
+              meetingTime={data.meetingTime}
+              location={data.location}
+              row={2}
+              description="adasdasd"
+              onPress={() => navigation.navigate('Detail', {props: data})}
+            />
+          ))}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -152,13 +165,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACKGROUND,
   },
-  scrollBox: {
+  content: {
     flex: 1,
   },
-  inner: {
+  topBox: {
     marginVertical: 20, // 안쪽 마진
     marginHorizontal: 20, // 바깥쪽 마진
-    gap: 20,
   },
   pickerBox: {
     backgroundColor: colors.WHITE,
@@ -171,6 +183,17 @@ const styles = StyleSheet.create({
   },
   picker: {
     color: colors.THEME,
+  },
+  scrollBox: {
+    // marginVertical: 20, // 안쪽 마진
+  },
+  inner: {
+    gap: 20,
+    marginHorizontal: 20, // 바깥쪽 마진
+  },
+  messageText: {
+    fontSize: 17,
+    color: colors.GRAY_300,
   },
 });
 

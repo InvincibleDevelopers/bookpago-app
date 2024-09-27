@@ -66,7 +66,7 @@ const DetailScreen = ({navigation, route}: Props) => {
               borderRadius: 3,
             }}
             text="뒤로가기"
-            onPress={() => navigation.navigate('Main')}
+            onPress={() => navigation.goBack()}
           />
         </View>
       </SafeAreaView>

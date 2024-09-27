@@ -53,51 +53,50 @@ const HomeScreen = ({navigation, route}: Props) => {
       <Header
         buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
       />
-      <ScrollView style={styles.scrollBox}>
-        <View style={styles.inner}>
-          <View style={styles.section}>
-            <CustomText style={styles.sectionTitle}>
-              책파고가 소개하는 인기도서 리스트
-            </CustomText>
-            {bestsellerQuery.isPending ? (
-              <View style={{height: 195, justifyContent: 'center'}}>
-                <ActivityIndicator size="large" color={colors.THEME} />
-              </View>
-            ) : (
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{gap: 10}}
-                overScrollMode="never" // Android
-                bounces={false} // iOS
-                horizontal>
-                {bestsellerQuery.data?.map((item, index) => {
-                  return (
-                    <BookCard
-                      key={item.isbn.toString() + index}
-                      isbn={item.isbn}
-                      title={item.title}
-                      image={item.image}
-                      author={item.author}
-                      isFavorite={false}
-                      isShowFavorite={true}
-                      onPress={() =>
-                        tabnav?.navigate('Search', {
-                          screen: 'Detail',
-                          params: {
-                            props: {
-                              isbn: item.isbn,
-                            },
+      <ScrollView style={styles.scrollBox} contentContainerStyle={styles.inner}>
+        <View style={styles.section}>
+          <CustomText style={styles.sectionTitle}>
+            책파고가 소개하는 인기도서 리스트
+          </CustomText>
+          {bestsellerQuery.isPending ? (
+            <View style={{height: 195, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" color={colors.THEME} />
+            </View>
+          ) : (
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{gap: 10}}
+              overScrollMode="never" // Android
+              bounces={false} // iOS
+              horizontal>
+              {bestsellerQuery.data?.map((item, index) => {
+                return (
+                  <BookCard
+                    key={item.isbn.toString() + index}
+                    isbn={item.isbn}
+                    title={item.title}
+                    image={item.image}
+                    author={item.author}
+                    isFavorite={false}
+                    isShowFavorite={true}
+                    onPress={() =>
+                      tabnav?.navigate('Search', {
+                        screen: 'Detail',
+                        params: {
+                          props: {
+                            isbn: item.isbn,
                           },
-                        })
-                      }
-                      onToggleFavorite={e => console.log(e)}
-                    />
-                  );
-                })}
-              </ScrollView>
-            )}
-          </View>
-          {/* <View style={styles.section}>
+                        },
+                      })
+                    }
+                    onToggleFavorite={e => console.log(e)}
+                  />
+                );
+              })}
+            </ScrollView>
+          )}
+        </View>
+        {/* <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               사용자 맞춤 추천 도서
             </CustomText>
@@ -113,7 +112,7 @@ const HomeScreen = ({navigation, route}: Props) => {
               <WideBookCard />
             </ScrollView>
           </View> */}
-          {/* <View style={styles.section}>
+        {/* <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               이달의 도서 카테고리
             </CustomText>
@@ -151,39 +150,41 @@ const HomeScreen = ({navigation, route}: Props) => {
               })}
             </ScrollView>
           </View> */}
-          <View style={styles.section}>
-            <CustomText style={styles.sectionTitle}>
-              현재 핫한 독서 모임
-            </CustomText>
-            {socialClubQuery.isPending ? (
-              <View style={{height: 150, justifyContent: 'center'}}>
-                <ActivityIndicator size="large" color={colors.THEME} />
-              </View>
-            ) : (
-              <ScrollView
-                contentContainerStyle={{gap: 10}}
-                showsHorizontalScrollIndicator={false}
-                overScrollMode="never" // Android
-                bounces={false} // iOS
-                horizontal>
-                {socialClubQuery.data?.map((item, index) => {
-                  return (
-                    <GroupCard
-                      key={index}
-                      members={item.members}
-                      clubName={item.clubName}
-                      meetingTime={item.meetingTime}
-                      location={item.location}
-                      description="asdasdasdasd"
-                      onPress={() =>
-                        tabnav?.navigate('Social', {screen: 'Detail'})
-                      }
-                    />
-                  );
-                })}
-              </ScrollView>
-            )}
-          </View>
+        <View style={styles.section}>
+          <CustomText style={styles.sectionTitle}>
+            현재 핫한 독서 모임
+          </CustomText>
+          {socialClubQuery.isPending ? (
+            <View style={{height: 150, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" color={colors.THEME} />
+            </View>
+          ) : (
+            <ScrollView
+              contentContainerStyle={{gap: 10}}
+              showsHorizontalScrollIndicator={false}
+              overScrollMode="never" // Android
+              bounces={false} // iOS
+              horizontal>
+              {socialClubQuery.data?.map((item, index) => {
+                return (
+                  <GroupCard
+                    key={index}
+                    members={item.members}
+                    clubName={item.clubName}
+                    meetingTime={item.meetingTime}
+                    location={item.location}
+                    description="asdasdasdasd"
+                    onPress={() =>
+                      tabnav?.navigate('Social', {
+                        screen: 'Detail',
+                        params: {props: item},
+                      })
+                    }
+                  />
+                );
+              })}
+            </ScrollView>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
