@@ -6,30 +6,25 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import CustomText from './CustomText';
-import CustomButton, {CustomButtonProps} from './CustomButton';
+import CustomText from '../../CustomText';
+import {CustomButtonProps} from '../../CustomButton';
 import {colors} from '@src/constants';
 
-export interface CardProps extends CustomButtonProps {
-  style?: StyleProp<ViewStyle>;
-  members: number;
-  clubName: string;
-  time: string;
-  location: string;
+export interface GroupCardProps extends CustomButtonProps, SocialGroup {
   row?: 1 | 2;
   onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 const GroupCard = ({
   style,
   members,
   clubName,
-  time,
+  meetingTime,
   location,
   row = 1,
   onPress,
-  ...props
-}: CardProps) => {
+}: GroupCardProps) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -55,7 +50,12 @@ const GroupCard = ({
               source={require('@src/assets/icons/clock.png')}
             />
             <CustomText style={styles.subText} numberOfLines={1}>
-              {time}
+              {meetingTime.toLocaleDateString('ko-KR', {
+                weekday: 'short',
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit',
+              })}
             </CustomText>
           </View>
           <View style={styles.sub}>

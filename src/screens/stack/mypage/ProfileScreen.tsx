@@ -1,15 +1,15 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import GroupCard from '@src/components/GroupCard';
+import GroupCard from '@src/components/common/card/GroupCard';
 import RecentBook from '@src/components/RecentBook';
-import { colors } from '@src/constants/colors';
+import {colors} from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
 import useOnStart from '@src/hooks/useOnStart';
-import { MyPageScreens, UserProfile } from '@src/types';
-import { MainContext } from '@src/utils/Context';
-import { useContext, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import {MyPageScreens, UserProfile} from '@src/types';
+import {MainContext} from '@src/utils/Context';
+import {useContext, useState} from 'react';
+import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
 
@@ -22,8 +22,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   const {user, setUser, token} = useContext(MainContext);
 
-  useOnStart(() => {
-  });
+  useOnStart(() => {});
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -61,7 +60,14 @@ const ProfileScreen = ({navigation, route}: Props) => {
         {/*-------------------------------------------------*/}
 
         <Image
-          style={{position: 'absolute', width: 50, height: 50, left: 20, top: 150, zIndex: 1}}
+          style={{
+            position: 'absolute',
+            width: 50,
+            height: 50,
+            left: 20,
+            top: 150,
+            zIndex: 1,
+          }}
           resizeMode="center"
           source={{uri: `${user.image}`}}
         />
@@ -98,11 +104,25 @@ const ProfileScreen = ({navigation, route}: Props) => {
           </View>
           <View>
             <ScrollView horizontal={true} style={{marginTop: 10}}>
-              <GroupCard members={5} clubName="Hello" time={"투썸 앞 14:00"} location={"서울대학교"}/>
+              <GroupCard
+                members={5}
+                clubName="Hello"
+                time={'투썸 앞 14:00'}
+                location={'서울대학교'}
+              />
             </ScrollView>
           </View>
-          <ScrollView horizontal={true} style={{marginTop: "10%"}} contentContainerStyle={{gap: 20}}>
-            <RecentBook path={"https://front-umber-omega.vercel.app/_next/image?url=%2Fimage.jpg&w=1080&q=75"} title={"해리포터: 죽음의 성물과 아즈카반의 죄수 뭐시기들"} detail={"Rowling, J.K 저자"}/>
+          <ScrollView
+            horizontal={true}
+            style={{marginTop: '10%'}}
+            contentContainerStyle={{gap: 20}}>
+            <RecentBook
+              path={
+                'https://front-umber-omega.vercel.app/_next/image?url=%2Fimage.jpg&w=1080&q=75'
+              }
+              title={'해리포터: 죽음의 성물과 아즈카반의 죄수 뭐시기들'}
+              detail={'Rowling, J.K 저자'}
+            />
           </ScrollView>
         </View>
       </ScrollView>

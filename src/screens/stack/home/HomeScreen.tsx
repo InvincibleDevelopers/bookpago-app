@@ -1,19 +1,52 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
-import GroupCard from '@src/components/GroupCard';
-import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
-import BookCardWithFavorite from '@src/components/common/card/BookCardWithFavorite';
-import WideBookCard from '@src/components/common/card/WideBookCard';
+import BookCard from '@src/components/common/card/BookCard';
+import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
-import {HomeScreens} from '@src/types';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {BookItem, HomeScreens} from '@src/types';
+import {useQuery} from '@tanstack/react-query';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 type Props = NativeStackScreenProps<HomeScreens, 'Main'>;
 
 const HomeScreen = ({navigation, route}: Props) => {
   const tabnav = navigation.getParent();
+
+  const bestsellerQuery = useQuery({
+    queryKey: ['/books/bestsellers'],
+    queryFn: async () => {
+      const body: {books: BookItem[]; total: number} = await get({
+        path: '/books/bestsellers',
+      });
+      return body.books;
+    },
+  });
+
+  const socialClubQuery = useQuery({
+    queryKey: ['/social/clubs'],
+    queryFn: async () => {
+      //page가 0부터 시작
+      const body: {content: {meetingTime: string} & SocialGroup[]} = await get({
+        path: '/social/clubs?page=0&size=10',
+      });
+      return body.content;
+    },
+    select: datas => {
+      return datas.map(data => ({
+        ...data,
+        meetingTime: new Date(data.meetingTime),
+      }));
+    },
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,28 +59,36 @@ const HomeScreen = ({navigation, route}: Props) => {
             <CustomText style={styles.sectionTitle}>
               책파고가 소개하는 인기도서 리스트
             </CustomText>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                gap: 10,
-              }}
-              overScrollMode="never" // Android
-              bounces={false} // iOS
-              horizontal>
-              {Array.from({length: 6}).map((_, index) => {
-                return (
-                  <BookCardWithFavorite
-                    key={index}
-                    isbn={index}
-                    isFavorite={false}
-                    onPress={e => console.log(e)}
-                    onToggleFavorite={e => console.log(e)}
-                  />
-                );
-              })}
-            </ScrollView>
+            {bestsellerQuery.isPending ? (
+              <View style={{height: 195, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color={colors.THEME} />
+              </View>
+            ) : (
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{gap: 10}}
+                overScrollMode="never" // Android
+                bounces={false} // iOS
+                horizontal>
+                {bestsellerQuery.data?.map((item, index) => {
+                  return (
+                    <BookCard
+                      key={item.isbn.toString() + index}
+                      isbn={item.isbn}
+                      title={item.title}
+                      image={item.image}
+                      author={item.author}
+                      isFavorite={false}
+                      isShowFavorite={true}
+                      onPress={e => console.log(item.isbn)}
+                      onToggleFavorite={e => console.log(e)}
+                    />
+                  );
+                })}
+              </ScrollView>
+            )}
           </View>
-          <View style={styles.section}>
+          {/* <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               사용자 맞춤 추천 도서
             </CustomText>
@@ -61,14 +102,9 @@ const HomeScreen = ({navigation, route}: Props) => {
               bounces={false} // iOS
               horizontal>
               <WideBookCard />
-              <WideBookCard />
-              <WideBookCard />
-              <WideBookCard />
-              <WideBookCard />
-              <WideBookCard />
             </ScrollView>
-          </View>
-          <View style={styles.section}>
+          </View> */}
+          {/* <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               이달의 도서 카테고리
             </CustomText>
@@ -84,21 +120,6 @@ const HomeScreen = ({navigation, route}: Props) => {
               <BorderButton id={'a'} isActive={false}>
                 베스트셀러
               </BorderButton>
-              <BorderButton id={'b'} isActive={false}>
-                스테디셀러
-              </BorderButton>
-              <BorderButton id={'c'} isActive={false}>
-                판타지
-              </BorderButton>
-              <BorderButton id={'d'} isActive={false}>
-                SF
-              </BorderButton>
-              <BorderButton id={'e'} isActive={false}>
-                인문
-              </BorderButton>
-              <BorderButton id={'f'} isActive={false}>
-                경제
-              </BorderButton>
             </ScrollView>
             <ScrollView
               contentContainerStyle={{
@@ -110,7 +131,7 @@ const HomeScreen = ({navigation, route}: Props) => {
               horizontal>
               {Array.from({length: 6}).map((_, index) => {
                 return (
-                  <BookCardWithFavorite
+                  <BookCard
                     key={index}
                     isbn={index}
                     isFavorite={false}
@@ -120,44 +141,36 @@ const HomeScreen = ({navigation, route}: Props) => {
                 );
               })}
             </ScrollView>
-          </View>
+          </View> */}
           <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               현재 핫한 독서 모임
             </CustomText>
-            <ScrollView
-              contentContainerStyle={{
-                gap: 10,
-              }}
-              showsHorizontalScrollIndicator={false}
-              overScrollMode="never" // Android
-              bounces={false} // iOS
-              horizontal>
-              <GroupCard
-                members={5}
-                clubName="Hello"
-                time={'투썸 앞 14:00'}
-                location={'서울대학교'}
-              />
-              <GroupCard
-                members={5}
-                clubName="Hello"
-                time={'투썸 앞 14:00'}
-                location={'서울대학교'}
-              />
-              <GroupCard
-                members={5}
-                clubName="Hello"
-                time={'투썸 앞 14:00'}
-                location={'서울대학교'}
-              />
-              <GroupCard
-                members={5}
-                clubName="Hello"
-                time={'투썸 앞 14:00'}
-                location={'서울대학교'}
-              />
-            </ScrollView>
+            {socialClubQuery.isPending ? (
+              <View style={{height: 150, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color={colors.THEME} />
+              </View>
+            ) : (
+              <ScrollView
+                contentContainerStyle={{gap: 10}}
+                showsHorizontalScrollIndicator={false}
+                overScrollMode="never" // Android
+                bounces={false} // iOS
+                horizontal>
+                {socialClubQuery.data?.map((item, index) => {
+                  return (
+                    <GroupCard
+                      key={index}
+                      members={item.members}
+                      clubName={item.clubName}
+                      meetingTime={item.meetingTime}
+                      location={item.location}
+                      description="asdasdasdasd"
+                    />
+                  );
+                })}
+              </ScrollView>
+            )}
           </View>
         </View>
       </ScrollView>

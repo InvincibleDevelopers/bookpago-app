@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import GroupCard from '@src/components/GroupCard';
+import GroupCard from '@src/components/common/card/GroupCard';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
@@ -44,7 +44,7 @@ const MyPageTab = ({navigation}: Props) => {
         component={FollowingScreen}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="OtherProfile"
         options={{
           headerShown: false,
@@ -57,7 +57,7 @@ const MyPageTab = ({navigation}: Props) => {
         component={OtherProfileScreen}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="Setting"
         options={{
           headerShown: false,
@@ -69,7 +69,6 @@ const MyPageTab = ({navigation}: Props) => {
         }}
         component={SettingScreen}
       />
-      
     </Stack.Navigator>
   );
 };

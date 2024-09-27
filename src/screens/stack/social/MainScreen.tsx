@@ -1,7 +1,7 @@
 import {Picker} from '@react-native-picker/picker';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomText from '@src/components/CustomText';
-import GroupCard from '@src/components/GroupCard';
+import GroupCard from '@src/components/common/card/GroupCard';
 import Selection from '@src/components/Selection';
 import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
@@ -82,58 +82,65 @@ const MainScreen = ({navigation}: Props) => {
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
           <GroupCard
             members={5}
             clubName="Hello"
-            time={'투썸 앞 14:00'}
+            meetingTime={new Date()}
             location={'서울대학교'}
             row={2}
             style={{width: '100%'}}
+            description="asdasdasdasd"
           />
         </View>
       </ScrollView>
