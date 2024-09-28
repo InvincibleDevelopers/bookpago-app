@@ -77,8 +77,6 @@ const HomeScreen = ({navigation, route}: Props) => {
                     title={item.title}
                     image={item.image}
                     author={item.author}
-                    isFavorite={false}
-                    isShowFavorite={true}
                     onPress={() =>
                       tabnav?.navigate('Search', {
                         screen: 'Detail',
@@ -89,7 +87,6 @@ const HomeScreen = ({navigation, route}: Props) => {
                         },
                       })
                     }
-                    onToggleFavorite={e => console.log(e)}
                   />
                 );
               })}

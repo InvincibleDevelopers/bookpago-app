@@ -46,11 +46,10 @@ const BookList = ({
   };
 
   const renderItem = useCallback(
-    ({item, index}: {item: BookItemType; index: number}) => {
+    ({item}: {item: BookItemType}) => {
       return (
         <BookItem
           item={item}
-          index={index}
           onToggleFavorite={onToggleFavorite}
           openDetail={openDetail}
         />

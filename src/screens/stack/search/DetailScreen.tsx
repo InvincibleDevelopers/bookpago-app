@@ -6,11 +6,13 @@ import MypageButton from '@src/components/common/button/MypageButton';
 import ToggleStar from '@src/components/common/button/ToggleStar';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
+import useBookFavorite from '@src/hooks/useBookFavorite';
 import {BookDetail, SearchScreens} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
-import {useState, useContext} from 'react';
+import {useContext, useState} from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Pressable,
@@ -18,7 +20,6 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  ActivityIndicator,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Detail'>;
@@ -27,27 +28,25 @@ const DetailScreen = ({navigation, route}: Props) => {
   const props = route.params.props;
   const tabnav = navigation.getParent();
   const [isShow, setIsShow] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
   const {kakaoId} = useContext(MainContext);
 
   const detailQuery = useQuery<BookDetail, {error: string}>({
     queryKey: ['/books/:isbn', props.isbn],
     queryFn: async () => {
-      console.log(`/books/${props.isbn}?kakaoId=${kakaoId}`);
       const body: BookDetail = await get({
         path: `/books/${props.isbn}?kakaoId=${kakaoId}`,
       });
 
       return body;
     },
+    staleTime: 3 * 1000,
+    gcTime: 30 * 1000,
   });
+
+  const favoriteMutation = useBookFavorite(kakaoId!);
 
   const toggleShow = () => {
     setIsShow(pre => !pre);
-  };
-
-  const toggleFavorite = () => {
-    setIsFavorite(pre => !pre);
   };
 
   if (detailQuery.error) {
@@ -143,7 +142,15 @@ const DetailScreen = ({navigation, route}: Props) => {
                   {detailQuery.data?.author}
                 </CustomText>
               </View>
-              <ToggleStar isActive={isFavorite} onPress={toggleFavorite} />
+              <ToggleStar
+                isActive={detailQuery.data.wishBook}
+                onPress={() =>
+                  favoriteMutation.mutate({
+                    isbn: props.isbn,
+                    isFavorite: detailQuery.data.wishBook,
+                  })
+                }
+              />
             </View>
             <View>
               <CustomText

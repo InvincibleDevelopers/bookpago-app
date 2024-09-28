@@ -1,22 +1,15 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
-import BookList from '@src/components/search/BookList';
 import SearchHeader from '@src/components/common/header/SearchHeader';
+import BookList from '@src/components/search/BookList';
 import {SEARCH_PAGE_SIZE} from '@src/constants';
-import useAPI from '@src/hooks/useAPI';
-import {BookDetail, BookItem, SearchScreens} from '@src/types';
-import {waitfor} from '@src/utils/waitfor';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import {AxiosResponse} from 'axios';
-import {useContext, useMemo, useState} from 'react';
-import {Alert, findNodeHandle, Keyboard, SafeAreaView} from 'react-native';
+import useBookFavorite from '@src/hooks/useBookFavorite';
+import {BookItem, SearchScreens} from '@src/types';
 import {MainContext} from '@src/utils/Context';
+import {useInfiniteQuery} from '@tanstack/react-query';
+import {useContext, useMemo, useState} from 'react';
+import {Alert, Keyboard, SafeAreaView} from 'react-native';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
@@ -24,10 +17,7 @@ const MainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
-  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
   const {kakaoId} = useContext(MainContext);
-
-  const queryClient = useQueryClient();
 
   const searchQuery = useInfiniteQuery<
     {total: number; books: BookItem[]},
@@ -38,6 +28,7 @@ const MainScreen = ({navigation}: Props) => {
       const body: {books: BookItem[]; total: number} = await get({
         path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}&kakaoId=${kakaoId}`,
       });
+      console.log('body', body.books[0], kakaoId);
       return body;
     },
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
@@ -50,24 +41,7 @@ const MainScreen = ({navigation}: Props) => {
     },
   });
 
-  const mutate = useMutation({
-    mutationFn: async (arg: {isbn: number; isFavorite: boolean}) => {
-      await waitfor(2000);
-      return !arg.isFavorite;
-    },
-    onMutate: arg => {
-      // Optimistic Update
-      // queryClient.setQueryData<BookItem[]>(['book', searchValue], prev => {
-      //   if (!prev) {
-      //     return prev;
-      //   }
-      //   return prev.map(i => i);
-      // });
-    },
-    onError: (error, arg) => {
-      // Rollback
-    },
-  });
+  const mutation = useBookFavorite(kakaoId!);
 
   const onChangeText = (text: string) => {
     setInputValue(() => text.replace('\n', '')); // 개행문자 제거
@@ -121,7 +95,7 @@ const MainScreen = ({navigation}: Props) => {
           bookItemList={bookItemList}
           search={searchValue}
           nonce={nonce}
-          onToggleFavorite={mutate.mutate}
+          onToggleFavorite={mutation.mutate}
           openDetail={openDetail}
           onRefresh={onSearch}
           onEndReached={onEndReached}

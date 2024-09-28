@@ -1,37 +1,18 @@
-import {BookItem as BookItemType} from '@src/types';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import Line from '../common/Line';
-import CustomText from '../CustomText';
 import {colors} from '@src/constants/colors';
-import {memo, useState} from 'react';
+import {BookItem as BookItemType} from '@src/types';
+import {memo} from 'react';
+import {Dimensions, Image, Pressable, StyleSheet, View} from 'react-native';
+import CustomText from '../CustomText';
+import Line from '../common/Line';
 import ToggleStar from '../common/button/ToggleStar';
 
 interface BookItemProps {
   item: BookItemType;
-  index: number;
   onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
   openDetail: (arg: BookItemType) => void;
 }
 
-const BookItem = ({
-  item,
-  index,
-  onToggleFavorite,
-  openDetail,
-}: BookItemProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(pre => !pre);
-  };
-
+const BookItem = ({item, onToggleFavorite, openDetail}: BookItemProps) => {
   return (
     <Pressable onPress={() => openDetail(item)}>
       <View style={styles.container}>
@@ -67,7 +48,12 @@ const BookItem = ({
                 {item.author}
               </CustomText>
             </View>
-            <ToggleStar isActive={isFavorite} onPress={toggleFavorite} />
+            <ToggleStar
+              isActive={item.wishBook}
+              onPress={() =>
+                onToggleFavorite({isbn: item.isbn, isFavorite: item.wishBook})
+              }
+            />
           </View>
           {/* <View style={styles.hashtagBox}>
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>

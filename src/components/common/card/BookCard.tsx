@@ -10,7 +10,7 @@ interface BookCardWithFavoriteProps {
   author?: string;
   title?: string;
   isShowFavorite?: boolean;
-  isFavorite: boolean;
+  isFavorite?: boolean;
   onPress?: () => void;
   onToggleFavorite?: (isbn: number) => void;
   style?: StyleProp<ViewStyle>;
@@ -21,7 +21,7 @@ const BookCard = ({
   image,
   author,
   title,
-  isFavorite,
+  isFavorite = false,
   isShowFavorite = false,
   onToggleFavorite,
   onPress,

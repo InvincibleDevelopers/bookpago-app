@@ -3,6 +3,7 @@ export interface BookItem {
   title: string;
   author: string;
   image: string;
+  wishBook: boolean;
 }
 
 export interface BookDetail extends BookItem {
