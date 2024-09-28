@@ -28,7 +28,6 @@ const MainScreen = ({navigation}: Props) => {
       const body: {books: BookItem[]; total: number} = await get({
         path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}&kakaoId=${kakaoId}`,
       });
-      console.log('body', body.books[0], kakaoId);
       return body;
     },
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
@@ -83,7 +82,6 @@ const MainScreen = ({navigation}: Props) => {
           value={inputValue}
           onChangeText={onChangeText}
           onPressBack={() => navigation.goBack()}
-          onPressAi={() => console.log('ai')}
           onPressSearch={onSearch}
           onSubmitEditing={onSearch}
           returnKeyType="search"
