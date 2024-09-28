@@ -2,8 +2,6 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {colors} from '@src/constants/colors';
 import {MainTabs, MyPageScreens} from '@src/types';
-import {MainContext} from '@src/utils/Context';
-import {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import FollowingScreen from '../stack/mypage/FollowingScreen';
 import OtherProfileScreen from '../stack/mypage/OtherProfileScreen';
@@ -14,8 +12,6 @@ type Props = BottomTabScreenProps<MainTabs, 'MyPage'>;
 const Stack = createStackNavigator<MyPageScreens>();
 
 const MyPageTab = ({navigation}: Props) => {
-  const {user, token} = useContext(MainContext);
-
   return (
     <Stack.Navigator>
       <Stack.Screen

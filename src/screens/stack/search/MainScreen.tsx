@@ -14,8 +14,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import {AxiosResponse} from 'axios';
-import {useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 import {Alert, findNodeHandle, Keyboard, SafeAreaView} from 'react-native';
+import {MainContext} from '@src/utils/Context';
 
 type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
 
@@ -24,6 +25,7 @@ const MainScreen = ({navigation}: Props) => {
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
   const [isFetchingDetail, setIsFetchingDetail] = useState(false);
+  const {kakaoId} = useContext(MainContext);
 
   const queryClient = useQueryClient();
 
@@ -34,7 +36,7 @@ const MainScreen = ({navigation}: Props) => {
     queryKey: ['/books/search', searchValue, nonce],
     queryFn: async ({pageParam = 1}) => {
       const body: {books: BookItem[]; total: number} = await get({
-        path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}`,
+        path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}&kakaoId=${kakaoId}`,
       });
       return body;
     },

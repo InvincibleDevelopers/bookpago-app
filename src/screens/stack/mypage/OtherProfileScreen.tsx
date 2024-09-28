@@ -1,13 +1,12 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import { colors } from '@src/constants/colors';
+import {colors} from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
-import { MyPageScreens, UserProfile } from '@src/types';
-import { MainContext } from '@src/utils/Context';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import {MyPageScreens, UserProfile} from '@src/types';
+import {useCallback, useEffect, useState} from 'react';
+import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'OtherProfile'>;
 
@@ -17,8 +16,6 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
     nickname: '',
     username: -1,
   });
-
-  const {user, token} = useContext(MainContext);
 
   useEffect(() => {
     const temp: UserProfile = {

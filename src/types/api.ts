@@ -1,12 +1,11 @@
-import { AxiosHeaders, RawAxiosRequestHeaders } from "axios";
+import {AxiosHeaders, RawAxiosRequestHeaders} from 'axios';
 
 export interface axiosTypes<T> {
-    path: string;
-    header?: AxiosHeaders;
-    body?: Objects<T>;
+  path: string;
+  header?: Record<string, string>;
+  body?: Objects<T>;
 }
 
-
 export interface Objects<T> {
-    [key: string]: T;
+  [key: string]: T;
 }

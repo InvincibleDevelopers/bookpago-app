@@ -7,8 +7,9 @@ import ToggleStar from '@src/components/common/button/ToggleStar';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import {BookDetail, SearchScreens} from '@src/types';
+import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {
   Dimensions,
   Image,
@@ -27,13 +28,16 @@ const DetailScreen = ({navigation, route}: Props) => {
   const tabnav = navigation.getParent();
   const [isShow, setIsShow] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const {kakaoId} = useContext(MainContext);
 
   const detailQuery = useQuery<BookDetail, {error: string}>({
     queryKey: ['/books/:isbn', props.isbn],
     queryFn: async () => {
+      console.log(`/books/${props.isbn}?kakaoId=${kakaoId}`);
       const body: BookDetail = await get({
-        path: `/books/${props.isbn}`,
+        path: `/books/${props.isbn}?kakaoId=${kakaoId}`,
       });
+
       return body;
     },
   });

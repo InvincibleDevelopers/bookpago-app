@@ -1,23 +1,34 @@
-import React, {useContext} from 'react';
 import {
   createNavigationContainerRef,
   NavigationContainer,
 } from '@react-navigation/native';
-import {TabNavigators} from '@src/types';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import {TabNavigators} from '@src/types';
 import {MainContext} from '@src/utils/Context';
-import AuthNavigator from './tab/AuthNavigator';
+import React, {useContext} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import AppNavigator from './tab/AppNavigator';
+import AuthNavigator from './tab/AuthNavigator';
+import {colors} from '@src/constants';
 
 const Stack = createStackNavigator<TabNavigators>();
 
 const ref = createNavigationContainerRef();
 
 const RootNavigator = () => {
-  const {bIsLogin, setTabVisibility} = useContext(MainContext);
+  const {isLoading, kakaoId, setTabVisibility} = useContext(MainContext);
+
+  if (isLoading) {
+    // splash screen
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color={colors.THEME} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer
@@ -32,7 +43,7 @@ const RootNavigator = () => {
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forBottomSheetAndroid,
         }}>
-        {bIsLogin ? (
+        {kakaoId !== null ? (
           <Stack.Screen name="App" component={AppNavigator} />
         ) : (
           <Stack.Screen name="Auth" component={AuthNavigator} />

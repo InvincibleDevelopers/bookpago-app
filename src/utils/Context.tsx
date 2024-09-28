@@ -1,72 +1,68 @@
-import { UserProfile } from "@src/types/UserProfile";
-import { createContext, useState } from "react";
-
+import {createContext, useEffect, useState} from 'react';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 type ContextProps = {
-    bIsLogin: boolean;
-    nickname: string;
-    user: UserProfile;
-    token: string;
-    isTabVisible: boolean;
+  isLoading: boolean;
+  kakaoId: number | null;
+  isTabVisible: boolean;
 
-    setLogin: (flag: boolean)=>void;
-    setNickname: (value: string) => void;
-    setUser: (value: UserProfile) => void;
-    setToken: (value: string) => void;
-    setTabVisibility: (flag: boolean) => void;
-}
-
-const defaultContext: ContextProps = {
-    bIsLogin: true,
-    nickname: "",
-    user: {username: -1, nickname: ""},
-    token: "",
-    isTabVisible: true,
-
-
-    setUser: (value) => {},
-    setLogin: (flag)=>{},
-    setNickname: (value) => {},
-    setToken: (value)=>{},
-    setTabVisibility: (flag)=>{},
+  login: (arg: {kakaoId: number}) => void;
+  setTabVisibility: (flag: boolean) => void;
 };
 
+const defaultContext: ContextProps = {
+  isLoading: true,
+  kakaoId: null,
+  isTabVisible: true,
+
+  login: () => {},
+  setTabVisibility: flag => {},
+};
 
 export const MainContext = createContext(defaultContext);
 
 const ContextProvider = ({children}: {children: React.ReactNode}) => {
-    const [bIsLogin, setIsLogin] = useState(false);
-    const [nickname, setNick] = useState("");
-    const [user, setCurrentUser] = useState<UserProfile>({username: -1, nickname: ""});
-    const [token, setCurrentToken] = useState("");
-    const [isTabVisible, setContextTabVisibility] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState(true); // 카카오 아이디를 가져오는중..
+  const [kakaoId, setKakaoId] = useState<number | null>(null); // null이면 로그인 안한거임
+  const [isTabVisible, setContextTabVisibility] = useState<boolean>(true);
 
-    const setTabVisibility = (flag: boolean) => {
-        setContextTabVisibility(flag);
-    };
+  const setTabVisibility = (flag: boolean) => {
+    setContextTabVisibility(flag);
+  };
 
-    const setUser = (value: UserProfile) => {
-        setCurrentUser(value);
-    };
+  const login = async ({kakaoId}: {kakaoId: number}) => {
+    await EncryptedStorage.setItem('kakaoId', kakaoId.toString());
+    setKakaoId(() => kakaoId);
+  };
 
-    const setNickname = (value: string) => {
-        setNick(value);
-    };
+  useEffect(() => {
+    EncryptedStorage.getItem('kakaoId')
+      .then(value => {
+        const num = Number(value) || null;
+        if (num === null) return;
+        login({kakaoId: num}).finally(() => {
+          setLoading(() => false);
+        });
+      })
+      .catch(() => {
+        EncryptedStorage.removeItem('kakaoId').finally(() => {
+          setLoading(() => false);
+        });
+      });
+  }, []);
 
-    const setLogin = (flag: boolean) => {
-        setIsLogin(flag);
-    };
-
-    const setToken = (value: string) => {
-        setCurrentToken(value);
-    };
-
-    return(
-        <MainContext.Provider value={{token, setToken, user, setUser, bIsLogin, setLogin, nickname, setNickname, isTabVisible, setTabVisibility}}>
-            {children}
-        </MainContext.Provider>
-    );
-
-};  
+  return (
+    <MainContext.Provider
+      value={{
+        isLoading,
+        kakaoId,
+        isTabVisible,
+        setTabVisibility,
+        login,
+      }}>
+      {children}
+    </MainContext.Provider>
+  );
+};
 
 export default ContextProvider;

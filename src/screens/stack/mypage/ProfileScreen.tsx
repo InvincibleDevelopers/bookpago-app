@@ -1,14 +1,12 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import GroupCard from '@src/components/common/card/GroupCard';
 import RecentBook from '@src/components/RecentBook';
+import GroupCard from '@src/components/common/card/GroupCard';
 import {colors} from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
-import useOnStart from '@src/hooks/useOnStart';
 import {MyPageScreens, UserProfile} from '@src/types';
-import {MainContext} from '@src/utils/Context';
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
 type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
@@ -19,10 +17,6 @@ const ProfileScreen = ({navigation, route}: Props) => {
     nickname: '',
     username: -1,
   });
-
-  const {user, setUser, token} = useContext(MainContext);
-
-  useOnStart(() => {});
 
   return (
     <SafeAreaView style={{flex: 1}}>
