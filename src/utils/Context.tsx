@@ -39,7 +39,7 @@ const ContextProvider = ({children}: {children: React.ReactNode}) => {
     EncryptedStorage.getItem('kakaoId')
       .then(value => {
         const num = Number(value) || null;
-        if (num === null) return;
+        if (num === null) return setLoading(() => false);
         login({kakaoId: num}).finally(() => {
           setLoading(() => false);
         });
