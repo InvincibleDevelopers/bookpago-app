@@ -18,18 +18,18 @@ const SocialNavigator = ({navigation}: Props) => {
         component={MainScreen}
       />
       <Stack.Screen
-        name="Detail"
-        options={{
-          headerShown: false,
-        }}
-        component={ClubDetailScreen}
-      />
-      <Stack.Screen
         name="Form"
         options={{
           headerShown: false,
         }}
         component={FormScreen}
+      />
+      <Stack.Screen
+        name="ClubDetail"
+        options={{
+          headerShown: false,
+        }}
+        component={ClubDetailScreen}
       />
     </Stack.Navigator>
   );
