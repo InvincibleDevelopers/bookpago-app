@@ -62,7 +62,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
             zIndex: 1,
           }}
           resizeMode="center"
-          source={{uri: require('@src/assets/user/profile.png')}}
+          source={require('@src/assets/user/profile.png')}
         />
         <View style={styles.bodyContainer}>
           <View style={styles.body}>
