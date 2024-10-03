@@ -1,7 +1,7 @@
 import ContextProvider from '@src/utils/Context';
 import {QueryClientProvider} from '@tanstack/react-query';
 import queryClient from '@src/api/queryClient';
-import SocketScreen from '@src/screens/ChatScreen';
+import ChatScreen from '@src/screens/ChatScreen';
 import RootNavigator from '@src/navigators/RootNavigator';
 import {
   createNavigationContainerRef,

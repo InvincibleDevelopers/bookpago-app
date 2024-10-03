@@ -6,7 +6,7 @@ interface LineProps extends ViewProps {
   type?: 'vertical' | 'horizontal';
 }
 
-const Line = ({type = 'horizontal', ...props}: LineProps) => {
+const Divider = ({type = 'horizontal', ...props}: LineProps) => {
   return (
     <View {...props} style={[styles.container, styles[type], props.style]} />
   );
@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.GRAY_200,
   },
   horizontal: {
-    borderTopColor: colors.GRAY_200,
-    borderTopWidth: 1,
+    height: 1,
   },
   vertical: {
-    borderLeftColor: colors.GRAY_200,
-    borderLeftWidth: 1,
+    width: 1,
+    height: '100%',
   },
 });
 
-export default Line;
+export default Divider;

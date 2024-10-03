@@ -2,11 +2,21 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import RecentBook from '@src/components/RecentBook';
+import Divider from '@src/components/common/Divider';
+import Spacer from '@src/components/common/Spacer';
 import GroupCard from '@src/components/common/card/GroupCard';
 import {colors} from '@src/constants/colors';
 import {MyStackParamList, UserProfile} from '@src/types';
 import {useState} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
@@ -22,26 +32,19 @@ const ProfileScreen = ({navigation, route}: Props) => {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         horizontal={false}
-        style={{flex: 1}}
         contentContainerStyle={styles.container}>
         <View
           style={{
-            padding: 30,
+            paddingHorizontal: 20,
+            paddingVertical: 20,
+            marginBottom: 50,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
+          <CustomButton hitSlop={10} text="MY" />
           <CustomButton
-            textstyle={{marginBottom: 30}}
-            containerstyle={{
-              zIndex: 10,
-              marginTop: 30,
-              width: 'auto',
-              height: 'auto',
-            }}
-            text={'MY'}
-          />
-          <CustomButton
+            hitSlop={10}
             onPress={() => navigation.navigate('Setting')}
             imageprops={{
               style: {width: 35, height: 35},
@@ -52,22 +55,20 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </View>
         {/*-------------------------------------------------*/}
 
-        <Image
-          style={{
-            position: 'absolute',
-            width: 50,
-            height: 50,
-            left: 20,
-            top: 150,
-            zIndex: 1,
-          }}
-          resizeMode="center"
-          source={require('@src/assets/user/profile.png')}
-        />
         <View style={styles.bodyContainer}>
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={require('@src/assets/user/profile.png')}
+          />
+          <View style={styles.header}>
+            <Pressable style={styles.dmButton}>
+              <Text style={{color: colors.THEME, fontSize: 16}}>DM 보내기</Text>
+            </Pressable>
+          </View>
           <View style={styles.body}>
             {/*-------------------------------------------------*/}
-            <View style={styles.username}>
+            <View style={styles.infoBox}>
               <View>
                 <CustomText style={{marginTop: 20}}>
                   {profile.nickname}
@@ -75,9 +76,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
               </View>
               <View style={styles.follow}>
                 <CustomText style={{fontSize: 15}}>팔로워</CustomText>
-                <View
-                  style={{borderWidth: 1, height: '50%', borderColor: 'gray'}}
-                />
+                <Divider type="vertical" style={{height: 15}} />
                 <CustomButton
                   onPress={() => navigation.navigate('Followee')}
                   bApplyCommonStyle={false}
@@ -86,19 +85,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
                 />
               </View>
             </View>
-            {/*-------------------------------------------------*/}
-            <View style={{marginTop: 20}}>
-              <CustomText style={{fontSize: 15}}>
-                {profile.introduce}
-              </CustomText>
-            </View>
-            {/*-------------------------------------------------*/}
-            <View style={{borderWidth: 0.5, width: '100%', marginTop: '5%'}} />
+            <Spacer height={20} />
+            <CustomText style={{fontSize: 15}}>{profile.introduce}</CustomText>
           </View>
-          {/*-------------------------------------------------*/}
-          <View style={{marginTop: 10}}>
-            <CustomText>{`참여중인 독서모임`}</CustomText>
-          </View>
+          <Divider type="horizontal" />
+          <Spacer height={20} />
+          <CustomText>{`참여중인 독서모임`}</CustomText>
           <View>
             <ScrollView horizontal={true} style={{marginTop: 10}}>
               <GroupCard
@@ -130,23 +122,29 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
     backgroundColor: colors.THEME,
-    justifyContent: 'flex-end',
   },
-
   bodyContainer: {
-    width: '100%',
-    height: '85%',
-    backgroundColor: 'white',
+    backgroundColor: colors.WHITE,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 20,
   },
-  body: {
-    marginTop: '10%',
+  image: {
+    position: 'absolute',
+    top: -50,
+    left: 20,
+    width: 100,
+    height: 100,
   },
-  username: {
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  body: {},
+  infoBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -154,6 +152,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
+  },
+  dmButton: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: colors.GRAY,
+    borderRadius: 9999,
   },
 });
 

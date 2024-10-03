@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {HomeTabParamList, SocialStackParamList} from '@src/types';
 import MainScreen from '../../screens/home/social/MainScreen';
 import FormScreen from '../../screens/home/social/FormScreen';
-import DetailScreen from '../../screens/home/social/DetailScreen';
+import ClubDetailScreen from '../../screens/home/ClubDetailScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'Social'>;
 
@@ -22,7 +22,7 @@ const SocialNavigator = ({navigation}: Props) => {
         options={{
           headerShown: false,
         }}
-        component={DetailScreen}
+        component={ClubDetailScreen}
       />
       <Stack.Screen
         name="Form"

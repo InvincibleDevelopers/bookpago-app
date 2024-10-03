@@ -5,7 +5,8 @@ import {MainContext} from '@src/utils/Context';
 import React, {useContext} from 'react';
 import HomeNavigator from './home/HomeNavigator';
 import AuthNavigator from './AuthNavigator';
-import DetailScreen from '@src/screens/home/search/DetailScreen';
+import BookDetailScreen from '@src/screens/home/BookDetailScreen';
+import ChatScreen from '@src/screens/ChatScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,7 @@ const RootNavigator = () => {
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}
+      <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );
 };

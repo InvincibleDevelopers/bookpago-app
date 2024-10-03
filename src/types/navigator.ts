@@ -3,6 +3,7 @@ import {UserProfile} from './UserProfile';
 export type RootStackParamList = {
   Auth: undefined;
   Home: undefined;
+  Chat: undefined;
 };
 
 export type AuthStackParamList = {
@@ -11,11 +12,17 @@ export type AuthStackParamList = {
 };
 
 export type HomeTabParamList = {
-  Main: undefined;
+  Home: undefined;
   Search: undefined;
   Social: undefined;
   Calendar: undefined;
   My: undefined;
+};
+
+export type MainStackParamList = {
+  Main: undefined;
+  BookDetail: {isbn: number};
+  ClubDetail: {socialGrop: SocialGroup};
 };
 
 export type MyStackParamList = {
@@ -28,11 +35,11 @@ export type MyStackParamList = {
 
 export type SearchStackParamList = {
   Main: undefined;
-  Detail: {isbn: number};
+  BookDetail: {isbn: number};
 };
 
 export type SocialStackParamList = {
   Main: undefined;
   Form: undefined;
-  Detail: {socialGrop: SocialGroup};
+  ClubDetail: {socialGrop: SocialGroup};
 };

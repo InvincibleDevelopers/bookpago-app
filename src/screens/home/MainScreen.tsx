@@ -1,3 +1,4 @@
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
@@ -6,7 +7,7 @@ import BookCard from '@src/components/common/card/BookCard';
 import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
-import {BookItem, HomeTabParamList} from '@src/types';
+import {BookItem, HomeTabParamList, MainStackParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {
   ActivityIndicator,
@@ -16,10 +17,10 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<HomeTabParamList, 'Main'>;
+type Props = NativeStackScreenProps<MainStackParamList, 'Main'>;
 
-const HomeScreen = ({navigation, route}: Props) => {
-  const tabnav = navigation.getParent();
+const MainScreen = ({navigation, route}: Props) => {
+  const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
 
   const bestsellerQuery = useQuery({
     queryKey: ['/books/bestsellers'],
@@ -51,7 +52,7 @@ const HomeScreen = ({navigation, route}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
+        buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
       />
       <ScrollView style={styles.scrollBox} contentContainerStyle={styles.inner}>
         <View style={styles.section}>
@@ -78,13 +79,8 @@ const HomeScreen = ({navigation, route}: Props) => {
                     image={item.image}
                     author={item.author}
                     onPress={() =>
-                      tabnav?.navigate('Search', {
-                        screen: 'Detail',
-                        params: {
-                          props: {
-                            isbn: item.isbn,
-                          },
-                        },
+                      navigation.navigate('BookDetail', {
+                        isbn: item.isbn,
                       })
                     }
                   />
@@ -172,9 +168,8 @@ const HomeScreen = ({navigation, route}: Props) => {
                     location={item.location}
                     description="asdasdasdasd"
                     onPress={() =>
-                      tabnav?.navigate('Social', {
-                        screen: 'Detail',
-                        params: {props: item},
+                      navigation.navigate('ClubDetail', {
+                        socialGrop: item,
                       })
                     }
                   />
@@ -213,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default MainScreen;

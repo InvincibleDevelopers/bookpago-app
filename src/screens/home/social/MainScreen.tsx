@@ -1,4 +1,5 @@
 import {Picker} from '@react-native-picker/picker';
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import CustomButton from '@src/components/CustomButton';
@@ -8,7 +9,7 @@ import MypageButton from '@src/components/common/button/MypageButton';
 import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants';
-import {SocialStackParamList} from '@src/types';
+import {HomeTabParamList, SocialStackParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {useState} from 'react';
 import {
@@ -24,7 +25,7 @@ import {
 type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
-  const tabnav = navigation.getParent();
+  const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const [v, s] = useState(0);
 
   const socialClubQuery = useQuery<SocialGroup[], {error: string}>({
@@ -47,7 +48,7 @@ const MainScreen = ({navigation}: Props) => {
   if (socialClubQuery.error) {
     <SafeAreaView style={styles.container}>
       <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('Mypage')} />]}
+        buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
       />
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <CustomText style={styles.messageText}>
@@ -71,9 +72,7 @@ const MainScreen = ({navigation}: Props) => {
     return (
       <SafeAreaView style={styles.container}>
         <Header
-          buttons={[
-            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
-          ]}
+          buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
         />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
@@ -85,7 +84,7 @@ const MainScreen = ({navigation}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('Mypage')} />]}
+        buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
       />
       <View style={styles.content}>
         <View style={styles.topBox}>
@@ -148,7 +147,9 @@ const MainScreen = ({navigation}: Props) => {
               location={data.location}
               row={2}
               description="adasdasd"
-              onPress={() => navigation.navigate('Detail', {socialGrop: data})}
+              onPress={() =>
+                navigation.navigate('ClubDetail', {socialGrop: data})
+              }
             />
           ))}
         </ScrollView>

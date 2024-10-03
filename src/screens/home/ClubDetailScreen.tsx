@@ -1,24 +1,32 @@
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants';
-import {SocialStackParamList} from '@src/types';
+import {
+  HomeTabParamList,
+  MainStackParamList,
+  SocialStackParamList,
+} from '@src/types';
 import {SafeAreaView, StyleSheet, ScrollView, View, Image} from 'react-native';
 
-type Props = NativeStackScreenProps<SocialStackParamList, 'Detail'>;
+type Props = NativeStackScreenProps<
+  MainStackParamList & SocialStackParamList,
+  'ClubDetail'
+>;
 
-const DetailScreen = ({navigation, route}: Props) => {
+const ClubDetailScreen = ({navigation, route}: Props) => {
   const props = route.params.socialGrop;
-  const tabNav = navigation.getParent();
+  const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
 
   return (
     <SafeAreaView style={styles.container}>
       <BackHeader
         imageProps={{onPress: () => navigation.goBack()}}
         title="토론모임 상세"
-        buttons={[<MypageButton onPress={() => tabNav?.navigate('Mypage')} />]}
+        buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
       />
       <ScrollView style={styles.scrollBox}>
         <View style={styles.inner}>
@@ -158,4 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailScreen;
+export default ClubDetailScreen;

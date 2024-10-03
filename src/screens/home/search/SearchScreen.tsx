@@ -58,7 +58,7 @@ const SearchScreen = ({navigation}: Props) => {
   };
 
   const openDetail = async (item: BookItem) => {
-    navigation.navigate('Detail', {isbn: item.isbn});
+    navigation.navigate('BookDetail', {isbn: item.isbn});
   };
 
   const onEndReached = () => {

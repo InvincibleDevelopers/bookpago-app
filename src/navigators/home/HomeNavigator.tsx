@@ -5,8 +5,8 @@ import SocialNavigator from '@src/navigators/home/SocialNavigator';
 import {HomeTabParamList} from '@src/types';
 import {StyleSheet} from 'react-native';
 import * as TabIcon from '@src/components/HomeTabIcons';
-import HomeScreen from '@src/screens/home/HomeScreen';
 import SearchNavigator from '@src/navigators/home/SearchNavigator';
+import MainNavigator from './MainNavigator';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -19,12 +19,12 @@ const HomeNavigator = () => {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="Main"
+        name="Home"
         options={{
           title: '홈 화면',
           tabBarIcon: TabIcon.HomeIcon,
         }}
-        component={HomeScreen}
+        component={MainNavigator}
       />
       <Tab.Screen
         name="Search"
@@ -33,14 +33,6 @@ const HomeNavigator = () => {
           tabBarIcon: TabIcon.SearchIcon,
         }}
         component={SearchNavigator}
-        listeners={({navigation}) => ({
-          tabPress: e => {
-            if (navigation.isFocused()) {
-              e.preventDefault();
-              navigation.navigate('Search', {screen: 'Main'});
-            }
-          },
-        })}
       />
       <Tab.Screen
         name="Social"

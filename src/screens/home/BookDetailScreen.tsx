@@ -1,3 +1,4 @@
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
 import CustomButton from '@src/components/CustomButton';
@@ -7,10 +8,15 @@ import ToggleStar from '@src/components/common/button/ToggleStar';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import useBookFavorite from '@src/hooks/useBookFavorite';
-import {BookDetail, SearchStackParamList} from '@src/types';
+import {
+  BookDetail,
+  HomeTabParamList,
+  MainStackParamList,
+  SearchStackParamList,
+} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -22,11 +28,14 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SearchStackParamList, 'Detail'>;
+type Props = NativeStackScreenProps<
+  SearchStackParamList & MainStackParamList,
+  'BookDetail'
+>;
 
-const DetailScreen = ({navigation, route}: Props) => {
+const BookDetailScreen = ({navigation, route}: Props) => {
   const props = route.params;
-  const tabnav = navigation.getParent();
+  const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const [isShow, setIsShow] = useState(false);
   const {kakaoId} = useContext(MainContext);
 
@@ -53,9 +62,7 @@ const DetailScreen = ({navigation, route}: Props) => {
     return (
       <SafeAreaView style={styles.container}>
         <Header
-          buttons={[
-            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
-          ]}
+          buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
         />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <CustomText style={styles.messageText}>
@@ -80,9 +87,7 @@ const DetailScreen = ({navigation, route}: Props) => {
     return (
       <SafeAreaView style={styles.container}>
         <Header
-          buttons={[
-            <MypageButton onPress={() => tabnav?.navigate('MyPage')} />,
-          ]}
+          buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
         />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
@@ -94,7 +99,7 @@ const DetailScreen = ({navigation, route}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
+        buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
       />
       <ScrollView>
         <View>
@@ -285,4 +290,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailScreen;
+export default BookDetailScreen;

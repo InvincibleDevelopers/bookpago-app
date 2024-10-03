@@ -62,34 +62,4 @@ const MyNavigator = ({navigation}: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.THEME,
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-
-  bodyContainer: {
-    width: '100%',
-    height: '85%',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    padding: 20,
-  },
-  body: {
-    marginTop: '10%',
-  },
-  username: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  follow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
-  },
-});
-
 export default MyNavigator;

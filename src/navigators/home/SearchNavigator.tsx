@@ -2,7 +2,7 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeTabParamList, SearchStackParamList} from '@src/types';
 import SearchScreen from '../../screens/home/search/SearchScreen';
-import DetailScreen from '@src/screens/home/search/DetailScreen';
+import BookDetailScreen from '@src/screens/home/BookDetailScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'Search'>;
 
@@ -17,11 +17,11 @@ const SearchNavigator = ({navigation}: Props) => {
         component={SearchScreen}
       />
       <Stack.Screen
-        name="Detail"
+        name="BookDetail"
         options={{
           headerShown: false,
         }}
-        component={DetailScreen}
+        component={BookDetailScreen}
       />
     </Stack.Navigator>
   );

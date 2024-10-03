@@ -3,7 +3,7 @@ import {BookItem as BookItemType} from '@src/types';
 import {memo} from 'react';
 import {Dimensions, Image, Pressable, StyleSheet, View} from 'react-native';
 import CustomText from '../CustomText';
-import Line from '../common/Line';
+import Divider from '../common/Divider';
 import ToggleStar from '../common/button/ToggleStar';
 
 interface BookItemProps {
@@ -16,7 +16,7 @@ const BookItem = ({item, onToggleFavorite, openDetail}: BookItemProps) => {
   return (
     <Pressable onPress={() => openDetail(item)}>
       <View style={styles.container}>
-        <Line
+        <Divider
           style={{
             position: 'absolute',
             alignItems: 'center',
