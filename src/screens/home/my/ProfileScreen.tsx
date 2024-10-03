@@ -1,3 +1,4 @@
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
@@ -6,7 +7,12 @@ import Divider from '@src/components/common/Divider';
 import Spacer from '@src/components/common/Spacer';
 import GroupCard from '@src/components/common/card/GroupCard';
 import {colors} from '@src/constants/colors';
-import {MyStackParamList, UserProfile} from '@src/types';
+import {
+  HomeTabParamList,
+  MyStackParamList,
+  RootStackParamList,
+  UserProfile,
+} from '@src/types';
 import {useState} from 'react';
 import {
   Image,
@@ -21,6 +27,9 @@ import {
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
 const ProfileScreen = ({navigation, route}: Props) => {
+  const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
+  const rootNav = navigation.getParent<NavigationProp<RootStackParamList>>();
+
   const [profile, setProfile] = useState<UserProfile>({
     nickname: '',
     username: '',
@@ -62,7 +71,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
             source={require('@src/assets/user/profile.png')}
           />
           <View style={styles.header}>
-            <Pressable style={styles.dmButton}>
+            <Pressable
+              style={styles.dmButton}
+              onPress={() => {
+                rootNav.navigate('Chat');
+              }}>
               <Text style={{color: colors.THEME, fontSize: 16}}>DM 보내기</Text>
             </Pressable>
           </View>

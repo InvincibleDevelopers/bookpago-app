@@ -26,7 +26,7 @@ const RootNavigator = () => {
         // cardStyleInterpolator: CardStyleInterpolators.forBottomSheetAndroid,
       }}>
       {kakaoId !== null ? (
-        <Stack.Screen name="Home" component={HomeNavigator} />
+        <Stack.Screen name="HomeTab" component={HomeNavigator} />
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}

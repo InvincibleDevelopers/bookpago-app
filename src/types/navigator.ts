@@ -2,7 +2,7 @@ import {UserProfile} from './UserProfile';
 
 export type RootStackParamList = {
   Auth: undefined;
-  Home: undefined;
+  HomeTab: undefined;
   Chat: undefined;
 };
 

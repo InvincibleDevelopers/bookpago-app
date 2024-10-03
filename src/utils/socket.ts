@@ -1,12 +1,9 @@
 import {DOMAIN} from '@env';
 import * as StompJs from '@stomp/stompjs';
-import {useRef} from 'react';
 import SocketJs from 'sockjs-client';
 
 export const MESSAGE_SUB = '/sub/message';
 export const MESSAGE_PUB = '/pub/hello';
-
-const socketjs = new SocketJs(`${DOMAIN}/ws`);
 
 class Socket {
   private _client: StompJs.Client | null = null;
@@ -15,11 +12,10 @@ class Socket {
 
   create() {
     const client = new StompJs.Client({
-      // brokerURL: BROKER_URL,
-      webSocketFactory: () => socketjs,
+      webSocketFactory: () => new SocketJs(`${DOMAIN}/ws`),
       connectHeaders: {},
       debug(str) {
-        // console.log('Debugging', str, client.connected);
+        console.log('Debugging', str);
       },
       onStompError(error) {
         console.error('Broker reported error: ' + error);
@@ -31,28 +27,29 @@ class Socket {
     return client;
   }
 
-  onConnect(cb: (c: StompJs.Client) => void) {
-    const client = this.create();
-    client.onConnect = () => cb(client);
-    client.activate();
-    this._client = client;
-  }
+  // onConnect(cb: (c: StompJs.Client) => void) {
+  //   const client = this.create();
+  //   client.onConnect = () => cb(client);
+  //   client.activate();
+  //   this._client = client;
+  // }
 
-  disConnect() {
-    if (this._client?.active) {
-      this._client?.deactivate();
-    }
-    this._client = null;
-  }
+  // disConnect() {
+  //   if (this._client?.active) {
+  //     this._client?.deactivate();
+  //   }
+  //   this._client = null;
+  // }
 
-  public get client() {
-    if (!this._client?.connected) return;
-    return this._client;
-  }
+  // public get client() {
+  //   // console.log('GET CLIENT', this._client?.connected);
+  //   // if (!this._client?.connected) return;
+  //   return this._client;
+  // }
 
-  static useSocket() {
-    return useRef(new Socket());
-  }
+  // static useSocket() {
+  //   return useState(new Socket());
+  // }
 }
 
 export default Socket;
