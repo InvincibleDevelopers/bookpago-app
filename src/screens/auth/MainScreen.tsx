@@ -3,13 +3,13 @@ import CustomButton from '@src/components/CustomButton';
 import {colors} from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
 import useOnStart from '@src/hooks/useOnStart';
-import {AuthScreens} from '@src/types';
+import {AuthStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useContext} from 'react';
 import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-type Props = NativeStackScreenProps<AuthScreens, 'Main'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
   const {isLoading, kakaoId} = useContext(MainContext);

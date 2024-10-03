@@ -1,17 +1,17 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {colors} from '@src/constants/colors';
-import {MainTabs, MyPageScreens} from '@src/types';
+import {HomeTabParamList, MyStackParamList} from '@src/types';
 import {StyleSheet} from 'react-native';
-import FollowingScreen from '../stack/mypage/FollowingScreen';
-import OtherProfileScreen from '../stack/mypage/OtherProfileScreen';
-import ProfileScreen from '../stack/mypage/ProfileScreen';
-import SettingScreen from '../stack/mypage/SettingScreen';
+import FollowingScreen from '../../screens/home/my/FollowingScreen';
+import OtherProfileScreen from '../../screens/home/my/OtherProfileScreen';
+import ProfileScreen from '../../screens/home/my/ProfileScreen';
+import SettingScreen from '../../screens/home/my/SettingScreen';
 
-type Props = BottomTabScreenProps<MainTabs, 'MyPage'>;
-const Stack = createStackNavigator<MyPageScreens>();
+type Props = BottomTabScreenProps<HomeTabParamList, 'My'>;
+const Stack = createStackNavigator<MyStackParamList>();
 
-const MyPageTab = ({navigation}: Props) => {
+const MyNavigator = ({navigation}: Props) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPageTab;
+export default MyNavigator;

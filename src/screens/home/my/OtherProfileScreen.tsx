@@ -4,18 +4,21 @@ import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import useAPI from '@src/hooks/useAPI';
-import {MyPageScreens, UserProfile} from '@src/types';
+import {MyStackParamList, UserProfile} from '@src/types';
+import {useQuery} from '@tanstack/react-query';
 import {useCallback, useEffect, useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
-type Props = NativeStackScreenProps<MyPageScreens, 'OtherProfile'>;
+type Props = NativeStackScreenProps<MyStackParamList, 'OtherProfile'>;
 
 const OtherProfileScreen = ({navigation, route}: Props) => {
   const {getMutation, postMutation} = useAPI();
   const [profile, setProfile] = useState<UserProfile>({
     nickname: '',
-    username: -1,
+    username: 'username',
   });
+
+  // const [] = useQuery({});
 
   useEffect(() => {
     const temp: UserProfile = {
@@ -23,7 +26,7 @@ const OtherProfileScreen = ({navigation, route}: Props) => {
       username: route.params.props.username,
       isMine: false,
     };
-    setProfile(temp);
+    // setProfile(temp);
   }, []);
 
   useFocusEffect(

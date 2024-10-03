@@ -4,18 +4,17 @@ import CustomText from '@src/components/CustomText';
 import RecentBook from '@src/components/RecentBook';
 import GroupCard from '@src/components/common/card/GroupCard';
 import {colors} from '@src/constants/colors';
-import useAPI from '@src/hooks/useAPI';
-import {MyPageScreens, UserProfile} from '@src/types';
+import {MyStackParamList, UserProfile} from '@src/types';
 import {useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
-type Props = NativeStackScreenProps<MyPageScreens, 'Profile'>;
+type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
 const ProfileScreen = ({navigation, route}: Props) => {
-  const {getMutation, postMutation} = useAPI();
   const [profile, setProfile] = useState<UserProfile>({
     nickname: '',
-    username: -1,
+    username: '',
+    image: '',
   });
 
   return (
@@ -63,14 +62,16 @@ const ProfileScreen = ({navigation, route}: Props) => {
             zIndex: 1,
           }}
           resizeMode="center"
-          source={{uri: `${user.image}`}}
+          source={{uri: require('@src/assets/user/profile.png')}}
         />
         <View style={styles.bodyContainer}>
           <View style={styles.body}>
             {/*-------------------------------------------------*/}
             <View style={styles.username}>
               <View>
-                <CustomText style={{marginTop: 20}}>{user.nickname}</CustomText>
+                <CustomText style={{marginTop: 20}}>
+                  {profile.nickname}
+                </CustomText>
               </View>
               <View style={styles.follow}>
                 <CustomText style={{fontSize: 15}}>팔로워</CustomText>
@@ -87,7 +88,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
             </View>
             {/*-------------------------------------------------*/}
             <View style={{marginTop: 20}}>
-              <CustomText style={{fontSize: 15}}>{user.introduce}</CustomText>
+              <CustomText style={{fontSize: 15}}>
+                {profile.introduce}
+              </CustomText>
             </View>
             {/*-------------------------------------------------*/}
             <View style={{borderWidth: 0.5, width: '100%', marginTop: '5%'}} />

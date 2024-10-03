@@ -7,10 +7,10 @@ import ToggleStar from '@src/components/common/button/ToggleStar';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import useBookFavorite from '@src/hooks/useBookFavorite';
-import {BookDetail, SearchScreens} from '@src/types';
+import {BookDetail, SearchStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -22,10 +22,10 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SearchScreens, 'Detail'>;
+type Props = NativeStackScreenProps<SearchStackParamList, 'Detail'>;
 
 const DetailScreen = ({navigation, route}: Props) => {
-  const props = route.params.props;
+  const props = route.params;
   const tabnav = navigation.getParent();
   const [isShow, setIsShow] = useState(false);
   const {kakaoId} = useContext(MainContext);

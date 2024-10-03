@@ -1,30 +1,24 @@
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {UserProfile} from './UserProfile';
-import {BookItem} from './book';
 
-export type MainTabs = {
-  Home: undefined;
-  Search: undefined;
-  Social: undefined;
-  Calendar: undefined;
-  MyPage: undefined;
-};
-
-export type TabNavigators = {
+export type RootStackParamList = {
   Auth: undefined;
-  App: undefined;
+  Home: undefined;
 };
 
-export type AuthScreens = {
+export type AuthStackParamList = {
   Main: undefined;
   Login: undefined;
 };
 
-export type HomeScreens = {
-  Main: {tabnav: BottomTabNavigationProp<MainTabs>};
+export type HomeTabParamList = {
+  Main: undefined;
+  Search: undefined;
+  Social: undefined;
+  Calendar: undefined;
+  My: undefined;
 };
 
-export type MyPageScreens = {
+export type MyStackParamList = {
   Profile: undefined;
   OtherProfile: {props: UserProfile};
   Followee: undefined;
@@ -32,14 +26,13 @@ export type MyPageScreens = {
   Setting: undefined;
 };
 
-export type SearchScreens = {
+export type SearchStackParamList = {
   Main: undefined;
-  Detail: {props: {isbn: number}};
+  Detail: {isbn: number};
 };
 
-export type SocialScreens = {
+export type SocialStackParamList = {
   Main: undefined;
-  Category__hide: undefined;
-  Detail: {props: SocialGroup};
   Form: undefined;
+  Detail: {socialGrop: SocialGroup};
 };

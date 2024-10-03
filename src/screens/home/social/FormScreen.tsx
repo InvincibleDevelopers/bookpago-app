@@ -1,9 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
-import {SocialScreens} from '@src/types';
+import {SocialStackParamList} from '@src/types';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
-type Props = NativeStackScreenProps<SocialScreens, 'Form'>;
+type Props = NativeStackScreenProps<SocialStackParamList, 'Form'>;
 
 const FormScreen = ({navigation}: Props) => {
   return (

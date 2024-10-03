@@ -12,7 +12,7 @@ import CustomText from '@src/components/CustomText';
 import InputField from '@src/components/InputField';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import {colors} from '@src/constants/colors';
-import {AuthScreens} from '@src/types';
+import {AuthStackParamList} from '@src/types';
 import {UserProfile} from '@src/types/UserProfile';
 import {MainContext} from '@src/utils/Context';
 import {useContext, useState} from 'react';
@@ -41,7 +41,7 @@ type JoinBody = {
   introduce: string;
 };
 
-type Props = NativeStackScreenProps<AuthScreens, 'Login'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 const LoginScreen = ({navigation}: Props) => {
   const ctx = useContext(MainContext);

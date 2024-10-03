@@ -4,13 +4,13 @@ import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants';
-import {SocialScreens} from '@src/types';
+import {SocialStackParamList} from '@src/types';
 import {SafeAreaView, StyleSheet, ScrollView, View, Image} from 'react-native';
 
-type Props = NativeStackScreenProps<SocialScreens, 'Detail'>;
+type Props = NativeStackScreenProps<SocialStackParamList, 'Detail'>;
 
 const DetailScreen = ({navigation, route}: Props) => {
-  const props = route.params.props;
+  const props = route.params.socialGrop;
   const tabNav = navigation.getParent();
 
   return (

@@ -2,11 +2,11 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import UserCard from '@src/components/UserCard';
 import useAPI from '@src/hooks/useAPI';
 import useOnStart from '@src/hooks/useOnStart';
-import {MyPageScreens, UserProfile} from '@src/types';
+import {MyStackParamList, UserProfile} from '@src/types';
 import {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 
-type Props = NativeStackScreenProps<MyPageScreens>;
+type Props = NativeStackScreenProps<MyStackParamList>;
 
 const FollowingScreen = ({navigation, route}: Props) => {
   const [data, setData] = useState<UserProfile[]>([]);

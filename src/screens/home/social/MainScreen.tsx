@@ -8,7 +8,7 @@ import MypageButton from '@src/components/common/button/MypageButton';
 import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants';
-import {SocialScreens} from '@src/types';
+import {SocialStackParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {useState} from 'react';
 import {
@@ -21,7 +21,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SocialScreens, 'Main'>;
+type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
   const tabnav = navigation.getParent();
@@ -116,10 +116,7 @@ const MainScreen = ({navigation}: Props) => {
               overScrollMode="never" // Android
               bounces={false} // iOS
             >
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('Category__hide');
-                }}>
+              <Pressable onPress={() => {}}>
                 <Image
                   style={{
                     width: 30,
@@ -151,7 +148,7 @@ const MainScreen = ({navigation}: Props) => {
               location={data.location}
               row={2}
               description="adasdasd"
-              onPress={() => navigation.navigate('Detail', {props: data})}
+              onPress={() => navigation.navigate('Detail', {socialGrop: data})}
             />
           ))}
         </ScrollView>

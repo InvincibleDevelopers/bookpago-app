@@ -4,7 +4,7 @@ import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants';
-import {SocialScreens} from '@src/types';
+import {SocialStackParamList} from '@src/types';
 import {
   Pressable,
   SafeAreaView,
@@ -14,17 +14,13 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SocialScreens, 'Category__hide'>;
-
-const CategoryScreen = ({navigation}: Props) => {
-  const tabnav = navigation.getParent();
-
+const CategoryScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <BackHeader
         title="카테고리"
-        imageProps={{onPress: () => navigation.goBack()}}
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('MyPage')} />]}
+        imageProps={{onPress: () => {}}}
+        buttons={[<MypageButton onPress={() => {}} />]}
       />
       <View style={styles.inner}>
         <View>
@@ -100,9 +96,7 @@ const CategoryScreen = ({navigation}: Props) => {
           <BorderButton>전체</BorderButton>
         </ScrollView>
         <View style={styles.buttonBox}>
-          <Pressable
-            style={styles.button}
-            onPress={() => navigation.navigate('Main')}>
+          <Pressable style={styles.button} onPress={() => {}}>
             <Text style={styles.buttonText}>설정 완료</Text>
           </Pressable>
         </View>

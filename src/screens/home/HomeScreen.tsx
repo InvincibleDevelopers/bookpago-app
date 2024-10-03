@@ -6,7 +6,7 @@ import BookCard from '@src/components/common/card/BookCard';
 import GroupCard from '@src/components/common/card/GroupCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
-import {BookItem, HomeScreens} from '@src/types';
+import {BookItem, HomeTabParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {
   ActivityIndicator,
@@ -16,7 +16,7 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<HomeScreens, 'Main'>;
+type Props = NativeStackScreenProps<HomeTabParamList, 'Main'>;
 
 const HomeScreen = ({navigation, route}: Props) => {
   const tabnav = navigation.getParent();

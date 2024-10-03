@@ -5,15 +5,15 @@ import SearchHeader from '@src/components/common/header/SearchHeader';
 import BookList from '@src/components/search/BookList';
 import {SEARCH_PAGE_SIZE} from '@src/constants';
 import useBookFavorite from '@src/hooks/useBookFavorite';
-import {BookItem, SearchScreens} from '@src/types';
+import {BookItem, SearchStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {useContext, useMemo, useState} from 'react';
 import {Alert, Keyboard, SafeAreaView} from 'react-native';
 
-type Props = NativeStackScreenProps<SearchScreens, 'Main'>;
+type Props = NativeStackScreenProps<SearchStackParamList, 'Main'>;
 
-const MainScreen = ({navigation}: Props) => {
+const SearchScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
@@ -58,7 +58,7 @@ const MainScreen = ({navigation}: Props) => {
   };
 
   const openDetail = async (item: BookItem) => {
-    navigation.navigate('Detail', {props: {isbn: item.isbn}});
+    navigation.navigate('Detail', {isbn: item.isbn});
   };
 
   const onEndReached = () => {
@@ -104,4 +104,4 @@ const MainScreen = ({navigation}: Props) => {
   );
 };
 
-export default MainScreen;
+export default SearchScreen;
