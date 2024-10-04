@@ -12,7 +12,7 @@ import {colors} from '@src/constants';
 
 export interface ClubCardProps extends CustomButtonProps {
   row?: 1 | 2;
-  data: SocialGroup;
+  data: SocialClub;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }

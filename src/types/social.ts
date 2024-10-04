@@ -1,4 +1,4 @@
-type SocialGroup = {
+type SocialClub = {
   clubId: number;
   members: number;
   clubName: string;

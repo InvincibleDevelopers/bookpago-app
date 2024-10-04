@@ -22,7 +22,7 @@ export type HomeTabParamList = {
 export type MainStackParamList = {
   Main: undefined;
   BookDetail: {isbn: number};
-  ClubDetail: {socialGrop: SocialGroup};
+  ClubDetail: {socialGrop: SocialClub};
 };
 
 export type MyStackParamList = {
@@ -41,5 +41,5 @@ export type SearchStackParamList = {
 export type SocialStackParamList = {
   Main: undefined;
   Form: undefined;
-  ClubDetail: {socialGrop: SocialGroup};
+  ClubDetail: {socialGrop: SocialClub};
 };

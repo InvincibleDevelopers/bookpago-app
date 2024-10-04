@@ -20,6 +20,7 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
@@ -29,14 +30,14 @@ const MainScreen = ({navigation}: Props) => {
   const [v, s] = useState(0);
 
   const socialClubQuery = useQuery<
-    ({id: number} & Omit<SocialGroup, 'id'>)[],
+    ({id: number} & Omit<SocialClub, 'id'>)[],
     {error: string},
-    SocialGroup[]
+    SocialClub[]
   >({
     queryKey: ['/social/clubs'],
     queryFn: async () => {
       //page가 0부터 시작
-      const body: {content: ({id: number} & Omit<SocialGroup, 'id'>)[]} =
+      const body: {content: ({id: number} & Omit<SocialClub, 'id'>)[]} =
         await get({
           path: '/social/clubs?page=0&size=10',
         });
@@ -153,6 +154,11 @@ const MainScreen = ({navigation}: Props) => {
             />
           ))}
         </ScrollView>
+        <Pressable
+          style={styles.postButton}
+          onPress={() => navigation.navigate('Form')}>
+          <Text style={styles.postButtonText}>모임 만들기</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -192,6 +198,18 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 17,
     color: colors.GRAY_300,
+  },
+  postButton: {
+    backgroundColor: colors.THEME,
+    position: 'absolute',
+    paddingVertical: 7.5,
+    paddingHorizontal: 10,
+    right: 10,
+    bottom: 10,
+    borderRadius: 9999,
+  },
+  postButtonText: {
+    color: colors.WHITE,
   },
 });
 
