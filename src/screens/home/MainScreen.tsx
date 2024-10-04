@@ -32,7 +32,11 @@ const MainScreen = ({navigation, route}: Props) => {
     },
   });
 
-  const socialClubQuery = useQuery({
+  const socialClubQuery = useQuery<
+    ({id: number} & Omit<SocialGroup, 'id'>)[],
+    {error: string},
+    SocialGroup[]
+  >({
     queryKey: ['/social/clubs'],
     queryFn: async () => {
       //page가 0부터 시작

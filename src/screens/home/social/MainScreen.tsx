@@ -28,19 +28,24 @@ const MainScreen = ({navigation}: Props) => {
   const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const [v, s] = useState(0);
 
-  const socialClubQuery = useQuery<SocialGroup[], {error: string}>({
+  const socialClubQuery = useQuery<
+    ({id: number} & Omit<SocialGroup, 'id'>)[],
+    {error: string},
+    SocialGroup[]
+  >({
     queryKey: ['/social/clubs'],
     queryFn: async () => {
       //page가 0부터 시작
-      const body: {content: {meetingTime: string} & SocialGroup[]} = await get({
-        path: '/social/clubs?page=0&size=10',
-      });
+      const body: {content: ({id: number} & Omit<SocialGroup, 'id'>)[]} =
+        await get({
+          path: '/social/clubs?page=0&size=10',
+        });
       return body.content;
     },
     select: datas => {
       return datas.map(data => ({
         ...data,
-        meetingTime: new Date(data.meetingTime),
+        clubId: data.id,
       }));
     },
   });
@@ -140,13 +145,8 @@ const MainScreen = ({navigation}: Props) => {
           {socialClubQuery.data?.map((data, index) => (
             <ClubCard
               key={index}
-              clubName={data.clubName}
-              style={{width: '100%'}}
-              members={data.members}
-              meetingTime={data.meetingTime}
-              location={data.location}
+              data={data}
               row={2}
-              description="adasdasd"
               onPress={() =>
                 navigation.navigate('ClubDetail', {socialGrop: data})
               }

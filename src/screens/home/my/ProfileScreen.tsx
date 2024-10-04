@@ -106,13 +106,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <CustomText>{`참여중인 독서모임`}</CustomText>
           <View>
             <ScrollView horizontal={true} style={{marginTop: 10}}>
-              <ClubCard
+              {/* <ClubCard
                 members={5}
                 clubName="Hello"
                 meetingTime={new Date()}
                 description="asdasdasdasd"
                 location={'서울대학교'}
-              />
+              /> */}
             </ScrollView>
           </View>
           <ScrollView
