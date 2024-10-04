@@ -16,6 +16,7 @@ import BorderButton from '../common/button/BorderButton';
 import {Picker} from '@react-native-picker/picker';
 import CustomText from '../CustomText';
 import {colors} from '@src/constants';
+import Spacer from '../common/Spacer';
 
 const ClubListHeader = () => {
   const navigation = useNavigation<NavigationProp<SocialStackParamList>>();
@@ -38,6 +39,7 @@ const ClubListHeader = () => {
             <Picker.Item label="가까운 위치" value={2} />
           </Picker>
         </View>
+        <Spacer height={10} />
         <View>
           <CustomText
             style={{

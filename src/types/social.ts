@@ -1,5 +1,5 @@
 type SocialClub = {
-  clubId: number;
+  id: number;
   members: number;
   clubName: string;
   location: string;
