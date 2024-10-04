@@ -8,7 +8,7 @@ import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants';
 import {SocialStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useContext, useState} from 'react';
 import {
   Dimensions,
@@ -72,6 +72,8 @@ const FormScreen = ({navigation}: Props) => {
   const [date, setDate] = useState(new Date());
   const {kakaoId} = useContext(MainContext);
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async () => {
       if (mutation.isPending) return;
@@ -96,13 +98,13 @@ const FormScreen = ({navigation}: Props) => {
 
       return {...body, clubId: body.id};
     },
-    onSuccess: result => {
-      console.log(result);
+    onSuccess: async result => {
       if (!result) return;
       navigation.pop();
       navigation.navigate('ClubDetail', {
         socialGrop: result,
       });
+      await queryClient.invalidateQueries({queryKey: ['/social/clubs']});
     },
   });
 

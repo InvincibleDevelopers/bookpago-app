@@ -2,14 +2,9 @@ import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants/colors';
 import {BookItem as BookItemType} from '@src/types';
 import {memo, useCallback, useState} from 'react';
-import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  Image,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
+import LoadingView from '../LoadingView';
+import NodataView from '../NodataView';
 import BookItem from './BookItem';
 
 interface BookListProps {
@@ -73,36 +68,12 @@ const BookList = ({
 
   if (isLoading) {
     // 검색중
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          style={{flex: 1}}
-          color={colors.THEME}
-        />
-      </View>
-    );
+    return <LoadingView />;
   }
 
   if (nonce > 0 && bookItemList.length === 0) {
     // 검색 결과가 없을때
-    return (
-      <View style={styles.container}>
-        <View style={styles.nodataBox}>
-          <Image
-            style={{
-              width: Dimensions.get('screen').width * 0.5,
-              height: Dimensions.get('screen').width * 0.5,
-            }}
-            source={require('@src/assets/logo/logo-translucent.png')}
-            resizeMode="center"
-          />
-          <CustomText style={styles.messageText}>
-            해당 검색어에 맞는 책이 없어요
-          </CustomText>
-        </View>
-      </View>
-    );
+    return <NodataView text="검색 결과가 없습니다." />;
   }
 
   return (
@@ -142,11 +113,6 @@ const styles = StyleSheet.create({
   },
   list: {
     backgroundColor: colors.WHITE,
-  },
-  nodataBox: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   messageText: {
     fontSize: 17,

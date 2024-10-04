@@ -1,34 +1,26 @@
-import {Picker} from '@react-native-picker/picker';
-import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
-import CustomButton from '@src/components/CustomButton';
-import CustomText from '@src/components/CustomText';
-import BorderButton from '@src/components/common/button/BorderButton';
-import MypageButton from '@src/components/common/button/MypageButton';
+import ClubListHeader from '@src/components/club/ClubListHeader';
+import Spacer from '@src/components/common/Spacer';
 import ClubCard from '@src/components/common/card/ClubCard';
-import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants';
-import {HomeTabParamList, SocialStackParamList} from '@src/types';
+import ErrorScreen from '@src/screens/ErrorScreen';
+import {SocialStackParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
-import {useState} from 'react';
+import {useCallback} from 'react';
 import {
-  Image,
+  ActivityIndicator,
+  FlatList,
   Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
-  View,
-  ActivityIndicator,
   Text,
+  View,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
-  const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
-  const [v, s] = useState(0);
-
   const socialClubQuery = useQuery<
     ({id: number} & Omit<SocialClub, 'id'>)[],
     {error: string},
@@ -51,35 +43,27 @@ const MainScreen = ({navigation}: Props) => {
     },
   });
 
-  if (socialClubQuery.error) {
-    <SafeAreaView style={styles.container}>
-      <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
-      />
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <CustomText style={styles.messageText}>
-          {socialClubQuery.error.error}
-        </CustomText>
-        <CustomButton
-          bApplyCommonStyle={true}
-          containerstyle={{
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 3,
-          }}
-          text="뒤로가기"
-          onPress={() => navigation.goBack()}
+  const renderItem = useCallback(({item}: {item: SocialClub}) => {
+    return (
+      <View style={{paddingHorizontal: 10}}>
+        <ClubCard
+          style={{width: '100%'}}
+          row={2}
+          data={item}
+          onPress={() => navigation.navigate('ClubDetail', {socialGrop: item})}
         />
       </View>
-    </SafeAreaView>;
+    );
+  }, []);
+
+  if (socialClubQuery.error) {
+    return <ErrorScreen errorMessage={socialClubQuery.error.error} />;
   }
 
   if (socialClubQuery.isPending) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header
-          buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
-        />
+        <ClubListHeader />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
         </View>
@@ -89,77 +73,20 @@ const MainScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        buttons={[<MypageButton onPress={() => tabnav?.navigate('My')} />]}
+      <FlatList
+        ListHeaderComponent={() => <ClubListHeader />}
+        ItemSeparatorComponent={() => <Spacer height={10} />}
+        ListFooterComponent={() => <Spacer height={20} />}
+        renderItem={renderItem}
+        contentContainerStyle={styles.inner}
+        keyExtractor={item => `club_${item.clubId.toString()}`}
+        data={socialClubQuery.data || []}
       />
-      <View style={styles.content}>
-        <View style={styles.topBox}>
-          <View style={styles.pickerBox}>
-            <Picker
-              selectedValue={v}
-              onValueChange={t => s(() => t)}
-              style={styles.picker}
-              dropdownIconColor={colors.THEME}>
-              <Picker.Item label="인기순" value={0} />
-              <Picker.Item label="최신순" value={1} />
-              <Picker.Item label="가까운 위치" value={2} />
-            </Picker>
-          </View>
-          <View>
-            <CustomText
-              style={{
-                fontSize: 20,
-                color: colors.BLACK,
-                marginBottom: 18,
-              }}>
-              현재 핫한 독서 모임
-            </CustomText>
-            <ScrollView
-              contentContainerStyle={{gap: 7}}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              overScrollMode="never" // Android
-              bounces={false} // iOS
-            >
-              <Pressable onPress={() => {}}>
-                <Image
-                  style={{
-                    width: 30,
-                    height: 30,
-                  }}
-                  source={require('@src/assets/buttons/filter.png')}></Image>
-              </Pressable>
-              <BorderButton>전체</BorderButton>
-              <BorderButton>미스터리</BorderButton>
-              <BorderButton>스릴러</BorderButton>
-              <BorderButton>판타지</BorderButton>
-              <BorderButton>기타등등</BorderButton>
-              <BorderButton>기타등등</BorderButton>
-              <BorderButton>기타등등</BorderButton>
-              <BorderButton>기타등등</BorderButton>
-            </ScrollView>
-          </View>
-        </View>
-        <ScrollView
-          style={styles.scrollBox}
-          contentContainerStyle={styles.inner}>
-          {socialClubQuery.data?.map((data, index) => (
-            <ClubCard
-              key={index}
-              data={data}
-              row={2}
-              onPress={() =>
-                navigation.navigate('ClubDetail', {socialGrop: data})
-              }
-            />
-          ))}
-        </ScrollView>
-        <Pressable
-          style={styles.postButton}
-          onPress={() => navigation.navigate('Form')}>
-          <Text style={styles.postButtonText}>모임 만들기</Text>
-        </Pressable>
-      </View>
+      <Pressable
+        style={styles.postButton}
+        onPress={() => navigation.navigate('Form')}>
+        <Text style={styles.postButtonText}>모임 만들기</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -169,32 +96,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.BACKGROUND,
   },
-  content: {
-    flex: 1,
-  },
-  topBox: {
-    marginVertical: 20, // 안쪽 마진
-    marginHorizontal: 20, // 바깥쪽 마진
-  },
-  pickerBox: {
-    backgroundColor: colors.WHITE,
-    width: 120,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    textAlign: 'center',
-    paddingLeft: 7,
-  },
-  picker: {
-    color: colors.THEME,
-  },
   scrollBox: {
     // marginVertical: 20, // 안쪽 마진
   },
-  inner: {
-    gap: 20,
-    marginHorizontal: 20, // 바깥쪽 마진
-  },
+  inner: {},
   messageText: {
     fontSize: 17,
     color: colors.GRAY_300,
