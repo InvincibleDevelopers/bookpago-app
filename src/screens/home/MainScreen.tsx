@@ -4,7 +4,7 @@ import {get} from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BookCard from '@src/components/common/card/BookCard';
-import GroupCard from '@src/components/common/card/GroupCard';
+import ClubCard from '@src/components/common/card/ClubCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import {BookItem, HomeTabParamList, MainStackParamList} from '@src/types';
@@ -36,15 +36,16 @@ const MainScreen = ({navigation, route}: Props) => {
     queryKey: ['/social/clubs'],
     queryFn: async () => {
       //page가 0부터 시작
-      const body: {content: {meetingTime: string} & SocialGroup[]} = await get({
-        path: '/social/clubs?page=0&size=10',
-      });
+      const body: {content: ({id: number} & Omit<SocialGroup, 'id'>)[]} =
+        await get({
+          path: '/social/clubs?page=0&size=10',
+        });
       return body.content;
     },
     select: datas => {
       return datas.map(data => ({
         ...data,
-        meetingTime: new Date(data.meetingTime),
+        clubId: data.id,
       }));
     },
   });
@@ -160,13 +161,9 @@ const MainScreen = ({navigation, route}: Props) => {
               horizontal>
               {socialClubQuery.data?.map((item, index) => {
                 return (
-                  <GroupCard
+                  <ClubCard
                     key={index}
-                    members={item.members}
-                    clubName={item.clubName}
-                    meetingTime={item.meetingTime}
-                    location={item.location}
-                    description="asdasdasdasd"
+                    data={item}
                     onPress={() =>
                       navigation.navigate('ClubDetail', {
                         socialGrop: item,

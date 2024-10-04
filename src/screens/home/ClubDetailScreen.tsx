@@ -79,12 +79,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
               <CustomText style={styles.text}>
                 날짜&nbsp;
                 <CustomText style={styles.highlightText}>
-                  {props.meetingTime.toLocaleDateString('ko-KR', {
-                    weekday: 'short',
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })}
+                  {props.time}
                 </CustomText>
               </CustomText>
             </View>

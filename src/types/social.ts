@@ -1,7 +1,9 @@
 type SocialGroup = {
+  clubId: number;
   members: number;
   clubName: string;
   location: string;
-  meetingTime: Date;
   description: string;
+  time: string;
+  weekDay: number[];
 };

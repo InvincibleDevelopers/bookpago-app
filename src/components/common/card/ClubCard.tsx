@@ -10,21 +10,14 @@ import CustomText from '../../CustomText';
 import {CustomButtonProps} from '../../CustomButton';
 import {colors} from '@src/constants';
 
-export interface GroupCardProps extends CustomButtonProps, SocialGroup {
+export interface ClubCardProps extends CustomButtonProps {
   row?: 1 | 2;
+  data: SocialGroup;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
 
-const GroupCard = ({
-  style,
-  members,
-  clubName,
-  meetingTime,
-  location,
-  row = 1,
-  onPress,
-}: GroupCardProps) => {
+const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -33,13 +26,13 @@ const GroupCard = ({
           <View style={styles.ingBox}>
             <CustomText
               style={styles.ing}
-              numberOfLines={1}>{`${members}명 참여중`}</CustomText>
+              numberOfLines={1}>{`${data.members}명 참여중`}</CustomText>
           </View>
           <CustomText
             numberOfLines={1}
             ellipsizeMode="tail"
             style={styles.title}>
-            {clubName}
+            {data.clubName}
           </CustomText>
         </View>
         <View style={styles.subBox}>
@@ -50,12 +43,7 @@ const GroupCard = ({
               source={require('@src/assets/icons/clock.png')}
             />
             <CustomText style={styles.subText} numberOfLines={1}>
-              {meetingTime.toLocaleDateString('ko-KR', {
-                weekday: 'short',
-                year: '2-digit',
-                month: '2-digit',
-                day: '2-digit',
-              })}
+              {data.time}
             </CustomText>
           </View>
           <View style={styles.sub}>
@@ -65,7 +53,7 @@ const GroupCard = ({
               source={require('@src/assets/icons/position.png')}
             />
             <CustomText style={styles.subText} numberOfLines={1}>
-              {location}
+              {data.location}
             </CustomText>
           </View>
           {row === 2 && (
@@ -154,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupCard;
+export default ClubCard;

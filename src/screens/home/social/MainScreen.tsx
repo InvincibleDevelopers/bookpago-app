@@ -6,7 +6,7 @@ import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import BorderButton from '@src/components/common/button/BorderButton';
 import MypageButton from '@src/components/common/button/MypageButton';
-import GroupCard from '@src/components/common/card/GroupCard';
+import ClubCard from '@src/components/common/card/ClubCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants';
 import {HomeTabParamList, SocialStackParamList} from '@src/types';
@@ -138,7 +138,7 @@ const MainScreen = ({navigation}: Props) => {
           style={styles.scrollBox}
           contentContainerStyle={styles.inner}>
           {socialClubQuery.data?.map((data, index) => (
-            <GroupCard
+            <ClubCard
               key={index}
               clubName={data.clubName}
               style={{width: '100%'}}

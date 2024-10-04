@@ -5,7 +5,7 @@ import CustomText from '@src/components/CustomText';
 import RecentBook from '@src/components/RecentBook';
 import Divider from '@src/components/common/Divider';
 import Spacer from '@src/components/common/Spacer';
-import GroupCard from '@src/components/common/card/GroupCard';
+import ClubCard from '@src/components/common/card/ClubCard';
 import {colors} from '@src/constants/colors';
 import {
   HomeTabParamList,
@@ -106,7 +106,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <CustomText>{`참여중인 독서모임`}</CustomText>
           <View>
             <ScrollView horizontal={true} style={{marginTop: 10}}>
-              <GroupCard
+              <ClubCard
                 members={5}
                 clubName="Hello"
                 meetingTime={new Date()}
