@@ -36,9 +36,7 @@ const FollowingScreen = ({navigation, route}: Props) => {
           return (
             <ScrollView style={{borderBottomWidth: 1}} key={index}>
               <UserCard
-                OnClick={() =>
-                  navigation.navigate('OtherProfile', {props: item})
-                }
+                OnClick={() => navigation.navigate('Profile', {kakaoId: 0})}
                 {...item}
               />
             </ScrollView>

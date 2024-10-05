@@ -43,7 +43,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
     queryKey: ['/books/:isbn', props.isbn],
     queryFn: async () => {
       const body: BookDetail = await get({
-        path: `/books/${props.isbn}?kakaoId=${kakaoId}`,
+        path: `/books/${props.isbn}`,
       });
 
       return body;

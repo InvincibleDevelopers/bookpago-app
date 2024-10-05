@@ -1,6 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get} from '@src/api/axios';
-import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import SearchHeader from '@src/components/common/header/SearchHeader';
 import BookList from '@src/components/search/BookList';
 import {SEARCH_PAGE_SIZE} from '@src/constants';
@@ -76,30 +75,28 @@ const SearchScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <DismissKeyboardView style={{flex: 1}}>
-        <SearchHeader
-          aiButtonType="book"
-          value={inputValue}
-          onChangeText={onChangeText}
-          onPressBack={() => navigation.goBack()}
-          onPressSearch={onSearch}
-          onSubmitEditing={onSearch}
-          returnKeyType="search"
-          multiline={false}
-        />
-        <BookList
-          isLoading={searchQuery.isPending}
-          total={total}
-          bookItemList={bookItemList}
-          search={searchValue}
-          nonce={nonce}
-          onToggleFavorite={mutation.mutate}
-          openDetail={openDetail}
-          onRefresh={onSearch}
-          onEndReached={onEndReached}
-          error={searchQuery.error}
-        />
-      </DismissKeyboardView>
+      <SearchHeader
+        aiButtonType="book"
+        value={inputValue}
+        onChangeText={onChangeText}
+        onPressBack={() => navigation.goBack()}
+        onPressSearch={onSearch}
+        onSubmitEditing={onSearch}
+        returnKeyType="search"
+        multiline={false}
+      />
+      <BookList
+        isLoading={searchQuery.isPending}
+        total={total}
+        bookItemList={bookItemList}
+        search={searchValue}
+        nonce={nonce}
+        onToggleFavorite={mutation.mutate}
+        openDetail={openDetail}
+        onRefresh={onSearch}
+        onEndReached={onEndReached}
+        error={searchQuery.error}
+      />
     </SafeAreaView>
   );
 };

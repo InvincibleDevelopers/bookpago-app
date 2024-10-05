@@ -55,9 +55,7 @@ const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
             style={styles.icon}
             source={require('@src/assets/icons/position.png')}
           />
-          <CustomText
-            style={[styles.subText, row === 2 && styles.longSub]}
-            numberOfLines={1}>
+          <CustomText style={[styles.subText]} numberOfLines={1}>
             {data.location}
           </CustomText>
         </View>
@@ -118,14 +116,11 @@ const styles = StyleSheet.create({
   },
   sub: {
     flexDirection: 'row',
-    width: ROW1_WIDTH - 40,
-  },
-  longSub: {
-    width: ROW2_WIDTH - 40,
   },
   subText: {
     color: colors.THEME,
     fontSize: 12,
+    flex: 1,
   },
   icon: {
     width: 16,

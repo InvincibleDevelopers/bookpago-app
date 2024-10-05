@@ -10,6 +10,7 @@ import {CYCLE, colors} from '@src/constants';
 import {
   HomeTabParamList,
   MainStackParamList,
+  MyStackParamList,
   SocialStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
@@ -30,7 +31,7 @@ import Spacer from '@src/components/common/Spacer';
 import {getWeekdayText} from '@src/utils/helper';
 
 type Props = NativeStackScreenProps<
-  MainStackParamList & SocialStackParamList,
+  MainStackParamList & SocialStackParamList & MyStackParamList,
   'ClubDetail'
 >;
 
@@ -51,6 +52,8 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
       return body;
     },
   });
+
+  console.log(query.data);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -163,11 +166,9 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
               source={require('@src/assets/icons/dollar-sign.png')}
               resizeMode="center"
             />
-            <CustomText
-              style={[
-                styles.text,
-                {flex: 1},
-              ]}>{`주요 활동 ${props.description}`}</CustomText>
+            <CustomText style={[styles.text, {flex: 1}]}>
+              {`주요 활동 ${props.description}`}
+            </CustomText>
           </View>
         </View>
         <Spacer height={20} />
@@ -210,7 +211,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
           </ScrollView>
         </View>
         <Spacer height={20} />
-        <View style={{paddingHorizontal: 20, marginTop: 50}}>
+        <View style={{paddingHorizontal: 20}}>
           <CustomButton
             containerstyle={[
               styles.accessButton,

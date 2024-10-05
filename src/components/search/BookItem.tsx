@@ -8,11 +8,11 @@ import ToggleStar from '../common/button/ToggleStar';
 
 interface BookItemProps {
   item: BookItemType;
-  onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
+  // onToggleFavorite: (arg: {isbn: number; isFavorite: boolean}) => void;
   openDetail: (arg: BookItemType) => void;
 }
 
-const BookItem = ({item, onToggleFavorite, openDetail}: BookItemProps) => {
+const BookItem = ({item, openDetail}: BookItemProps) => {
   return (
     <Pressable onPress={() => openDetail(item)}>
       <View style={styles.container}>
@@ -48,12 +48,12 @@ const BookItem = ({item, onToggleFavorite, openDetail}: BookItemProps) => {
                 {item.author}
               </CustomText>
             </View>
-            <ToggleStar
+            {/* <ToggleStar
               isActive={item.wishBook}
               onPress={() =>
                 onToggleFavorite({isbn: item.isbn, isFavorite: item.wishBook})
               }
-            />
+            /> */}
           </View>
           {/* <View style={styles.hashtagBox}>
             <CustomText style={{fontSize: 12, color: colors.GRAY_300}}>

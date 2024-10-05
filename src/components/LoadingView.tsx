@@ -2,10 +2,14 @@ import {colors} from '@src/constants';
 import React from 'react';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
 
-const LoadingView = () => {
+interface LoadingViewProps {
+  color?: string;
+}
+
+const LoadingView = ({color = colors.THEME}: LoadingViewProps) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" style={{flex: 1}} color={colors.THEME} />
+      <ActivityIndicator size="large" style={{flex: 1}} color={color} />
     </View>
   );
 };

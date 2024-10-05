@@ -45,7 +45,7 @@ const BookList = ({
       return (
         <BookItem
           item={item}
-          onToggleFavorite={onToggleFavorite}
+          // onToggleFavorite={onToggleFavorite}
           openDetail={openDetail}
         />
       );
