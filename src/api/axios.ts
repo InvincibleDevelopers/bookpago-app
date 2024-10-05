@@ -5,11 +5,15 @@ import axios, {AxiosError} from 'axios';
 const axiosInstance = axios.create({
   baseURL: `${DOMAIN}`,
 });
-axiosInstance.interceptors.request.use(response => {
-  // 요청이 성공적인 경우 그대로 반환
-  console.log('Axios interceptors request: ', response.url);
-  return response;
-});
+
+axiosInstance.interceptors.request.use(
+  request => {
+    const fullUrl = `${request.baseURL || ''}${request.url}`;
+    console.log('Axios interceptors request: ', fullUrl);
+    return request;
+  },
+  error => Promise.reject(error),
+);
 
 // https://axios-http.com/kr/docs/interceptors
 axiosInstance.interceptors.response.use(
