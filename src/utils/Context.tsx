@@ -1,3 +1,4 @@
+import {KAKAO_ID_KEY} from '@src/constants';
 import {createContext, useEffect, useState} from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
@@ -7,6 +8,7 @@ type ContextProps = {
   isTabVisible: boolean;
 
   login: (arg: {kakaoId: number}) => void;
+  logout: () => void;
   setTabVisibility: (flag: boolean) => void;
 };
 
@@ -16,6 +18,7 @@ const defaultContext: ContextProps = {
   isTabVisible: true,
 
   login: () => {},
+  logout: () => {},
   setTabVisibility: flag => {},
 };
 
@@ -31,15 +34,22 @@ const ContextProvider = ({children}: {children: React.ReactNode}) => {
   };
 
   const login = async ({kakaoId}: {kakaoId: number}) => {
-    await EncryptedStorage.setItem('kakaoId', kakaoId.toString());
+    await EncryptedStorage.setItem(KAKAO_ID_KEY, kakaoId.toString());
     setKakaoId(() => kakaoId);
+  };
+
+  const logout = async () => {
+    await EncryptedStorage.removeItem(KAKAO_ID_KEY);
+    setKakaoId(() => null);
   };
 
   useEffect(() => {
     EncryptedStorage.getItem('kakaoId')
       .then(value => {
         const num = Number(value) || null;
-        if (num === null) return setLoading(() => false);
+        if (num === null) {
+          return setLoading(() => false);
+        }
         login({kakaoId: num}).finally(() => {
           setLoading(() => false);
         });
@@ -59,6 +69,7 @@ const ContextProvider = ({children}: {children: React.ReactNode}) => {
         isTabVisible,
         setTabVisibility,
         login,
+        logout,
       }}>
       {children}
     </MainContext.Provider>

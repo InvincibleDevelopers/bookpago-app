@@ -1,23 +1,22 @@
-import {DOMAIN} from '@env';
-import {
-  KakaoOAuthToken,
-  KakaoProfile,
-  getProfile,
-  login,
-} from '@react-native-seoul/kakao-login';
+import {KakaoProfile, getProfile, login} from '@react-native-seoul/kakao-login';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {get, post} from '@src/api/axios';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import InputField from '@src/components/InputField';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
+import Spacer from '@src/components/common/Spacer';
 import {colors} from '@src/constants/colors';
 import {AuthStackParamList} from '@src/types';
-import {UserProfile} from '@src/types/UserProfile';
 import {MainContext} from '@src/utils/Context';
 import {useContext, useState} from 'react';
-import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 type SuccessLogin = {
   imageUrl: string | null;
@@ -61,8 +60,11 @@ const LoginScreen = ({navigation}: Props) => {
     const result = await login();
     const userProfile = await getProfile();
 
+    const id = userProfile.id;
+    // const id = 3709787671; // 민욱
+    // const id = 3704616859; // 테스트
     const loginBody: SuccessLogin | FailLogin = await get({
-      path: '/user/login?kakaoId=' + userProfile.id,
+      path: '/user/login?kakaoId=' + id,
     });
 
     console.log('login', loginBody);
@@ -77,7 +79,9 @@ const LoginScreen = ({navigation}: Props) => {
 
   const Submit = async () => {
     const id = profile?.id;
-    if (!id) return;
+    if (!id) {
+      return;
+    }
 
     const result = await post({
       path: '/user/kakaojoin',
@@ -107,6 +111,10 @@ const LoginScreen = ({navigation}: Props) => {
             bApplyCommonStyle={false}
             imageprops={{source: require('@src/assets/logo/kakao.png')}}
           />
+          <Spacer height={20} />
+          <TouchableOpacity onPress={() => navigation.navigate('Test')}>
+            <Text>테스트 로그인</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

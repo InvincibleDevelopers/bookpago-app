@@ -9,6 +9,7 @@ export type RootStackParamList = {
 export type AuthStackParamList = {
   Main: undefined;
   Login: undefined;
+  Test: undefined;
 };
 
 export type HomeTabParamList = {

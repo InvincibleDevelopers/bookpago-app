@@ -3,8 +3,9 @@ import CustomButton from '@src/components/CustomButton';
 import InputField from '@src/components/InputField';
 import useAPI from '@src/hooks/useAPI';
 import {UserProfile} from '@src/types';
+import {MainContext} from '@src/utils/Context';
 import axios from 'axios';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {
   Alert,
   Button,
@@ -25,6 +26,7 @@ const SettingScreen = () => {
     username: '',
   });
   const {postMutation} = useAPI();
+  const {logout} = useContext(MainContext);
 
   const selectImage = () => {
     launchImageLibrary(
@@ -77,8 +79,8 @@ const SettingScreen = () => {
     }
   };
 
-  const Submit = async () => {
-    await postMutation.mutate(
+  const Submit = () => {
+    postMutation.mutate(
       {
         path: '/profile/nickname',
         body: {
@@ -128,6 +130,7 @@ const SettingScreen = () => {
         />
         <CustomButton onPress={Submit} text={'Submit'} />
       </View>
+      <CustomButton onPress={logout} text={'로그아웃'} />
       <View style={{top: 10, justifyContent: 'center', alignItems: 'center'}}>
         <Image source={{uri: imageUri}} style={{width: 200, height: 200}} />
         <Button title="Select Image" onPress={selectImage} />
