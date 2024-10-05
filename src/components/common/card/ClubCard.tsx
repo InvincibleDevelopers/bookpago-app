@@ -1,3 +1,5 @@
+import {CYCLE, colors} from '@src/constants';
+import {getWeekdayText} from '@src/utils/helper';
 import {
   Image,
   StyleProp,
@@ -6,9 +8,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import CustomText from '../../CustomText';
 import {CustomButtonProps} from '../../CustomButton';
-import {CYCLE, WEEKDAYS, colors} from '@src/constants';
+import CustomText from '../../CustomText';
 import Spacer from '../Spacer';
 
 const ROW1_WIDTH = 223;
@@ -22,7 +23,7 @@ export interface ClubCardProps extends CustomButtonProps {
 }
 
 const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
-  const weekdayText = data.weekDay.map(day => WEEKDAYS[day]).join(', ');
+  const weekdayText = getWeekdayText(data.weekDay);
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View

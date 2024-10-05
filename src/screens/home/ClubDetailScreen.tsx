@@ -6,7 +6,7 @@ import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BackHeader from '@src/components/common/header/BackHeader';
-import {colors} from '@src/constants';
+import {CYCLE, colors} from '@src/constants';
 import {
   HomeTabParamList,
   MainStackParamList,
@@ -15,9 +15,19 @@ import {
 import {MainContext} from '@src/utils/Context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useContext} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView, View, Image} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Image,
+  Text,
+} from 'react-native';
 import ErrorScreen from '../ErrorScreen';
 import {postAccessClub} from '@src/api/post';
+import ApplicantCard from '@src/components/common/card/ApplicantCard';
+import Spacer from '@src/components/common/Spacer';
+import {getWeekdayText} from '@src/utils/helper';
 
 type Props = NativeStackScreenProps<
   MainStackParamList & SocialStackParamList,
@@ -68,6 +78,8 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     mutation.mutate();
   };
 
+  const weekdayText = getWeekdayText(props.weekDay);
+
   if (query.error) {
     const error = query.error as unknown as {error: string};
     return <ErrorScreen errorMessage={error.error} />;
@@ -94,91 +106,122 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
         buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
       />
       <ScrollView style={styles.scrollBox}>
-        <View style={styles.inner}>
-          <View style={{paddingHorizontal: 20}}>
-            <CustomText style={{fontSize: 20}}>{props.clubName}</CustomText>
-          </View>
-          <View style={styles.infoBox}>
-            <CustomText
-              style={{
-                fontSize: 14,
-                color: colors.GRAY_400,
-                marginBottom: 16,
-                fontWeight: 'light',
-              }}>
-              세부 모집 정보
-            </CustomText>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/position.png')}
-                resizeMode="center"
-              />
-              <CustomText
-                style={[
-                  styles.text,
-                  {color: colors.THEME},
-                ]}>{`장소: ${props.location}`}</CustomText>
-            </View>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/human.png')}
-                resizeMode="center"
-              />
-              <CustomText style={styles.text}>
-                현재&nbsp;
-                <CustomText
-                  style={
-                    styles.highlightText
-                  }>{`${props.members}명`}</CustomText>
-                &nbsp;참여중
-              </CustomText>
-            </View>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/clock.png')}
-                resizeMode="center"
-              />
-              <CustomText style={styles.text}>
-                날짜&nbsp;
-                <CustomText style={styles.highlightText}>
-                  {props.time}
-                </CustomText>
-              </CustomText>
-            </View>
-            <View style={[styles.row, {alignItems: 'flex-start'}]}>
-              <Image
-                style={[styles.icon, {marginTop: 4}]}
-                source={require('@src/assets/icons/dollar-sign.png')}
-                resizeMode="center"
-              />
-              <CustomText
-                style={[
-                  styles.text,
-                  {flex: 1},
-                ]}>{`주요 활동 ${props.description}`}</CustomText>
-            </View>
-          </View>
-          <View style={{paddingHorizontal: 20}}>
-            <CustomText
-              style={
-                styles.text
-              }>{`모임설명: ${props.description}`}</CustomText>
-          </View>
-          <View style={{paddingHorizontal: 20, marginTop: 50}}>
-            <CustomButton
-              containerstyle={[
-                styles.accessButton,
-                mutation.isPending && styles.accessButtonLoading,
-              ]}
-              textstyle={{color: colors.WHITE}}
-              text="참여하기"
-              onPress={accessClub}
+        <Spacer height={20} />
+        <View style={{paddingHorizontal: 20}}>
+          <CustomText style={{fontSize: 20}}>{props.clubName}</CustomText>
+        </View>
+        <Spacer height={20} />
+        <View style={styles.infoBox}>
+          <CustomText
+            style={{
+              fontSize: 14,
+              color: colors.GRAY_400,
+              marginBottom: 16,
+              fontWeight: 'light',
+            }}>
+            세부 모집 정보
+          </CustomText>
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/position.png')}
+              resizeMode="center"
             />
+            <CustomText
+              style={[
+                styles.text,
+                {color: colors.THEME},
+              ]}>{`장소: ${props.location}`}</CustomText>
+          </View>
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/human.png')}
+              resizeMode="center"
+            />
+            <CustomText style={styles.text}>
+              현재&nbsp;
+              <CustomText
+                style={styles.highlightText}>{`${props.members}명`}</CustomText>
+              &nbsp;참여중
+            </CustomText>
+          </View>
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/clock.png')}
+              resizeMode="center"
+            />
+            <CustomText style={styles.text}>
+              {`${CYCLE[props.repeatCycle]} (${weekdayText}) `}
+              <CustomText style={styles.highlightText}>{props.time}</CustomText>
+            </CustomText>
+          </View>
+          <View style={[styles.row, {alignItems: 'flex-start'}]}>
+            <Image
+              style={[styles.icon, {marginTop: 4}]}
+              source={require('@src/assets/icons/dollar-sign.png')}
+              resizeMode="center"
+            />
+            <CustomText
+              style={[
+                styles.text,
+                {flex: 1},
+              ]}>{`주요 활동 ${props.description}`}</CustomText>
           </View>
         </View>
+        <Spacer height={20} />
+        <View>
+          <Text style={styles.cardBoxText}>참여자 목록</Text>
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.cardBox}
+            showsHorizontalScrollIndicator={false}>
+            <ApplicantCard
+              onPress={id => console.log(id)}
+              kakaoId={1}
+              nickname={'nickname'}
+              profileUrl={'profileUrl'}
+            />
+            <ApplicantCard
+              onPress={id => console.log(id)}
+              kakaoId={1}
+              nickname={'nickname'}
+              profileUrl={'profileUrl'}
+            />
+            <ApplicantCard
+              onPress={id => console.log(id)}
+              kakaoId={1}
+              nickname={'nickname'}
+              profileUrl={'profileUrl'}
+            />
+            <ApplicantCard
+              onPress={id => console.log(id)}
+              kakaoId={1}
+              nickname={'nickname'}
+              profileUrl={'profileUrl'}
+            />
+            <ApplicantCard
+              onPress={id => console.log(id)}
+              kakaoId={1}
+              nickname={'nickname'}
+              profileUrl={'profileUrl'}
+            />
+          </ScrollView>
+        </View>
+        <Spacer height={20} />
+        <View style={{paddingHorizontal: 20, marginTop: 50}}>
+          <CustomButton
+            containerstyle={[
+              styles.accessButton,
+              mutation.isPending && styles.accessButtonLoading,
+            ]}
+            textstyle={{color: colors.WHITE}}
+            text="참여하기"
+            onPress={accessClub}
+          />
+        </View>
+        <Spacer height={20} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -189,10 +232,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollBox: {flex: 1},
-  inner: {
-    marginVertical: 20, // 안쪽 마진
-    gap: 20,
-  },
   infoBox: {
     backgroundColor: colors.WHITE,
     padding: 20,
@@ -231,6 +270,16 @@ const styles = StyleSheet.create({
   },
   accessButtonLoading: {
     opacity: 0.5,
+  },
+  cardBox: {
+    padding: 20,
+    gap: 20,
+  },
+  cardBoxText: {
+    paddingHorizontal: 20,
+    fontWeight: 'bold',
+    color: colors.BLACK,
+    fontSize: 20,
   },
 });
 
