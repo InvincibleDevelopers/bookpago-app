@@ -1,7 +1,9 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {getClubDetail} from '@src/api/get';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
+import LoadingView from '@src/components/LoadingView';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants';
@@ -10,7 +12,12 @@ import {
   MainStackParamList,
   SocialStackParamList,
 } from '@src/types';
+import {MainContext} from '@src/utils/Context';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useContext} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView, View, Image} from 'react-native';
+import ErrorScreen from '../ErrorScreen';
+import {postAccessClub} from '@src/api/post';
 
 type Props = NativeStackScreenProps<
   MainStackParamList & SocialStackParamList,
@@ -20,6 +27,64 @@ type Props = NativeStackScreenProps<
 const ClubDetailScreen = ({navigation, route}: Props) => {
   const props = route.params.socialGrop;
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
+  const {kakaoId} = useContext(MainContext);
+
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ['/social/clubs/:clubId', props.id],
+    queryFn: async () => {
+      if (!kakaoId) {
+        return;
+      }
+      const body = await getClubDetail({clubId: props.id, kakaoId});
+      return body;
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (!kakaoId) {
+        return;
+      }
+      const body = await postAccessClub({clubId: props.id, kakaoId});
+      return body;
+    },
+    onSuccess: async result => {
+      if (!result) {
+        return;
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['/social/clubs/:clubId', props.id],
+      });
+      console.log('access club success');
+    },
+  });
+
+  const accessClub = () => {
+    if (mutation.isPending) {
+      return;
+    }
+    mutation.mutate();
+  };
+
+  if (query.error) {
+    const error = query.error as unknown as {error: string};
+    return <ErrorScreen errorMessage={error.error} />;
+  }
+
+  if (query.isPending) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <BackHeader
+          imageProps={{onPress: () => navigation.goBack()}}
+          title="토론모임 상세"
+          buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
+        />
+        <LoadingView />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,12 +169,13 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
           </View>
           <View style={{paddingHorizontal: 20, marginTop: 50}}>
             <CustomButton
-              containerstyle={{
-                borderRadius: 10,
-                paddingVertical: 16,
-              }}
+              containerstyle={[
+                styles.accessButton,
+                mutation.isPending && styles.accessButtonLoading,
+              ]}
               textstyle={{color: colors.WHITE}}
               text="참여하기"
+              onPress={accessClub}
             />
           </View>
         </View>
@@ -158,6 +224,13 @@ const styles = StyleSheet.create({
     color: colors.THEME,
     fontWeight: 'bold',
     fontSize: 17,
+  },
+  accessButton: {
+    borderRadius: 10,
+    paddingVertical: 16,
+  },
+  accessButtonLoading: {
+    opacity: 0.5,
   },
 });
 
