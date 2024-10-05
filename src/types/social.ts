@@ -6,4 +6,5 @@ type SocialClub = {
   description: string;
   time: string;
   weekDay: number[];
+  repeatCycle: number;
 };

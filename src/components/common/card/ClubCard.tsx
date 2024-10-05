@@ -8,7 +8,11 @@ import {
 } from 'react-native';
 import CustomText from '../../CustomText';
 import {CustomButtonProps} from '../../CustomButton';
-import {colors} from '@src/constants';
+import {CYCLE, WEEKDAYS, colors} from '@src/constants';
+import Spacer from '../Spacer';
+
+const ROW1_WIDTH = 223;
+const ROW2_WIDTH = 348;
 
 export interface ClubCardProps extends CustomButtonProps {
   row?: 1 | 2;
@@ -18,47 +22,48 @@ export interface ClubCardProps extends CustomButtonProps {
 }
 
 const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
+  const weekdayText = data.weekDay.map(day => WEEKDAYS[day]).join(', ');
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={[styles.container, row === 2 && styles.longContainer, style]}>
-        <View style={styles.titleBox}>
-          <View style={styles.ingBox}>
-            <CustomText
-              style={styles.ing}
-              numberOfLines={1}>{`${data.members}명 참여중`}</CustomText>
-          </View>
+        <View style={styles.ingBox}>
           <CustomText
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={styles.title}>
-            {data.clubName}
+            style={styles.ing}
+            numberOfLines={1}>{`${data.members}명 참여중`}</CustomText>
+        </View>
+        <Spacer height={7} />
+        <CustomText numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+          {data.clubName}
+        </CustomText>
+        <Spacer height={14} />
+        <View style={styles.sub}>
+          <Image
+            resizeMode="center"
+            style={styles.icon}
+            source={require('@src/assets/icons/clock.png')}
+          />
+          <CustomText style={styles.subText} numberOfLines={1}>
+            {`${CYCLE[data.repeatCycle]} (${weekdayText}) ${data.time}`}
           </CustomText>
         </View>
-        <View style={styles.subBox}>
-          <View style={styles.sub}>
-            <Image
-              resizeMode="center"
-              style={styles.icon}
-              source={require('@src/assets/icons/clock.png')}
-            />
-            <CustomText style={styles.subText} numberOfLines={1}>
-              {data.time}
-            </CustomText>
-          </View>
-          <View style={styles.sub}>
-            <Image
-              resizeMode="center"
-              style={styles.icon}
-              source={require('@src/assets/icons/position.png')}
-            />
-            <CustomText style={styles.subText} numberOfLines={1}>
-              {data.location}
-            </CustomText>
-          </View>
-          {row === 2 && (
+        <Spacer height={7} />
+        <View style={styles.sub}>
+          <Image
+            resizeMode="center"
+            style={styles.icon}
+            source={require('@src/assets/icons/position.png')}
+          />
+          <CustomText
+            style={[styles.subText, row === 2 && styles.longSub]}
+            numberOfLines={1}>
+            {data.location}
+          </CustomText>
+        </View>
+        {row === 2 && (
+          <>
+            <Spacer height={7} />
             <View style={styles.detailBox}>
-              <CustomText style={styles.detailText}>상세 보기</CustomText>
               <Image
                 resizeMode="center"
                 style={{
@@ -67,9 +72,10 @@ const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
                 }}
                 source={require('@src/assets/icons/right-arrow-gray.png')}
               />
+              <CustomText style={styles.detailText}>상세 보기</CustomText>
             </View>
-          )}
-        </View>
+          </>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -77,12 +83,10 @@ const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 223,
-    height: 150,
+    width: ROW1_WIDTH,
     padding: 15,
     borderRadius: 20,
     backgroundColor: colors.WHITE,
-    justifyContent: 'space-between',
 
     borderWidth: 1,
     borderColor: colors.GRAY,
@@ -92,9 +96,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   longContainer: {
-    width: 348,
+    width: ROW2_WIDTH,
   },
-  titleBox: {},
   ingBox: {
     marginBottom: 5,
     width: 100,
@@ -112,12 +115,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  subBox: {
-    position: 'relative',
-  },
   sub: {
     flexDirection: 'row',
-    marginBottom: 7,
+    width: ROW1_WIDTH - 40,
+  },
+  longSub: {
+    width: ROW2_WIDTH - 40,
   },
   subText: {
     color: colors.THEME,
@@ -129,10 +132,7 @@ const styles = StyleSheet.create({
     marginRight: 7,
   },
   detailBox: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
   },
   detailText: {

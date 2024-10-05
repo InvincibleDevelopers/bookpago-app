@@ -5,7 +5,7 @@ import PostcodeModal from '@src/components/PostcodeModal';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
 import BackHeader from '@src/components/common/header/BackHeader';
-import {colors} from '@src/constants';
+import {CYCLE, WEEKDAYS, colors} from '@src/constants';
 import {SocialStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
@@ -25,9 +25,6 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
 import dayjs from 'dayjs';
-
-const WEEKDAYS = ['월', '화', '수', '목', '금', '토', '일'];
-const CYCLE = ['매주', '격주'];
 
 interface WeekdayButtonProps {
   children: string;
@@ -76,7 +73,9 @@ const FormScreen = ({navigation}: Props) => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      if (mutation.isPending) return;
+      if (mutation.isPending) {
+        return;
+      }
       if (!title || !location || !weekdays.length || !desc) {
         Alert.alert('입력되지 않은 항목이 있습니다.');
         return;
@@ -99,7 +98,9 @@ const FormScreen = ({navigation}: Props) => {
       return {...body, clubId: body.id};
     },
     onSuccess: async result => {
-      if (!result) return;
+      if (!result) {
+        return;
+      }
       navigation.pop();
       navigation.navigate('ClubDetail', {
         socialGrop: result,
