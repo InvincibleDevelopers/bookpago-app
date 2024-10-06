@@ -1,5 +1,5 @@
-import {post} from '@src/api/axios';
-import {BookDetail, BookItem} from '@src/types';
+import {postToggleLikes} from '@src/api/book';
+import {BookDetail} from '@src/types';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 const useBookFavorite = (kakaoId: number | null) => {
@@ -10,10 +10,8 @@ const useBookFavorite = (kakaoId: number | null) => {
   const mutation = useMutation({
     mutationFn: async (arg: {isbn: number; isFavorite: boolean}) => {
       if (mutation.isPending) return;
-      const result = await post({
-        path: `/books/${arg.isbn}/likes`,
-        body: {kakaoId},
-      });
+      const result = await postToggleLikes(arg.isbn, kakaoId);
+      console.log('result', result);
       return result;
     },
     onMutate: arg => {
@@ -24,21 +22,21 @@ const useBookFavorite = (kakaoId: number | null) => {
           pre.wishBook = !arg.isFavorite;
         },
       );
-      queryClient.setQueriesData<{
-        pages: {books: BookItem[]; total: number}[];
-        pageParams: number[];
-      }>({queryKey: ['/books/search']}, pre => {
-        if (!pre) return pre;
-        const newPages = pre.pages.map(page => {
-          return page.books.map(book => {
-            if (book.isbn === arg.isbn) {
-              book.wishBook = !arg.isFavorite;
-            }
-            return book;
-          });
-        });
-        return {...pre, books: newPages};
-      });
+      // queryClient.setQueriesData<{
+      //   pages: {books: BookItem[]; total: number}[];
+      //   pageParams: number[];
+      // }>({queryKey: ['/books/search']}, pre => {
+      //   if (!pre) return pre;
+      //   const newPages = pre.pages.map(page => {
+      //     return page.books.map(book => {
+      //       if (book.isbn === arg.isbn) {
+      //         book.wishBook = !arg.isFavorite;
+      //       }
+      //       return book;
+      //     });
+      //   });
+      //   return {...pre, books: newPages};
+      // });
     },
     onError: (_error, arg) => {
       queryClient.setQueriesData<BookDetail>(
@@ -48,21 +46,21 @@ const useBookFavorite = (kakaoId: number | null) => {
           pre.wishBook = arg.isFavorite;
         },
       );
-      queryClient.setQueriesData<{
-        pages: {books: BookItem[]; total: number}[];
-        pageParams: number[];
-      }>({queryKey: ['/books/search']}, pre => {
-        if (!pre) return pre;
-        const newPages = pre.pages.map(page => {
-          return page.books.map(book => {
-            if (book.isbn === arg.isbn) {
-              book.wishBook = !arg.isFavorite;
-            }
-            return book;
-          });
-        });
-        return {...pre, books: newPages};
-      });
+      // queryClient.setQueriesData<{
+      //   pages: {books: BookItem[]; total: number}[];
+      //   pageParams: number[];
+      // }>({queryKey: ['/books/search']}, pre => {
+      //   if (!pre) return pre;
+      //   const newPages = pre.pages.map(page => {
+      //     return page.books.map(book => {
+      //       if (book.isbn === arg.isbn) {
+      //         book.wishBook = !arg.isFavorite;
+      //       }
+      //       return book;
+      //     });
+      //   });
+      //   return {...pre, books: newPages};
+      // });
     },
   });
 

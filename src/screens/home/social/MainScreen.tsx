@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get} from '@src/api/axios';
+import {getClubs} from '@src/api/club';
 import ClubListHeader from '@src/components/club/ClubListHeader';
 import Spacer from '@src/components/common/Spacer';
 import ClubCard from '@src/components/common/card/ClubCard';
@@ -25,12 +25,7 @@ const MainScreen = ({navigation}: Props) => {
 
   const clubQuery = useInfiniteQuery<{content: SocialClub[]}, {error: string}>({
     queryKey: ['/social/clubs', 'infinity'],
-    queryFn: async ({pageParam}) => {
-      const body: {content: SocialClub[]} = await get({
-        path: `/social/clubs?page=${pageParam}&size=${CLUB_PAGE_SIZE}`,
-      });
-      return body;
-    },
+    queryFn: ({pageParam}) => getClubs(pageParam as number),
     initialPageParam: 0, //page가 0부터 시작
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
       // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청

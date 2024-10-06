@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get} from '@src/api/axios';
+import fetcher from '@src/api/axios';
 import CustomText from '@src/components/CustomText';
 import InputField from '@src/components/InputField';
 import BackHeader from '@src/components/common/header/BackHeader';
@@ -41,13 +41,13 @@ const TestScreen = ({navigation}: Props) => {
     // const id = 3709787671; // 민욱
     // const id = 3704616859; // 테스트
     console.log('login', kakaoId);
-    const loginBody: SuccessLogin | FailLogin = await get({
-      path: '/user/login?kakaoId=' + kakaoId,
-    });
+    const loginBody = await fetcher.get<SuccessLogin | FailLogin>(
+      '/user/login?kakaoId=' + kakaoId,
+    );
 
     console.log('login', kakaoId);
 
-    if (loginBody.isUser) {
+    if (loginBody.data.isUser) {
       ctx.login({kakaoId: Number(kakaoId)});
     } else {
       Alert.alert('없는 유저입니다. 회원가입을 해주세요.');

@@ -1,7 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import {colors} from '@src/constants/colors';
-import useAPI from '@src/hooks/useAPI';
 import useOnStart from '@src/hooks/useOnStart';
 import {AuthStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
@@ -13,7 +12,6 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
   const {isLoading, kakaoId} = useContext(MainContext);
-  const {getMutation} = useAPI();
 
   useOnStart(async () => {
     // const username = await EncryptedStorage.getItem("username");

@@ -1,6 +1,5 @@
 import {OnCompleteParams} from '@actbase/react-daum-postcode/lib/types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {post} from '@src/api/axios';
 import PostcodeModal from '@src/components/PostcodeModal';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
@@ -25,6 +24,7 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
 import dayjs from 'dayjs';
+import {postClub} from '@src/api/club';
 
 interface WeekdayButtonProps {
   children: string;
@@ -73,26 +73,22 @@ const FormScreen = ({navigation}: Props) => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      if (mutation.isPending) {
+      if (mutation.isPending || !kakaoId) {
         return;
       }
+
       if (!title || !location || !weekdays.length || !desc) {
         Alert.alert('입력되지 않은 항목이 있습니다.');
         return;
       }
 
-      const body: {
-        id: number;
-      } & SocialClub = await post({
-        path: '/social/clubs',
-        body: {
-          kakaoId,
-          location,
-          clubName: title,
-          weekDay: weekdays,
-          description: desc,
-          time: dayjs(date).format('HH:mm'),
-        },
+      const body = await postClub({
+        kakaoId,
+        location,
+        clubName: title,
+        weekDay: weekdays,
+        description: desc,
+        time: dayjs(date).format('HH:mm'),
       });
 
       return {...body, clubId: body.id};

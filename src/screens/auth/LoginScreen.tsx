@@ -1,6 +1,6 @@
 import {KakaoProfile, getProfile, login} from '@react-native-seoul/kakao-login';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get, post} from '@src/api/axios';
+import {JoinBody, getAuthenticated, postKakaoJoin} from '@src/api/auth';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import InputField from '@src/components/InputField';
@@ -18,28 +18,6 @@ import {
   View,
 } from 'react-native';
 
-type SuccessLogin = {
-  imageUrl: string | null;
-  isUser: boolean;
-  kakaoid: number;
-  nickname: string;
-};
-
-type FailLogin = {
-  imageUrl: null;
-  isUser: false;
-  kakaoid: null;
-  nickname: null;
-};
-
-type JoinBody = {
-  nickname: string;
-  age: string;
-  gender: string;
-  genre: string;
-  introduce: string;
-};
-
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 const LoginScreen = ({navigation}: Props) => {
@@ -48,7 +26,9 @@ const LoginScreen = ({navigation}: Props) => {
   const [profile, setProfile] = useState<
     (KakaoProfile & {kakaoOauthToken: string}) | null
   >(null);
-  const [joinBody, setJoinBody] = useState<JoinBody>({
+  const [joinBody, setJoinBody] = useState<
+    {age: string} & Omit<JoinBody, 'age' | 'kakaoOauthToken'>
+  >({
     age: '',
     nickname: '',
     gender: '',
@@ -63,11 +43,7 @@ const LoginScreen = ({navigation}: Props) => {
     const id = userProfile.id;
     // const id = 3709787671; // 민욱
     // const id = 3704616859; // 테스트
-    const loginBody: SuccessLogin | FailLogin = await get({
-      path: '/user/login?kakaoId=' + id,
-    });
-
-    console.log('login', loginBody);
+    const loginBody = await getAuthenticated(id);
 
     if (loginBody.isUser) {
       ctx.login({kakaoId: userProfile.id});
@@ -83,14 +59,12 @@ const LoginScreen = ({navigation}: Props) => {
       return;
     }
 
-    const result = await post({
-      path: '/user/kakaojoin',
-      body: {
-        ...joinBody,
-        kakaoOauthToken: profile.kakaoOauthToken,
-        age: Number(joinBody.age) || 0,
-      },
+    const result = await postKakaoJoin({
+      ...joinBody,
+      kakaoOauthToken: profile.kakaoOauthToken,
+      age: Number(joinBody.age) || 0,
     });
+
     console.log(result);
     ctx.login({kakaoId: id});
   };

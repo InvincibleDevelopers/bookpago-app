@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getProfile} from '@src/api/get';
+import {getProfile} from '@src/api/profile';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';

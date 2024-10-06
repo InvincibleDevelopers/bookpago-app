@@ -1,4 +1,8 @@
-import {QueryCache, QueryClient} from '@tanstack/react-query';
+import {
+  GetNextPageParamFunction,
+  QueryCache,
+  QueryClient,
+} from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({

@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get} from '@src/api/axios';
+import {getBookByIsbn} from '@src/api/book';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
@@ -41,13 +41,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   const detailQuery = useQuery<BookDetail, {error: string}>({
     queryKey: ['/books/:isbn', props.isbn],
-    queryFn: async () => {
-      const body: BookDetail = await get({
-        path: `/books/${props.isbn}`,
-      });
-
-      return body;
-    },
+    queryFn: () => getBookByIsbn(props.isbn),
     staleTime: 3 * 1000,
     gcTime: 30 * 1000,
   });

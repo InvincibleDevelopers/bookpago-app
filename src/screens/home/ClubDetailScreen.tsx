@@ -1,6 +1,5 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getClubDetail} from '@src/api/get';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';
@@ -25,7 +24,7 @@ import {
   Text,
 } from 'react-native';
 import ErrorScreen from '../ErrorScreen';
-import {postAccessClub} from '@src/api/post';
+import {getClubDetail, postJoinClub} from '@src/api/club';
 import ApplicantCard from '@src/components/common/card/ApplicantCard';
 import Spacer from '@src/components/common/Spacer';
 import {getWeekdayText} from '@src/utils/helper';
@@ -42,7 +41,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
 
   const queryClient = useQueryClient();
 
-  const query = useQuery({
+  const clubQuery = useQuery({
     queryKey: ['/social/clubs/:clubId', props.id],
     queryFn: async () => {
       if (!kakaoId) {
@@ -53,14 +52,12 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     },
   });
 
-  console.log(query.data);
-
   const mutation = useMutation({
     mutationFn: async () => {
       if (!kakaoId) {
         return;
       }
-      const body = await postAccessClub({clubId: props.id, kakaoId});
+      const body = await postJoinClub({clubId: props.id, kakaoId});
       return body;
     },
     onSuccess: async result => {
@@ -81,14 +78,16 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     mutation.mutate();
   };
 
+  const isAdmin = clubQuery.data?.adminId === kakaoId;
+
   const weekdayText = getWeekdayText(props.weekDay);
 
-  if (query.error) {
-    const error = query.error as unknown as {error: string};
+  if (clubQuery.error) {
+    const error = clubQuery.error as unknown as {error: string};
     return <ErrorScreen errorMessage={error.error} />;
   }
 
-  if (query.isPending) {
+  if (clubQuery.isPending) {
     return (
       <SafeAreaView style={styles.container}>
         <BackHeader

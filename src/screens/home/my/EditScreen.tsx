@@ -1,7 +1,6 @@
 import {DOMAIN} from '@env';
 import CustomButton from '@src/components/CustomButton';
 import InputField from '@src/components/InputField';
-import useAPI from '@src/hooks/useAPI';
 import {UserProfile} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import axios from 'axios';
@@ -25,7 +24,6 @@ const EditScreen = () => {
     nickname: '',
     username: '',
   });
-  const {postMutation} = useAPI();
   const {logout} = useContext(MainContext);
 
   const selectImage = () => {
@@ -79,33 +77,7 @@ const EditScreen = () => {
     }
   };
 
-  const Submit = () => {
-    postMutation.mutate(
-      {
-        path: '/profile/nickname',
-        body: {
-          username: String(data.username),
-          nickname: String(data.nickname),
-        },
-      },
-      {
-        onSuccess: () => console.log('DD'),
-      },
-    );
-
-    postMutation.mutate(
-      {
-        path: '/profile/introduce',
-        body: {
-          username: String(data.username),
-          introduce: String(data.introduce),
-        },
-      },
-      {
-        onSuccess: () => console.log('TT'),
-      },
-    );
-  };
+  const Submit = () => {};
 
   return (
     <SafeAreaView style={styles.container}>

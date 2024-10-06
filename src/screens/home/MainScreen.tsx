@@ -1,13 +1,14 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get} from '@src/api/axios';
+import {getBestsellers} from '@src/api/book';
+import {getClubs} from '@src/api/club';
 import CustomText from '@src/components/CustomText';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BookCard from '@src/components/common/card/BookCard';
 import ClubCard from '@src/components/common/card/ClubCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
-import {BookItem, HomeTabParamList, MainStackParamList} from '@src/types';
+import {HomeTabParamList, MainStackParamList} from '@src/types';
 import {useQuery} from '@tanstack/react-query';
 import {
   ActivityIndicator,
@@ -24,30 +25,14 @@ const MainScreen = ({navigation, route}: Props) => {
 
   const bestsellerQuery = useQuery({
     queryKey: ['/books/bestsellers'],
-    queryFn: async () => {
-      const body: {books: BookItem[]; total: number} = await get({
-        path: '/books/bestsellers',
-      });
-      return body.books;
-    },
+    queryFn: getBestsellers,
   });
 
-  const socialClubQuery = useQuery<
-    ({id: number} & Omit<SocialClub, 'id'>)[],
-    {error: string},
-    SocialClub[]
-  >({
+  const socialClubQuery = useQuery({
     queryKey: ['/social/clubs'],
-    queryFn: async () => {
-      //page가 0부터 시작
-      const body: {content: ({id: number} & Omit<SocialClub, 'id'>)[]} =
-        await get({
-          path: '/social/clubs?page=0&size=10',
-        });
-      return body.content;
-    },
+    queryFn: async () => getClubs(0),
     select: datas => {
-      return datas.map(data => ({
+      return datas.content.map(data => ({
         ...data,
         clubId: data.id,
       }));

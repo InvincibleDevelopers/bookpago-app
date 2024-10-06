@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {get} from '@src/api/axios';
+import {getSearchBooks} from '@src/api/book';
 import LoadingView from '@src/components/LoadingView';
 import NodataView from '@src/components/NodataView';
 import SearchHeader from '@src/components/common/header/SearchHeader';
@@ -8,9 +8,8 @@ import SearchResult from '@src/components/search/Result';
 import {SEARCH_PAGE_SIZE, colors} from '@src/constants';
 import ErrorScreen from '@src/screens/ErrorScreen';
 import {BookItem as BookItemType, SearchStackParamList} from '@src/types';
-import {MainContext} from '@src/utils/Context';
 import {useInfiniteQuery} from '@tanstack/react-query';
-import {useCallback, useContext, useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -28,19 +27,13 @@ const SearchScreen = ({navigation}: Props) => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const {kakaoId} = useContext(MainContext);
-
   const searchQuery = useInfiniteQuery<
     {total: number; books: BookItemType[]},
     {error: string}
   >({
     queryKey: ['/books/search', searchValue, nonce],
-    queryFn: async ({pageParam}) => {
-      const body: {books: BookItemType[]; total: number} = await get({
-        path: `/books/search?query=${searchValue}&page=${pageParam}&size=${SEARCH_PAGE_SIZE}&kakaoId=${kakaoId}`,
-      });
-      return body;
-    },
+    queryFn: async ({pageParam}) =>
+      getSearchBooks(searchValue, pageParam as number),
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {

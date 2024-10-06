@@ -1,4 +1,3 @@
-import useAPI from '@src/hooks/useAPI';
 import {UserProfile} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useContext} from 'react';
@@ -15,23 +14,21 @@ const UserCard = ({
   genre,
   introduce,
 }: UserProfile) => {
-  const {postMutation} = useAPI();
-
   const Submit = () => {
-    postMutation.mutate(
-      {
-        path: '/profile/follow',
-        body: {
-          follower: username.toString(),
-          followee: username.toString(),
-        },
-      },
-      {
-        onSuccess: () => {
-          Alert.alert('처리되었습니다');
-        },
-      },
-    );
+    // postMutation.mutate(
+    //   {
+    //     path: '/profile/follow',
+    //     body: {
+    //       follower: username.toString(),
+    //       followee: username.toString(),
+    //     },
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       Alert.alert('처리되었습니다');
+    //     },
+    //   },
+    // );
   };
 
   return (

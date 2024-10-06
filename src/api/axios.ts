@@ -1,12 +1,11 @@
 import {DOMAIN} from '@env';
-import {axiosTypes} from '@src/types/api';
 import axios, {AxiosError} from 'axios';
 
-const axiosInstance = axios.create({
+const fetcher = axios.create({
   baseURL: `${DOMAIN}`,
 });
 
-axiosInstance.interceptors.request.use(
+fetcher.interceptors.request.use(
   request => {
     const fullUrl = `${request.baseURL || ''}${request.url}`;
     console.log('Axios interceptors request: ', fullUrl);
@@ -16,7 +15,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // https://axios-http.com/kr/docs/interceptors
-axiosInstance.interceptors.response.use(
+fetcher.interceptors.response.use(
   response => {
     // 응답이 성공적인 경우 그대로 반환
     return response;
@@ -36,21 +35,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-const get = async ({path, header}: axiosTypes<undefined>) => {
-  const {data} = await axiosInstance.get(`${path}`, {
-    headers: header,
-  });
-
-  return data;
-};
-
-const post = async <T>({path, header, body}: axiosTypes<T>) => {
-  const {data} = await axiosInstance.post(`${path}`, body, {
-    headers: header,
-  });
-
-  return data;
-};
-
-export default axiosInstance;
-export {get, post};
+export default fetcher;
