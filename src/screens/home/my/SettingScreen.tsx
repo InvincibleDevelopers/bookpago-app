@@ -1,4 +1,5 @@
 import {DOMAIN} from '@env';
+import {patchProfileImage} from '@src/api/profile';
 import CustomButton from '@src/components/CustomButton';
 import InputField from '@src/components/InputField';
 import {UserProfile} from '@src/types';
@@ -25,7 +26,7 @@ const SettingScreen = () => {
     username: '',
   });
 
-  const {logout} = useContext(MainContext);
+  const {logout, kakaoId} = useContext(MainContext);
 
   const selectImage = () => {
     launchImageLibrary(

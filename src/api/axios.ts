@@ -25,13 +25,14 @@ fetcher.interceptors.response.use(
       console.error('Axios interceptors error: ', error.response?.data);
     }
 
-    const hasErrorKey = 'error' in error;
+    const errorData = error.response?.data;
+    const hasErrorKey = 'error' in errorData;
     if (!hasErrorKey) {
       // 네트워크 에러인 경우
       return Promise.reject({error: 'network error'});
     }
     // 그 서버에서 내려온 에러는 그대로 반환
-    return Promise.reject(error);
+    return Promise.reject(errorData);
   },
 );
 

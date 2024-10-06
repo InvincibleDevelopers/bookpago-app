@@ -22,3 +22,34 @@ export const getProfile = async ({
   }>(`/profile/${myKakaoId}?currentUserKakaoId=${currentUserKakaoId}`);
   return body.data;
 };
+
+interface ProfileImageArg {
+  file: {
+    uri: string;
+    type: string;
+    name: string;
+  };
+  kakaoId: number;
+}
+
+export const patchProfileImage = async ({file, kakaoId}: ProfileImageArg) => {
+  console.log('patchProfileImage', file, kakaoId);
+
+  const formData = new FormData();
+
+  formData.append('file', file);
+
+  const response = await fetcher.patch<{
+    userId: number;
+    nickname: string;
+    introduce: string;
+    imageUrl: string;
+    wishIsbnList: number[];
+    readingClubDto: null;
+  }>(`/profile/image?kakaoId=${kakaoId}`, file, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  });
+
+  console.log(response);
+  return response.data;
+};

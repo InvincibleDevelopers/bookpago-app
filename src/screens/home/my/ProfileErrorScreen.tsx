@@ -23,7 +23,11 @@ const ProfileErrorScreen = ({profileKakaoId, messageText}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerBox}>
-        {isMyProfile ? <MyHeader myKakaoid={kakaoId!} /> : <MyBackHeader />}
+        {isMyProfile ? (
+          <MyHeader myKakaoid={kakaoId!} profileKakaoId={profileKakaoId} />
+        ) : (
+          <MyBackHeader />
+        )}
       </View>
       <View style={styles.bodyBox}>
         <View style={styles.innerBox}>

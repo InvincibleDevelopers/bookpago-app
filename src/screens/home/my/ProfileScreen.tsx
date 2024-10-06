@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getProfile} from '@src/api/profile';
+import {getProfile, patchProfileImage} from '@src/api/profile';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';
@@ -17,7 +17,7 @@ import {
   RootStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useContext, useState} from 'react';
 import {
   Image,
@@ -27,8 +27,11 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import ProfileErrorScreen from './ProfileErrorScreen';
+import useUploadProfileImage from '@src/hooks/useUploadProfileImage';
 
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
@@ -42,6 +45,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   const [isShowParticipateModal, setIsShowParticipateModal] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const profileQuery = useQuery({
     queryKey: ['/profile/:kakaoId', profileKakaoId],
     queryFn: async () =>
@@ -51,6 +56,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       }),
     enabled: !!myKakaoId,
   });
+  const mutateProfileImage = useUploadProfileImage(myKakaoId!);
 
   const openParticipateModal = () => setIsShowParticipateModal(true);
   const closeParticipateModal = () => setIsShowParticipateModal(false);
@@ -62,6 +68,19 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const pressModalRow = (club: SocialClub) => {
     closeParticipateModal();
     navigateClubDetail(club);
+  };
+
+  const longPressProfileImage = () => {
+    if (mutateProfileImage.isPending) return;
+    Alert.alert('프로필 사진을 변경하시겠습니까?', undefined, [
+      {text: '취소', style: 'cancel'},
+      {
+        text: '변경',
+        onPress: () => {
+          mutateProfileImage.mutate(profileKakaoId);
+        },
+      },
+    ]);
   };
 
   if (profileQuery.error) {
@@ -94,12 +113,20 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <MyHeader myKakaoid={myKakaoId!} profileKakaoId={profileKakaoId} />
           <View style={styles.bodyContainer}>
             <View style={styles.bodyInnerBox}>
-              <Image
-                style={styles.image}
-                resizeMode="cover"
-                source={require('@src/assets/user/profile.png')}
-              />
-
+              <TouchableOpacity
+                style={styles.profileImageButton}
+                onLongPress={longPressProfileImage}
+                disabled={!isMyProfile}>
+                <Image
+                  style={styles.profileImage}
+                  resizeMode="cover"
+                  source={
+                    profileQuery.data.profile.imageUrl
+                      ? {uri: profileQuery.data.profile.imageUrl}
+                      : require('@src/assets/user/profile.png')
+                  }
+                />
+              </TouchableOpacity>
               <View style={styles.header}>
                 <Pressable style={styles.dmButton} onPress={() => {}}>
                   <Text style={{color: colors.THEME, fontSize: 16}}>
@@ -246,10 +273,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     flex: 1,
   },
-  image: {
+  profileImageButton: {
     position: 'absolute',
     top: -50,
     left: 20,
+    borderRadius: 9999,
+    overflow: 'hidden',
+  },
+  profileImage: {
     width: 100,
     height: 100,
   },
