@@ -61,7 +61,13 @@ type PatchProfileBody = {
 };
 
 export const patchProfile = async (body: PatchProfileBody) => {
-  const response = await fetcher.patch(`/profile/${body.kakaoId}`, body);
-  console.log(response);
+  const response = await fetcher.patch<{
+    userId: number;
+    nickname: string;
+    introduce: string;
+    imageUrl?: string;
+    wishIsbnList: any[];
+    readingClubDto: null;
+  }>(`/profile/${body.kakaoId}`, body);
   return response.data;
 };

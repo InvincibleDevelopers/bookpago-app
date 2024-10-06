@@ -8,7 +8,11 @@ const fetcher = axios.create({
 fetcher.interceptors.request.use(
   request => {
     const fullUrl = `${request.baseURL || ''}${request.url}`;
-    console.log('Axios interceptors request: ', fullUrl);
+    console.log(
+      'Axios interceptors request: ',
+      request.method?.toUpperCase(),
+      fullUrl,
+    );
     return request;
   },
   error => Promise.reject(error),
