@@ -8,9 +8,9 @@ import {waitfor} from '@src/utils/waitfor';
 import {useState, useContext, useCallback} from 'react';
 import {SafeAreaView, Text, FlatList, View, StyleSheet} from 'react-native';
 
-type Props = NativeStackScreenProps<MyStackParamList, 'Following'>;
+type Props = NativeStackScreenProps<MyStackParamList, 'Follower'>;
 
-const FollowingScreen = ({navigation, route}: Props) => {
+const FollowerScreen = ({navigation, route}: Props) => {
   const {kakaoId} = useContext(MainContext);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -40,7 +40,6 @@ const FollowingScreen = ({navigation, route}: Props) => {
     ({item, index}: {item: {nickname: string}; index: number}) => {
       return (
         <UserCard
-          isFollowing={true}
           nickname={item.nickname}
           onPress={() => {}}
           onPressFollow={() => {}}
@@ -60,7 +59,7 @@ const FollowingScreen = ({navigation, route}: Props) => {
         ListHeaderComponent={() => (
           <BackHeader
             imageProps={{onPress: () => navigation.goBack()}}
-            title="팔로잉"
+            title="팔로워"
           />
         )}
         stickyHeaderIndices={[0]}
@@ -81,4 +80,4 @@ const FollowingScreen = ({navigation, route}: Props) => {
 
 const styles = StyleSheet.create({});
 
-export default FollowingScreen;
+export default FollowerScreen;

@@ -3,11 +3,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {HomeTabParamList, MyStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useContext} from 'react';
-import FollowingScreen from '../../screens/home/my/FollowingScreen';
-import ProfileScreen from '../../screens/home/my/ProfileScreen';
-import SettingScreen from '../../screens/home/my/SettingScreen';
+import FollowerScreen from '@src/screens/home/my/FollowerScreen';
+import ProfileScreen from '@src/screens/home/my/ProfileScreen';
+import SettingScreen from '@src/screens/home/my/SettingScreen';
 import EditScreen from '@src/screens/home/my/EditScreen';
 import ClubDetailScreen from '@src/screens/home/ClubDetailScreen';
+import FollowingScreen from '@src/screens/home/my/FollowingScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'My'>;
 const Stack = createStackNavigator<MyStackParamList>();
@@ -29,12 +30,21 @@ const MyNavigator = ({navigation}: Props) => {
       />
 
       <Stack.Screen
-        name="Followee"
+        name="Following"
         options={{
           title: '팔로잉',
           headerShown: false,
         }}
         component={FollowingScreen}
+      />
+
+      <Stack.Screen
+        name="Follower"
+        options={{
+          title: '팔로워',
+          headerShown: false,
+        }}
+        component={FollowerScreen}
       />
 
       <Stack.Screen

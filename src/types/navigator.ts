@@ -29,7 +29,7 @@ export type MainStackParamList = {
 export type MyStackParamList = {
   Profile: {kakaoId: number};
   Follower: undefined;
-  Followee: undefined;
+  Following: undefined;
   Setting: undefined;
   Edit: undefined;
   ClubDetail: {socialGrop: SocialClub};

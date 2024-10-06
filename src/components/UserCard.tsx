@@ -1,92 +1,93 @@
-import {UserProfile} from '@src/types';
-import {MainContext} from '@src/utils/Context';
-import {useContext} from 'react';
-import {Alert, Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, Text} from 'react-native';
+import Pressable from './CustomButton';
 import CustomButton from './CustomButton';
+import {colors} from '@src/constants';
+import Divider from './common/Divider';
+import Spacer from './common/Spacer';
+
+interface UserCard {
+  onPress: () => void;
+  isFollowing?: boolean;
+  onPressFollow?: (isFollow: boolean) => void;
+  nickname: string;
+}
 
 const UserCard = ({
-  OnClick,
-  username,
+  onPress,
+  onPressFollow,
   nickname,
-  kakaoOauthToken,
-  gender,
-  age,
-  genre,
-  introduce,
-}: UserProfile) => {
-  const Submit = () => {
-    // postMutation.mutate(
-    //   {
-    //     path: '/profile/follow',
-    //     body: {
-    //       follower: username.toString(),
-    //       followee: username.toString(),
-    //     },
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       Alert.alert('처리되었습니다');
-    //     },
-    //   },
-    // );
-  };
-
+  isFollowing = false,
+}: UserCard) => {
   return (
-    <CustomButton onPress={() => OnClick?.()} style={styles.container}>
+    <Pressable onPress={onPress} style={styles.container}>
       <Image
         resizeMode={'cover'}
         style={styles.image}
         source={require('@src/assets/user/profile.png')}
       />
-      <View style={{gap: 10}}>
-        <CustomButton
-          pointerEvents={'none'}
-          bApplyCommonStyle={false}
-          textprops={{style: {left: '-35%', fontSize: 18, color: 'black'}}}
-          text={nickname}
-        />
-        <View style={{left: '-25%', flexDirection: 'row', gap: 20}}>
-          <CustomButton
-            pointerEvents={'none'}
-            bApplyCommonStyle={false}
-            textprops={{style: {left: '-35%', fontSize: 14, color: 'gray'}}}
-            text="평가"
-          />
-          <CustomButton
-            pointerEvents={'none'}
-            bApplyCommonStyle={false}
-            textprops={{style: {left: '-35%', fontSize: 14, color: 'gray'}}}
-            text="코멘트"
-          />
+
+      <View style={styles.contentBox}>
+        <Text style={styles.nickname}>{nickname}</Text>
+        <Spacer height={5} />
+
+        <View style={styles.subBox}>
+          <Text style={styles.sub}>평가</Text>
+          <Divider type="vertical" style={{height: 15}} />
+          <Text style={styles.sub}>코멘트</Text>
         </View>
       </View>
-      <CustomButton
-        onPress={Submit}
-        textprops={{style: {fontSize: 16, color: '#214868'}}}
-        containerstyle={styles.button}
-        text={'언팔로우'}
-      />
-    </CustomButton>
+
+      {isFollowing && (
+        <CustomButton
+          onPress={() => onPressFollow?.(false)}
+          textprops={{style: styles.buttonText}}
+          containerstyle={styles.button}
+          text="팔로우"
+        />
+      )}
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 15,
+    alignItems: 'center',
   },
   image: {
     width: 60,
     height: 60,
+    borderRadius: 9999,
+    overflow: 'hidden',
+    marginRight: 15,
+  },
+  contentBox: {
+    flex: 1,
+  },
+  nickname: {
+    fontSize: 18,
+    color: colors.BLACK,
+    fontWeight: 'bold',
+  },
+  subBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  sub: {
+    fontSize: 14,
+    color: colors.GRAY_400,
   },
   button: {
     backgroundColor: '#cdd4db',
-    height: 40,
-    top: '25%',
-    padding: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#214868',
+    fontWeight: 'medium',
   },
 });
 

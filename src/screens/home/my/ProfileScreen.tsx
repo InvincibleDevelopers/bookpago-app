@@ -31,7 +31,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import NicknameButton from '../../../components/my/Nickname';
+import NicknameButton from '@src/components/my/Nickname';
 import ProfileErrorScreen from './ProfileErrorScreen';
 import ProfileLoadingScreen from './ProfileLoadingScreent';
 
@@ -143,7 +143,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
                 />
                 <Divider type="vertical" style={{height: 15}} />
                 <CustomButton
-                  onPress={() => navigation.navigate('Followee')}
+                  onPress={() => navigation.navigate('Following')}
                   bApplyCommonStyle={false}
                   text="팔로잉"
                   textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
