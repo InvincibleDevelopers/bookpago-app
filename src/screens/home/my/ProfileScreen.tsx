@@ -7,12 +7,10 @@ import LoadingView from '@src/components/LoadingView';
 import Divider from '@src/components/common/Divider';
 import Spacer from '@src/components/common/Spacer';
 import ClubCard from '@src/components/common/card/ClubCard';
-import MyBackHeader from '@src/components/my/MyBackHeader';
 import MyHeader from '@src/components/my/MyHeader';
 import ParticipateClubModal from '@src/components/my/ParticipateClubModal';
 import SectionButton from '@src/components/my/SectionButton';
 import {colors} from '@src/constants/colors';
-import ErrorScreen from '@src/screens/ErrorScreen';
 import {
   HomeTabParamList,
   MyStackParamList,
@@ -30,23 +28,28 @@ import {
   Text,
   View,
 } from 'react-native';
+import ProfileErrorScreen from './ProfileErrorScreen';
 
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
 const ProfileScreen = ({navigation, route}: Props) => {
+  const profileKakaoId = route.params.kakaoId;
+
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const rootNav = navigation.getParent<NavigationProp<RootStackParamList>>();
-  const {kakaoId} = useContext(MainContext);
+  const {kakaoId: myKakaoId} = useContext(MainContext);
+  const isMyProfile = profileKakaoId === myKakaoId;
+
   const [isShowParticipateModal, setIsShowParticipateModal] = useState(false);
 
   const profileQuery = useQuery({
-    queryKey: ['/profile/:kakaoId', route.params.kakaoId],
+    queryKey: ['/profile/:kakaoId', profileKakaoId],
     queryFn: async () =>
       getProfile({
-        myKakaoId: kakaoId!,
-        currentUserKakaoId: route.params.kakaoId,
+        myKakaoId: myKakaoId!,
+        currentUserKakaoId: profileKakaoId,
       }),
-    enabled: !!kakaoId,
+    enabled: !!myKakaoId,
   });
 
   const openParticipateModal = () => setIsShowParticipateModal(true);
@@ -61,18 +64,25 @@ const ProfileScreen = ({navigation, route}: Props) => {
     navigateClubDetail(club);
   };
 
-  const isMyProfile = route.params.kakaoId === kakaoId;
-
   if (profileQuery.error) {
     const error = profileQuery.error as unknown as {error: string};
-    return <ErrorScreen errorMessage={error.error} />;
+    return (
+      <ProfileErrorScreen
+        profileKakaoId={profileKakaoId}
+        messageText={error.error}
+      />
+    );
   }
 
   if (profileQuery.isPending) {
     return (
-      <SafeAreaView style={styles.container}>
-        {isMyProfile ? <MyHeader myKakaoid={kakaoId!} /> : <MyBackHeader />}
-        <LoadingView color={colors.WHITE} />
+      <SafeAreaView style={[styles.container, {backgroundColor: colors.THEME}]}>
+        <MyHeader myKakaoid={myKakaoId!} profileKakaoId={profileKakaoId} />
+        <View style={styles.bodyContainer}>
+          <View style={styles.bodyInnerBox}>
+            <LoadingView />
+          </View>
+        </View>
       </SafeAreaView>
     );
   }
@@ -81,10 +91,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
     <>
       <SafeAreaView style={styles.container}>
         <ScrollView>
-          <View style={styles.headerBox}>
-            {isMyProfile ? <MyHeader myKakaoid={kakaoId!} /> : <MyBackHeader />}
-            <Spacer height={50} backgroundColor={colors.THEME} />
-          </View>
+          <MyHeader myKakaoid={myKakaoId!} profileKakaoId={profileKakaoId} />
           <View style={styles.bodyContainer}>
             <View style={styles.bodyInnerBox}>
               <Image
@@ -204,6 +211,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
           </View>
 
           <Spacer height={50} backgroundColor={colors.WHITE} />
+
+          <Spacer height={50} backgroundColor={colors.WHITE} />
+
+          <Spacer height={50} backgroundColor={colors.WHITE} />
         </ScrollView>
       </SafeAreaView>
 
@@ -226,12 +237,14 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     backgroundColor: colors.THEME,
+    flex: 1,
   },
   bodyInnerBox: {
     padding: 20,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     backgroundColor: colors.WHITE,
+    flex: 1,
   },
   image: {
     position: 'absolute',
