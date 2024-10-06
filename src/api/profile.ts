@@ -53,3 +53,15 @@ export const patchProfileImage = async ({file, kakaoId}: ProfileImageArg) => {
   console.log(response);
   return response.data;
 };
+
+type PatchProfileBody = {
+  kakaoId: number;
+  nickname: string;
+  introduce: string;
+};
+
+export const patchProfile = async (body: PatchProfileBody) => {
+  const response = await fetcher.patch(`/profile/${body.kakaoId}`, body);
+  console.log(response);
+  return response.data;
+};
