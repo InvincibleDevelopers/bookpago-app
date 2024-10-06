@@ -14,10 +14,18 @@ export type GetClubDetailArg = {
   clubId: number;
 };
 
+export type member = {
+  kakaoId: number;
+  nickname: string;
+  imgUrl: string;
+};
+
 export const getClubDetail = async ({clubId}: GetClubDetailArg) => {
   const response = await fetcher.get<
     {
       adminId: number;
+      memberList: member[];
+      applicantList: member[];
     } & SocialClub
   >(`/social/clubs/${clubId}`);
   return response.data;
@@ -52,9 +60,12 @@ export const postJoinClub = async ({clubId, kakaoId}: PostAccessClubArg) => {
   return response.data.success;
 };
 
-// export const deleteJoinClub = async ({
-//   clubId,
-//   kakaoId,
-// }: PostAccessClubArg) => {
-//   await
-// };
+export const deleteJoinClub = async ({clubId, kakaoId}: PostAccessClubArg) => {
+  const response = await fetcher({
+    url: `/social/clubs/${clubId}/members`,
+    method: 'DELETE',
+    data: {kakaoId},
+  });
+  console.log('del', response.data);
+  return response.data.success;
+};

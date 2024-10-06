@@ -1,3 +1,4 @@
+import {NavigatorScreenParams} from '@react-navigation/native';
 import {UserProfile} from './UserProfile';
 
 export type RootStackParamList = {
@@ -17,7 +18,7 @@ export type HomeTabParamList = {
   Search: undefined;
   Social: undefined;
   Calendar: undefined;
-  My: undefined;
+  My?: NavigatorScreenParams<MyStackParamList>;
 };
 
 export type MainStackParamList = {
