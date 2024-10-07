@@ -41,7 +41,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   const detailQuery = useQuery<BookDetail, {error: string}>({
     queryKey: ['/books/:isbn', props.isbn],
-    queryFn: () => getBookByIsbn(props.isbn),
+    queryFn: () => getBookByIsbn(props.isbn, kakaoId!),
     staleTime: 3 * 1000,
     gcTime: 30 * 1000,
   });

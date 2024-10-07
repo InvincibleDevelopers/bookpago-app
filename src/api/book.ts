@@ -16,8 +16,10 @@ export const getSearchBooks = async (query: string, page: number) => {
   return response.data;
 };
 
-export const getBookByIsbn = async (isbn: number) => {
-  const response = await fetcher.get<BookDetail>(`/books/${isbn}`);
+export const getBookByIsbn = async (isbn: number, kakaoId: number) => {
+  const response = await fetcher.get<BookDetail>(
+    `/books/${isbn}?kakaoId=${kakaoId}`,
+  );
   return response.data;
 };
 
