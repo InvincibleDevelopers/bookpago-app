@@ -87,7 +87,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     queryFn: () => getClubDetail({clubId: props.id, kakaoId: kakaoId!}),
   });
 
-  const isAdmin = clubQuery.data?.adminId === kakaoId;
+  const isAdmin = clubQuery.data?.adminId?.toString() === kakaoId!.toString(); // number로 비교시에 간혹 버그
 
   const mutationJoinClub = useJoinClub();
 
