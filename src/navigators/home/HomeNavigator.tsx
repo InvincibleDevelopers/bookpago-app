@@ -42,14 +42,14 @@ const HomeNavigator = () => {
         }}
         component={SocialNavigator}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Calendar"
         options={{
           title: '캘린더',
           tabBarIcon: TabIcon.CalendarIcon,
         }}
         component={CalendarNavigator}
-      />
+      /> */}
       <Tab.Screen
         name="My"
         options={{

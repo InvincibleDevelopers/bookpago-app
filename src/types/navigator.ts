@@ -17,7 +17,7 @@ export type HomeTabParamList = {
   Home: undefined;
   Search: undefined;
   Social: undefined;
-  Calendar: undefined;
+  // Calendar: undefined;
   My?: NavigatorScreenParams<MyStackParamList>;
 };
 
