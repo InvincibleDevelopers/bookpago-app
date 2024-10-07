@@ -1,11 +1,21 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {
+  deleteAcceptMember,
+  deleteExistMember,
+  getClubDetail,
+  postAcceptMember,
+} from '@src/api/club';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';
+import SelectModal, {SelectModalOptions} from '@src/components/SelectModal';
+import Spacer from '@src/components/common/Spacer';
 import MypageButton from '@src/components/common/button/MypageButton';
+import ClubMemberCard from '@src/components/common/card/ClubMemberCard';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {CYCLE, colors} from '@src/constants';
+import useJoinClub from '@src/hooks/useJoinClub';
 import {
   HomeTabParamList,
   MainStackParamList,
@@ -13,23 +23,19 @@ import {
   SocialStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {useContext, useState, useMemo} from 'react';
+import {getWeekdayText} from '@src/utils/helper';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {useContext, useMemo, useState} from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
+  Alert,
   Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
   Text,
+  View,
 } from 'react-native';
 import ErrorScreen from '../ErrorScreen';
-import {getClubDetail, postJoinClub} from '@src/api/club';
-import ClubMemberCard from '@src/components/common/card/ClubMemberCard';
-import Spacer from '@src/components/common/Spacer';
-import {getWeekdayText} from '@src/utils/helper';
-import SelectModal, {SelectModalOptions} from '@src/components/SelectModal';
-import useJoinClub from '@src/hooks/useJoinClub';
 
 const MEMBER_OPTIONS: SelectModalOptions[] = [
   {
@@ -37,7 +43,7 @@ const MEMBER_OPTIONS: SelectModalOptions[] = [
     text: '프로필 페이지로 이동',
   },
   {
-    value: '1',
+    value: '3',
     text: '추방하기',
   },
 ];
@@ -62,25 +68,52 @@ type Props = NativeStackScreenProps<
   'ClubDetail'
 >;
 
+enum memberStatus {
+  MEMBER,
+  APPLICANT,
+}
+
 const ClubDetailScreen = ({navigation, route}: Props) => {
   const props = route.params.socialGrop;
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const {kakaoId} = useContext(MainContext);
   const [selectedMember, setSelecteMember] = useState<{
     kakaoId: number;
-    status: 0 | 1;
+    status: memberStatus;
   } | null>(null);
-
-  const queryClient = useQueryClient();
 
   const clubQuery = useQuery({
     queryKey: ['/social/clubs/:clubId', props.id],
     queryFn: () => getClubDetail({clubId: props.id, kakaoId: kakaoId!}),
   });
 
+  const isAdmin = clubQuery.data?.adminId === kakaoId;
+
   const mutationJoinClub = useJoinClub();
 
-  const isAdmin = clubQuery.data?.adminId === kakaoId;
+  const acceptMember = useMutation({
+    mutationFn: postAcceptMember,
+    onSuccess: async () => {
+      await clubQuery.refetch();
+      Alert.alert('승인 하였습니다.');
+    },
+  });
+
+  const rejectMember = useMutation({
+    mutationFn: deleteAcceptMember,
+    onSuccess: async () => {
+      await clubQuery.refetch();
+      Alert.alert('승인 거절 하였습니다.');
+    },
+  });
+
+  const kickMember = useMutation({
+    mutationFn: deleteExistMember,
+    onSuccess: async () => {
+      await clubQuery.refetch();
+      Alert.alert('추방 하였습니다.');
+    },
+  });
 
   const isIJoinded = useMemo(() => {
     const data = clubQuery.data;
@@ -101,11 +134,11 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
   };
 
   const onPressMember = (id: number) => {
-    setSelecteMember({kakaoId: id, status: 0});
+    setSelecteMember({kakaoId: id, status: memberStatus.MEMBER});
   };
 
   const onPressApplicant = (id: number) => {
-    setSelecteMember({kakaoId: id, status: 1});
+    setSelecteMember({kakaoId: id, status: memberStatus.APPLICANT});
   };
 
   const onCloseModal = () => {
@@ -120,6 +153,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     onCloseModal();
 
     if (value === '0') {
+      // 프로필 페이지로 이동
       tabNav.navigate('My', {
         screen: 'Profile',
         params: {kakaoId: selectedMember.kakaoId},
@@ -127,18 +161,38 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
       return;
     }
 
-    if (selectedMember.status === 0) {
-      // 멤버
+    if (selectedMember.status === memberStatus.MEMBER && isAdmin) {
+      // 멤버의 경우
 
-      if (value === '1') {
+      if (value === '3') {
         // 추방하기
+        if (selectedMember.kakaoId === kakaoId) {
+          Alert.alert('자신을 추방할 수 없습니다.');
+          return;
+        }
+
+        kickMember.mutate({
+          clubId: props.id,
+          adminKakaoId: kakaoId!,
+          memberKakaoId: selectedMember.kakaoId,
+        });
       }
     } else {
-      // 신청자
+      // 신청자의 경우
       if (value === '1') {
         // 수락하기
+        acceptMember.mutate({
+          clubId: props.id,
+          adminKakaoId: kakaoId!,
+          memberKakaoId: selectedMember.kakaoId,
+        });
       } else if (value === '2') {
         // 거절하기
+        rejectMember.mutate({
+          clubId: props.id,
+          adminKakaoId: kakaoId!,
+          memberKakaoId: selectedMember.kakaoId,
+        });
       }
     }
   };
@@ -150,7 +204,9 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
       return [];
     }
     const option =
-      selectedMember.status === 0 ? MEMBER_OPTIONS : APPLICANT_OPTIONS;
+      selectedMember.status === memberStatus.MEMBER
+        ? MEMBER_OPTIONS
+        : APPLICANT_OPTIONS;
 
     return isAdmin ? option : option.filter(o => o.value === '0');
   }, [selectedMember]);
@@ -186,9 +242,6 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
 
           <View style={{paddingHorizontal: 20}}>
             <CustomText style={{fontSize: 20}}>{props.clubName}</CustomText>
-            <CustomText style={{fontSize: 20}}>
-              {clubQuery.data?.adminId}
-            </CustomText>
           </View>
 
           <Spacer height={20} />
@@ -268,6 +321,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
                   kakaoId={member.kakaoId}
                   nickname={member.nickname}
                   profilUrl={member.imgUrl}
+                  disabled={kickMember.isPending}
                 />
               ))}
             </ScrollView>
@@ -288,6 +342,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
                   kakaoId={member.kakaoId}
                   nickname={member.nickname}
                   profilUrl={member.imgUrl}
+                  disabled={acceptMember.isPending || rejectMember.isPending}
                 />
               ))}
             </ScrollView>

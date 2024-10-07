@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import Spacer from '../Spacer';
 import {colors} from '@src/constants';
-import {Picker} from '@react-native-picker/picker';
 
 interface ClubMemberCardProps {
   onPress: () => void;

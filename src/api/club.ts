@@ -69,3 +69,59 @@ export const deleteJoinClub = async ({clubId, kakaoId}: PostAccessClubArg) => {
   console.log('del', response.data);
   return response.data.success;
 };
+
+type ClubAdminArg = {
+  clubId: number;
+  adminKakaoId: number;
+  memberKakaoId: number;
+};
+
+// admin
+export const postAcceptMember = async ({
+  clubId,
+  adminKakaoId,
+  memberKakaoId,
+}: ClubAdminArg) => {
+  console.log('postAcceptMember', clubId, adminKakaoId, memberKakaoId);
+  const response = await fetcher.post<{success: boolean}>(
+    `/social/clubs/${clubId}/applicants`,
+    {
+      kakaoId: adminKakaoId,
+      applicants: [memberKakaoId],
+    },
+  );
+
+  return response.data;
+};
+
+export const deleteAcceptMember = async ({
+  clubId,
+  adminKakaoId,
+  memberKakaoId,
+}: ClubAdminArg) => {
+  const response = await fetcher<{success: boolean}>({
+    url: `/social/clubs/${clubId}/applicants`,
+    method: 'DELETE',
+    data: {
+      kakaoId: adminKakaoId,
+      applicants: [memberKakaoId],
+    },
+  });
+  return response.data;
+};
+
+export const deleteExistMember = async ({
+  clubId,
+  adminKakaoId,
+  memberKakaoId,
+}: ClubAdminArg) => {
+  const response = await fetcher<{success: boolean}>({
+    url: `/social/clubs/${clubId}/admin`,
+    method: 'DELETE',
+    data: {
+      kakaoId: adminKakaoId,
+      members: [memberKakaoId],
+    },
+  });
+  return response.data;
+};
