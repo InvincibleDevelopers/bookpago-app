@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     borderRadius: 20,
     alignItems: 'center',
-    width: Dimensions.get('screen').width / 3,
+    width: 120,
   },
   nicknameText: {
     color: colors.BLACK,

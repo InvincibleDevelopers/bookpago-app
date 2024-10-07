@@ -350,7 +350,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
 
           <Spacer height={20} />
 
-          {!isAdmin && (
+          {isAdmin === false && (
             <View style={{paddingHorizontal: 20}}>
               <CustomButton
                 containerstyle={[
