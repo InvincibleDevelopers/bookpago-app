@@ -46,11 +46,10 @@ export const patchProfileImage = async ({file, kakaoId}: ProfileImageArg) => {
     imageUrl: string;
     wishIsbnList: number[];
     readingClubDto: null;
-  }>(`/profile/image?kakaoId=${kakaoId}`, file, {
+  }>(`/profile/image?kakaoId=${kakaoId}`, formData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
 
-  console.log(response);
   return response.data;
 };
 

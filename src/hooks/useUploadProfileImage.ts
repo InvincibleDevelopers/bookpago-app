@@ -1,8 +1,5 @@
 import {patchProfileImage} from '@src/api/profile';
-import {requestExternalStoragePermission} from '@src/utils/permission';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import {Alert} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 
@@ -12,12 +9,6 @@ const useUploadProfileImage = (myKakaoId: number) => {
   return useMutation({
     mutationFn: async (profileKakaoId: number) => {
       const isMyProfile = myKakaoId === profileKakaoId;
-
-      // const hasPermission = await requestExternalStoragePermission();
-
-      // if (!hasPermission) {
-      //   return false;
-      // }
 
       if (!isMyProfile) {
         Alert.alert('본인의 프로필 사진만 변경할 수 있습니다.');
@@ -44,8 +35,6 @@ const useUploadProfileImage = (myKakaoId: number) => {
       const type = asset?.type;
       const name = asset?.fileName;
 
-      console.log('asset', asset);
-
       if (!asset || !uri || !type || !name) {
         throw new Error("unknown error: response.assets doesn't exist");
       }
@@ -58,8 +47,6 @@ const useUploadProfileImage = (myKakaoId: number) => {
           name,
         },
       });
-
-      console.log('success', result);
 
       return true;
     },
