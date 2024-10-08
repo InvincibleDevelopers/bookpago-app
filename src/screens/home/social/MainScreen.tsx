@@ -1,11 +1,14 @@
+import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getClubs} from '@src/api/club';
 import ClubListHeader from '@src/components/club/ClubListHeader';
 import Spacer from '@src/components/common/Spacer';
+import MypageButton from '@src/components/common/button/MypageButton';
 import ClubCard from '@src/components/common/card/ClubCard';
+import Header from '@src/components/common/header/Header';
 import {CLUB_PAGE_SIZE, colors} from '@src/constants';
 import ErrorScreen from '@src/screens/ErrorScreen';
-import {SocialStackParamList} from '@src/types';
+import {HomeTabParamList, SocialStackParamList} from '@src/types';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {useCallback, useMemo, useState} from 'react';
 import {
@@ -22,6 +25,7 @@ type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
 
 const MainScreen = ({navigation}: Props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
 
   const clubQuery = useInfiniteQuery<{content: SocialClub[]}, {error: string}>({
     queryKey: ['/social/clubs', 'infinity'],
@@ -72,6 +76,9 @@ const MainScreen = ({navigation}: Props) => {
   if (clubQuery.isPending) {
     return (
       <SafeAreaView style={styles.container}>
+        <Header
+          buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
+        />
         <ClubListHeader />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
@@ -82,6 +89,9 @@ const MainScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header
+        buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
+      />
       <FlatList
         ListHeaderComponent={() => <ClubListHeader />}
         ItemSeparatorComponent={() => <Spacer height={10} />}
