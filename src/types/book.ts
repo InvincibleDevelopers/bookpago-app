@@ -3,7 +3,6 @@ export interface BookItem {
   title: string;
   author: string;
   image: string;
-  wishBook: boolean;
 }
 
 export interface BookDetail extends BookItem {
@@ -11,6 +10,7 @@ export interface BookDetail extends BookItem {
   publisher: string;
   pubdate: string;
   average_rating: number;
+  wishBook: boolean;
 }
 
 export interface RecentBookProps {

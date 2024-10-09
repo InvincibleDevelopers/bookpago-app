@@ -1,9 +1,9 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
-import {UserProfile} from './UserProfile';
 
 export type RootStackParamList = {
-  Auth: undefined;
-  HomeTab: undefined;
+  Auth?: NavigatorScreenParams<AuthStackParamList>;
+  HomeTab?: NavigatorScreenParams<HomeTabParamList>;
+  DM: undefined;
   Chat: undefined;
 };
 
@@ -14,9 +14,9 @@ export type AuthStackParamList = {
 };
 
 export type HomeTabParamList = {
-  Home: undefined;
-  Search: undefined;
-  Social: undefined;
+  Home?: NavigatorScreenParams<MainStackParamList>;
+  Search?: NavigatorScreenParams<SearchStackParamList>;
+  Social?: NavigatorScreenParams<SocialStackParamList>;
   // Calendar: undefined;
   My?: NavigatorScreenParams<MyStackParamList>;
 };
@@ -24,15 +24,6 @@ export type HomeTabParamList = {
 export type MainStackParamList = {
   Main: undefined;
   BookDetail: {isbn: number};
-  ClubDetail: {socialGrop: SocialClub};
-};
-
-export type MyStackParamList = {
-  Profile: {kakaoId: number};
-  Follower: undefined;
-  Following: undefined;
-  Setting: undefined;
-  Edit: undefined;
   ClubDetail: {socialGrop: SocialClub};
 };
 
@@ -44,5 +35,14 @@ export type SearchStackParamList = {
 export type SocialStackParamList = {
   Main: undefined;
   Form: undefined;
+  ClubDetail: {socialGrop: SocialClub};
+};
+
+export type MyStackParamList = {
+  Profile: {kakaoId: number};
+  Follower: undefined;
+  Following: undefined;
+  Setting: undefined;
+  Edit: undefined;
   ClubDetail: {socialGrop: SocialClub};
 };
