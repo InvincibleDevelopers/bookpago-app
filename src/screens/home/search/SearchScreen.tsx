@@ -75,6 +75,13 @@ const SearchScreen = ({navigation}: Props) => {
     }
   };
 
+  const bookItemList = useMemo(
+    () => searchQuery.data?.pages.map(d => d.books).flat() || [],
+    [searchQuery.data],
+  );
+
+  const total = searchQuery.data?.pages.at(-1)?.total;
+
   const renderItem = useCallback(
     ({item}: {item: BookItemType}) => {
       return (
@@ -87,13 +94,6 @@ const SearchScreen = ({navigation}: Props) => {
     },
     [openDetail],
   );
-
-  const bookItemList = useMemo(
-    () => searchQuery.data?.pages.map(d => d.books).flat() || [],
-    [searchQuery.data],
-  );
-
-  const total = searchQuery.data?.pages.at(-1)?.total;
 
   if (searchQuery.error) {
     const error = searchQuery.error as unknown as {error: string};

@@ -8,24 +8,16 @@ import Spacer from '../common/Spacer';
 interface MyHeaderProps {
   myKakaoid: number;
   profileKakaoId: number;
+  isShowBackButton?: boolean;
 }
 
-const MyHeader = ({myKakaoid, profileKakaoId}: MyHeaderProps) => {
+const MyHeader = ({myKakaoid, isShowBackButton = false}: MyHeaderProps) => {
   const navigation = useNavigation<NavigationProp<MyStackParamList>>();
-
-  const isMyProfile = myKakaoid == profileKakaoId;
 
   return (
     <View style={styles.contrainer}>
       <View style={styles.box}>
-        {isMyProfile ? (
-          <CustomButton
-            hitSlop={10}
-            text="MY"
-            containerstyle={{backgroundColor: 'transparent'}}
-            onPress={() => navigation.navigate('Profile', {kakaoId: myKakaoid})}
-          />
-        ) : (
+        {isShowBackButton ? (
           <CustomButton
             hitSlop={10}
             imageprops={{
@@ -34,6 +26,13 @@ const MyHeader = ({myKakaoid, profileKakaoId}: MyHeaderProps) => {
               source: require('@src/assets/icons/hback-white.png'),
             }}
             onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <CustomButton
+            hitSlop={10}
+            text="MY"
+            containerstyle={{backgroundColor: 'transparent'}}
+            onPress={() => navigation.navigate('Profile', {kakaoId: myKakaoid})}
           />
         )}
         <CustomButton

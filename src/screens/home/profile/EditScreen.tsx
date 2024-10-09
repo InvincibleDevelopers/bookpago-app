@@ -2,8 +2,8 @@ import {DOMAIN} from '@env';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import CustomButton from '@src/components/CustomButton';
 import InputField from '@src/components/InputField';
-import IntroduceView from '@src/components/my/IntroduceView';
-import ProfileImageButton from '@src/components/my/ProfileImageButton';
+import IntroduceView from '@src/components/profile/IntroduceView';
+import ProfileImageButton from '@src/components/profile/ProfileImageButton';
 import useProfile from '@src/hooks/useProfile';
 import {MyStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
@@ -22,9 +22,9 @@ import {
 } from 'react-native';
 import ProfileLoadingScreen from './ProfileLoadingScreent';
 import ProfileErrorScreen from './ProfileErrorScreen';
-import MyHeader from '@src/components/my/MyHeader';
+import MyHeader from '@src/components/profile/MyHeader';
 import Spacer from '@src/components/common/Spacer';
-import NicknameButton from '@src/components/my/Nickname';
+import NicknameButton from '@src/components/profile/Nickname';
 import Divider from '@src/components/common/Divider';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import {colors} from '@src/constants';
@@ -88,7 +88,11 @@ const EditScreen = ({navigation}: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <DismissKeyboardView>
-        <MyHeader myKakaoid={kakaoId!} profileKakaoId={kakaoId!} />
+        <MyHeader
+          myKakaoid={kakaoId!}
+          profileKakaoId={kakaoId!}
+          isShowBackButton
+        />
 
         <IntroduceView>
           <ProfileImageButton imageUri={myProfileQuery.data.profile.imageUrl} />

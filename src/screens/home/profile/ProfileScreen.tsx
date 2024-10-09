@@ -6,11 +6,11 @@ import LoadingView from '@src/components/LoadingView';
 import Divider from '@src/components/common/Divider';
 import Spacer from '@src/components/common/Spacer';
 import ClubCard from '@src/components/common/card/ClubCard';
-import IntroduceView from '@src/components/my/IntroduceView';
-import MyHeader from '@src/components/my/MyHeader';
-import ParticipateClubModal from '@src/components/my/ParticipateClubModal';
-import ProfileImageButton from '@src/components/my/ProfileImageButton';
-import SectionButton from '@src/components/my/SectionButton';
+import IntroduceView from '@src/components/profile/IntroduceView';
+import MyHeader from '@src/components/profile/MyHeader';
+import ParticipateClubModal from '@src/components/profile/ParticipateClubModal';
+import ProfileImageButton from '@src/components/profile/ProfileImageButton';
+import SectionButton from '@src/components/profile/SectionButton';
 import {colors} from '@src/constants/colors';
 import useProfile from '@src/hooks/useProfile';
 import useUploadProfileImage from '@src/hooks/useUploadProfileImage';
@@ -31,7 +31,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import NicknameButton from '@src/components/my/Nickname';
+import NicknameButton from '@src/components/profile/Nickname';
 import ProfileErrorScreen from './ProfileErrorScreen';
 import ProfileLoadingScreen from './ProfileLoadingScreent';
 
@@ -48,9 +48,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [isShowParticipateModal, setIsShowParticipateModal] = useState(false);
 
   const queryClient = useQueryClient();
-
   const profileQuery = useProfile(myKakaoId!, profileKakaoId);
-
   const mutateProfileImage = useUploadProfileImage(myKakaoId!);
 
   const openParticipateModal = () => setIsShowParticipateModal(true);
@@ -111,18 +109,21 @@ const ProfileScreen = ({navigation, route}: Props) => {
             />
 
             <View style={styles.followBox}>
-              <Pressable style={styles.dmButton} onPress={() => {}}>
-                <Text style={{color: colors.THEME, fontSize: 16}}>
-                  팔로우/언팔
-                </Text>
-              </Pressable>
-              <Pressable
-                style={styles.dmButton}
-                onPress={() => rootNav.navigate('Chat')}>
-                <Text style={{color: colors.THEME, fontSize: 16}}>
-                  DM 보내기
-                </Text>
-              </Pressable>
+              {isMyProfile ? (
+                <Pressable
+                  style={styles.dmButton}
+                  onPress={() => rootNav.navigate('DM')}>
+                  <Text style={{color: colors.THEME, fontSize: 16}}>
+                    DM 보내기
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable style={styles.dmButton} onPress={() => {}}>
+                  <Text style={{color: colors.THEME, fontSize: 16}}>
+                    팔로우/언팔
+                  </Text>
+                </Pressable>
+              )}
             </View>
 
             <Spacer height={20} />

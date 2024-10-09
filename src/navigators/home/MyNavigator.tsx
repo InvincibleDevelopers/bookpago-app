@@ -1,14 +1,17 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import {HomeTabParamList, MyStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useContext} from 'react';
-import FollowerScreen from '@src/screens/home/my/FollowerScreen';
-import ProfileScreen from '@src/screens/home/my/ProfileScreen';
-import SettingScreen from '@src/screens/home/my/SettingScreen';
-import EditScreen from '@src/screens/home/my/EditScreen';
+import FollowerScreen from '@src/screens/home/profile/FollowerScreen';
+import ProfileScreen from '@src/screens/home/profile/ProfileScreen';
+import SettingScreen from '@src/screens/home/profile/SettingScreen';
+import EditScreen from '@src/screens/home/profile/EditScreen';
 import ClubDetailScreen from '@src/screens/home/ClubDetailScreen';
-import FollowingScreen from '@src/screens/home/my/FollowingScreen';
+import FollowingScreen from '@src/screens/home/profile/FollowingScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'My'>;
 const Stack = createStackNavigator<MyStackParamList>();
@@ -21,52 +24,45 @@ const MyNavigator = ({navigation}: Props) => {
   }
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name="Profile"
-        options={{title: '프로필', headerShown: false}}
+        options={{title: '프로필'}}
         component={ProfileScreen}
         initialParams={{kakaoId}}
       />
 
       <Stack.Screen
         name="Following"
-        options={{
-          title: '팔로잉',
-          headerShown: false,
-        }}
+        options={{title: '팔로잉'}}
         component={FollowingScreen}
       />
 
       <Stack.Screen
         name="Follower"
-        options={{
-          title: '팔로워',
-          headerShown: false,
-        }}
+        options={{title: '팔로워'}}
         component={FollowerScreen}
       />
 
       <Stack.Screen
         name="Setting"
-        options={{
-          headerShown: false,
-        }}
+        options={{title: '설정'}}
         component={SettingScreen}
       />
+
       <Stack.Screen
         name="Edit"
-        options={{
-          headerShown: false,
-        }}
+        options={{title: '프로필 수정'}}
         component={EditScreen}
       />
 
       <Stack.Screen
         name="ClubDetail"
-        options={{
-          headerShown: false,
-        }}
+        options={{title: '독서모임 상세'}}
         component={ClubDetailScreen}
       />
     </Stack.Navigator>

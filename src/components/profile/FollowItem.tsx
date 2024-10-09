@@ -1,23 +1,24 @@
 import {Image, StyleSheet, View, Text} from 'react-native';
-import Pressable from './CustomButton';
-import CustomButton from './CustomButton';
+import Pressable from '../CustomButton';
+import CustomButton from '../CustomButton';
 import {colors} from '@src/constants';
-import Divider from './common/Divider';
-import Spacer from './common/Spacer';
+import Divider from '../common/Divider';
+import Spacer from '../common/Spacer';
+import {FollowItem as FollowItemType} from '@src/api/profile';
 
-interface UserCard {
+interface FollowItemProps {
   onPress: () => void;
+  item: FollowItemType;
   isFollowing?: boolean;
   onPressFollow?: (isFollow: boolean) => void;
-  nickname: string;
 }
 
-const UserCard = ({
+const FollowItem = ({
+  item,
+  isFollowing = false,
   onPress,
   onPressFollow,
-  nickname,
-  isFollowing = false,
-}: UserCard) => {
+}: FollowItemProps) => {
   return (
     <Pressable onPress={onPress} style={styles.container}>
       <Image
@@ -27,14 +28,14 @@ const UserCard = ({
       />
 
       <View style={styles.contentBox}>
-        <Text style={styles.nickname}>{nickname}</Text>
+        <Text style={styles.nickname}>{item.nickname}</Text>
         <Spacer height={5} />
 
-        <View style={styles.subBox}>
+        {/* <View style={styles.subBox}>
           <Text style={styles.sub}>평가</Text>
           <Divider type="vertical" style={{height: 15}} />
           <Text style={styles.sub}>코멘트</Text>
-        </View>
+        </View> */}
       </View>
 
       {isFollowing && (
@@ -91,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserCard;
+export default FollowItem;

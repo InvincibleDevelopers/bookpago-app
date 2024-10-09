@@ -1,6 +1,6 @@
 import LoadingView from '@src/components/LoadingView';
-import IntroduceView from '@src/components/my/IntroduceView';
-import MyHeader from '@src/components/my/MyHeader';
+import IntroduceView from '@src/components/profile/IntroduceView';
+import MyHeader from '@src/components/profile/MyHeader';
 import {colors} from '@src/constants';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';

@@ -32,4 +32,13 @@ const queryClient = new QueryClient({
   },
 });
 
+export const checkIsEndPage = (
+  lastPageContent: any[],
+  allPage: any[],
+  pageSize: number,
+) => {
+  // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
+  return lastPageContent.length === pageSize ? allPage.length + 1 : undefined;
+};
+
 export default queryClient;

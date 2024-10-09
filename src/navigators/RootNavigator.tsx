@@ -9,6 +9,7 @@ import React, {useContext} from 'react';
 import HomeNavigator from './home/HomeNavigator';
 import AuthNavigator from './AuthNavigator';
 import ChatScreen from '@src/screens/ChatScreen';
+import DMScreen from '@src/screens/DMScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,13 +26,14 @@ const RootNavigator = () => {
       screenOptions={{
         headerShown: false,
         presentation: 'card',
-        cardStyleInterpolator: CardStyleInterpolators.forBottomSheetAndroid,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       {kakaoId !== null ? (
         <Stack.Screen name="HomeTab" component={HomeNavigator} />
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}
+      <Stack.Screen name="DM" component={DMScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
   );

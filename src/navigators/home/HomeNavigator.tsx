@@ -1,11 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import CalendarNavigator from '@src/navigators/home/CalendarNavigator';
+import * as TabIcon from '@src/components/HomeTabIcons';
 import MyNavigator from '@src/navigators/home/MyNavigator';
+import SearchNavigator from '@src/navigators/home/SearchNavigator';
 import SocialNavigator from '@src/navigators/home/SocialNavigator';
 import {HomeTabParamList} from '@src/types';
 import {StyleSheet} from 'react-native';
-import * as TabIcon from '@src/components/HomeTabIcons';
-import SearchNavigator from '@src/navigators/home/SearchNavigator';
 import MainNavigator from './MainNavigator';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();

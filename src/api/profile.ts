@@ -1,3 +1,4 @@
+import {FOLLOW_PAGE_SIZE} from '@src/constants';
 import fetcher from './axios';
 
 export const getProfile = async ({
@@ -33,8 +34,6 @@ interface ProfileImageArg {
 }
 
 export const patchProfileImage = async ({file, kakaoId}: ProfileImageArg) => {
-  console.log('patchProfileImage', file, kakaoId);
-
   const formData = new FormData();
 
   formData.append('file', file);
@@ -69,4 +68,58 @@ export const patchProfile = async (body: PatchProfileBody) => {
     readingClubDto: null;
   }>(`/profile/${body.kakaoId}`, body);
   return response.data;
+};
+
+export const postToggleFollow = async (
+  myKakaoId: number,
+  otherKakaoId: number,
+) => {
+  const result = await fetcher.post(`/profile/follow`, {
+    followerKakaoId: otherKakaoId, // 하는 사람ㄴ
+    followeeKakaoId: myKakaoId, // 받는 사람
+  });
+
+  console.log('data!!!', result.data);
+  return result.data;
+};
+
+export type FollowItem = {
+  profileImgUrl?: string;
+  nickname: string;
+  kakaoId: number;
+};
+
+type FollowResponse = {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: FollowItem[];
+};
+
+export const getFollowing = async (kakaoId: number | null, page: number) => {
+  if (!kakaoId) {
+    throw new Error('getFollower: kakaoId is required');
+  }
+
+  const result = await fetcher.get<FollowResponse>(
+    `/profile/${kakaoId}/following?kakaoId=${kakaoId}&page=${
+      page <= 0 ? 0 : page - 1
+    }&size=${FOLLOW_PAGE_SIZE}`,
+  );
+
+  return result.data;
+};
+
+export const getFollower = async (kakaoId: number | null, page: number) => {
+  if (!kakaoId) {
+    throw new Error('getFollower: kakaoId is required');
+  }
+
+  const result = await fetcher.get<FollowResponse>(
+    `/profile/${kakaoId}/follower?kakaoId=${kakaoId}&page=${
+      page <= 0 ? 0 : page - 1
+    }&size=${FOLLOW_PAGE_SIZE}`,
+  );
+
+  return result.data;
 };

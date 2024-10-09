@@ -48,6 +48,15 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   const favoriteMutation = useBookFavorite(kakaoId!);
 
+  const onPressStar = () => {
+    const wishBook = detailQuery.data?.wishBook;
+    if (favoriteMutation.isPending || wishBook === undefined) return;
+    favoriteMutation.mutate({
+      isbn: props.isbn,
+      isFavorite: wishBook,
+    });
+  };
+
   const toggleShow = () => {
     setIsShow(pre => !pre);
   };
@@ -143,12 +152,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
               </View>
               <ToggleStar
                 isActive={detailQuery.data.wishBook}
-                onPress={() =>
-                  favoriteMutation.mutate({
-                    isbn: props.isbn,
-                    isFavorite: detailQuery.data.wishBook,
-                  })
-                }
+                onPress={onPressStar}
               />
             </View>
             <View>
