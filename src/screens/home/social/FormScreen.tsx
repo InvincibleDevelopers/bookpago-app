@@ -133,7 +133,7 @@ const FormScreen = ({navigation}: Props) => {
     <SafeAreaView style={{flex: 1}}>
       <DismissKeyboardView style={{flex: 1}}>
         <BackHeader
-          title="토론 작성"
+          title="모임 만들기"
           buttons={[
             <ToggleButton
               value={0}
@@ -151,6 +151,7 @@ const FormScreen = ({navigation}: Props) => {
               value={title}
               onChangeText={onChangeTitle}
               placeholder="제목을 입력해주세요"
+              placeholderTextColor={colors.GRAY_300}
             />
           </View>
           <Spacer height={10} />
@@ -160,7 +161,11 @@ const FormScreen = ({navigation}: Props) => {
                 source={require('@src/assets/icons/position.png')}
                 style={styles.icon}
               />
-              <Text style={location && styles.locationInputTextActive}>
+              <Text
+                style={[
+                  styles.locationInputText,
+                  location && styles.locationInputTextActive,
+                ]}>
                 {location ? location : '장소를 입력해주세요'}
               </Text>
             </View>
@@ -172,14 +177,18 @@ const FormScreen = ({navigation}: Props) => {
                 source={require('@src/assets/icons/clock.png')}
                 style={styles.icon}
               />
-              <Text style={location && styles.locationInputTextActive}>
+              <Text
+                style={[
+                  styles.locationInputText,
+                  location && styles.locationInputTextActive,
+                ]}>
                 {dayjs(date).format('HH:mm')}
               </Text>
             </View>
           </Pressable>
           <Spacer height={20} />
           <View style={styles.weekdayBox}>
-            <Text>토론 요일을 선택해 주세요</Text>
+            <Text style={{color: colors.BLACK}}>모임 요일을 선택해 주세요</Text>
             <Spacer height={10} />
             <View style={styles.weekdayButtonBox}>
               {WEEKDAYS.map((day, index) => (
@@ -193,7 +202,7 @@ const FormScreen = ({navigation}: Props) => {
               ))}
             </View>
             <Spacer height={45} />
-            <Text>토론 요일을 선택해 주세요</Text>
+            <Text style={{color: colors.BLACK}}>모임 주기을 선택해 주세요</Text>
             <Spacer height={20} />
             <View style={styles.weekdayButtonBox}>
               {CYCLE.map((c, index) => (
@@ -218,6 +227,8 @@ const FormScreen = ({navigation}: Props) => {
                 value={desc}
                 onChangeText={setDesc}
                 placeholder="주요활동 설명을 입력해 주세요"
+                placeholderTextColor={colors.GRAY_300}
+                style={{color: colors.GRAY_400}}
                 multiline
               />
             </View>
@@ -254,6 +265,7 @@ const styles = StyleSheet.create({
   titleInput: {
     borderBottomWidth: 1,
     borderBottomColor: colors.GRAY_300,
+    color: colors.BLACK,
   },
   locationInputBox: {
     flexDirection: 'row',
@@ -261,6 +273,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
     borderRadius: 10,
+  },
+  locationInputText: {
+    color: colors.GRAY_300,
   },
   locationInputTextActive: {
     color: colors.BLACK,
