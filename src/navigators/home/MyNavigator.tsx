@@ -40,12 +40,14 @@ const MyNavigator = ({navigation}: Props) => {
         name="Following"
         options={{title: '팔로잉'}}
         component={FollowingScreen}
+        initialParams={{kakaoId}}
       />
 
       <Stack.Screen
         name="Follower"
         options={{title: '팔로워'}}
         component={FollowerScreen}
+        initialParams={{kakaoId}}
       />
 
       <Stack.Screen

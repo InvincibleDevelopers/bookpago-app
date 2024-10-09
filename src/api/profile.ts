@@ -1,6 +1,22 @@
 import {FOLLOW_PAGE_SIZE} from '@src/constants';
 import fetcher from './axios';
 
+export type GetProfileData = {
+  isFollow: boolean;
+  profile: {
+    userId: number;
+    nickname: string;
+    introduce: string;
+    imageUrl?: string;
+    wishIsbnList: number[];
+    readingClubDto: {
+      content: SocialClub[];
+    };
+  };
+};
+
+export const GET_PROFILE_KEY = '/profile/:kakaoId';
+
 export const getProfile = async ({
   myKakaoId,
   currentUserKakaoId,
@@ -8,19 +24,9 @@ export const getProfile = async ({
   myKakaoId: number;
   currentUserKakaoId: number;
 }) => {
-  const body = await fetcher.get<{
-    isFollow: boolean;
-    profile: {
-      userId: number;
-      nickname: string;
-      introduce: string;
-      imageUrl?: string;
-      wishIsbnList: number[];
-      readingClubDto: {
-        content: SocialClub[];
-      };
-    };
-  }>(`/profile/${myKakaoId}?currentUserKakaoId=${currentUserKakaoId}`);
+  const body = await fetcher.get<GetProfileData>(
+    `/profile/${currentUserKakaoId}?kakaoId=${myKakaoId}&currentUserKakaoId=${currentUserKakaoId}`,
+  );
   return body.data;
 };
 
@@ -74,12 +80,11 @@ export const postToggleFollow = async (
   myKakaoId: number,
   otherKakaoId: number,
 ) => {
-  const result = await fetcher.post(`/profile/follow`, {
-    followerKakaoId: otherKakaoId, // 하는 사람ㄴ
+  const result = await fetcher.post<string>(`/profile/follow`, {
+    followerKakaoId: otherKakaoId, // 하는 사람
     followeeKakaoId: myKakaoId, // 받는 사람
   });
 
-  console.log('data!!!', result.data);
   return result.data;
 };
 
@@ -96,13 +101,17 @@ type FollowResponse = {
   content: FollowItem[];
 };
 
-export const getFollowing = async (kakaoId: number | null, page: number) => {
-  if (!kakaoId) {
+export const getFollowing = async (
+  myKakaoId: number | null,
+  otherKakaoId: number,
+  page: number,
+) => {
+  if (!myKakaoId) {
     throw new Error('getFollower: kakaoId is required');
   }
 
   const result = await fetcher.get<FollowResponse>(
-    `/profile/${kakaoId}/following?kakaoId=${kakaoId}&page=${
+    `/profile/${otherKakaoId}/following?kakaoId=${myKakaoId}&page=${
       page <= 0 ? 0 : page - 1
     }&size=${FOLLOW_PAGE_SIZE}`,
   );
@@ -110,13 +119,17 @@ export const getFollowing = async (kakaoId: number | null, page: number) => {
   return result.data;
 };
 
-export const getFollower = async (kakaoId: number | null, page: number) => {
-  if (!kakaoId) {
+export const getFollower = async (
+  myKakaoId: number | null,
+  otherKakaoId: number,
+  page: number,
+) => {
+  if (!myKakaoId) {
     throw new Error('getFollower: kakaoId is required');
   }
 
   const result = await fetcher.get<FollowResponse>(
-    `/profile/${kakaoId}/follower?kakaoId=${kakaoId}&page=${
+    `/profile/${otherKakaoId}/follower?kakaoId=${myKakaoId}&page=${
       page <= 0 ? 0 : page - 1
     }&size=${FOLLOW_PAGE_SIZE}`,
   );

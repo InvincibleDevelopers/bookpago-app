@@ -3,7 +3,11 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {Alert} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-const useUploadProfileImage = (myKakaoId: number) => {
+const useUploadProfileImage = (myKakaoId: number | null) => {
+  if (!myKakaoId) {
+    throw new Error('useUploadProfileImage: myKakaoId is required');
+  }
+
   const queryClient = useQueryClient();
 
   return useMutation({

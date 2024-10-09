@@ -16,12 +16,15 @@ import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 type Props = NativeStackScreenProps<MyStackParamList, 'Following'>;
 
 const FollowingScreen = ({navigation, route}: Props) => {
+  const profileKakaoId = route.params.kakaoId;
   const {kakaoId} = useContext(MainContext);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const followeringQuery = useInfiniteQuery({
-    queryKey: ['/profile/followering', kakaoId],
-    queryFn: async ({pageParam}) => getFollowing(kakaoId, pageParam as number),
+    queryKey: ['/profile/followering', kakaoId, profileKakaoId],
+    queryFn: async ({pageParam}) => {
+      return getFollowing(kakaoId, profileKakaoId, pageParam as number);
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
       return checkIsEndPage(lastPage.content, allPage, FOLLOW_PAGE_SIZE);
@@ -36,7 +39,11 @@ const FollowingScreen = ({navigation, route}: Props) => {
 
   const renderItem = useCallback(({item}: {item: FollowItemType}) => {
     return (
-      <FollowItem item={item} onPress={() => {}} onPressFollow={() => {}} />
+      <FollowItem
+        item={item}
+        onPress={() => navigation.navigate('Profile', {kakaoId: item.kakaoId})}
+        onPressFollow={() => {}}
+      />
     );
   }, []);
 

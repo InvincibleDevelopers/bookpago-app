@@ -1,9 +1,13 @@
 import {useQuery} from '@tanstack/react-query';
-import {getProfile} from '@src/api/profile';
+import {GET_PROFILE_KEY, getProfile} from '@src/api/profile';
 
-const useProfile = (myKakaoId: number, profileKakaoId: number) => {
+const useProfile = (myKakaoId: number | null, profileKakaoId: number) => {
+  if (!myKakaoId) {
+    throw new Error('useProfile: myKakaoId is required');
+  }
+
   return useQuery({
-    queryKey: ['/profile/:kakaoId', profileKakaoId],
+    queryKey: [GET_PROFILE_KEY, myKakaoId, profileKakaoId],
     queryFn: async () =>
       getProfile({
         myKakaoId: myKakaoId,

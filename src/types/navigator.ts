@@ -40,8 +40,8 @@ export type SocialStackParamList = {
 
 export type MyStackParamList = {
   Profile: {kakaoId: number};
-  Follower: undefined;
-  Following: undefined;
+  Follower: {kakaoId: number};
+  Following: {kakaoId: number};
   Setting: undefined;
   Edit: undefined;
   ClubDetail: {socialGrop: SocialClub};
