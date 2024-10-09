@@ -141,7 +141,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
                   </Pressable>
                 ) : (
                   <>
-                    <TouchableOpacity onPress={() => rootNav.navigate('Chat')}>
+                    {/* <TouchableOpacity onPress={() => rootNav.navigate('Chat')}>
                       <Text
                         style={{
                           color: colors.THEME,
@@ -150,7 +150,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
                         }}>
                         메세지
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity
                       style={styles.dmButton}
