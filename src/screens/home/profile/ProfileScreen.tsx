@@ -25,15 +25,18 @@ import {useContext, useState} from 'react';
 import {
   Alert,
   Pressable,
+  TouchableOpacity,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
 import NicknameButton from '@src/components/profile/Nickname';
 import ProfileErrorScreen from './ProfileErrorScreen';
 import ProfileLoadingScreen from './ProfileLoadingScreent';
+import useFollow from '@src/hooks/useFollow';
 
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
@@ -46,10 +49,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const isMyProfile = profileKakaoId === myKakaoId;
 
   const [isShowParticipateModal, setIsShowParticipateModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const queryClient = useQueryClient();
-  const profileQuery = useProfile(myKakaoId!, profileKakaoId);
-  const mutateProfileImage = useUploadProfileImage(myKakaoId!);
+  const profileQuery = useProfile(myKakaoId, profileKakaoId);
+  const mutateProfileImage = useUploadProfileImage(myKakaoId);
+  const mutateFollow = useFollow(myKakaoId);
 
   const openParticipateModal = () => setIsShowParticipateModal(true);
   const closeParticipateModal = () => setIsShowParticipateModal(false);
@@ -63,6 +67,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
     navigateClubDetail(club);
   };
 
+  const onRefresh = async () => {
+    setIsRefreshing(() => true);
+    await profileQuery.refetch();
+    setIsRefreshing(() => false);
+  };
+
   const longPressProfileImage = () => {
     if (mutateProfileImage.isPending) return;
     Alert.alert('프로필 사진을 변경하시겠습니까?', undefined, [
@@ -74,6 +84,14 @@ const ProfileScreen = ({navigation, route}: Props) => {
         },
       },
     ]);
+  };
+
+  const onPressFollow = () => {
+    if (mutateFollow.isPending) return;
+    if (myKakaoId === profileKakaoId) {
+      Alert.alert('자신을 팔로우 할 수 없습니다.');
+    }
+    mutateFollow.mutate({otherId: profileKakaoId});
   };
 
   if (profileQuery.error) {
@@ -98,7 +116,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }>
           <MyHeader myKakaoid={myKakaoId!} profileKakaoId={profileKakaoId} />
 
           <IntroduceView>
@@ -118,11 +139,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
                   </Text>
                 </Pressable>
               ) : (
-                <Pressable style={styles.dmButton} onPress={() => {}}>
+                <TouchableOpacity
+                  style={styles.dmButton}
+                  onPress={onPressFollow}>
                   <Text style={{color: colors.THEME, fontSize: 16}}>
-                    팔로우/언팔
+                    {profileQuery.data.isFollow ? '언팔로우' : '팔로우'}
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
             </View>
 
@@ -137,14 +160,18 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
               <View style={styles.follow}>
                 <CustomButton
-                  onPress={() => navigation.navigate('Follower')}
+                  onPress={() =>
+                    navigation.navigate('Follower', {kakaoId: profileKakaoId})
+                  }
                   bApplyCommonStyle={false}
                   text="팔로워"
                   textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
                 />
                 <Divider type="vertical" style={{height: 15}} />
                 <CustomButton
-                  onPress={() => navigation.navigate('Following')}
+                  onPress={() =>
+                    navigation.navigate('Following', {kakaoId: profileKakaoId})
+                  }
                   bApplyCommonStyle={false}
                   text="팔로잉"
                   textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
