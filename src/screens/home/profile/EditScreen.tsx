@@ -95,70 +95,74 @@ const EditScreen = ({navigation}: Props) => {
         />
 
         <IntroduceView>
-          <ProfileImageButton imageUri={myProfileQuery.data.profile.imageUrl} />
-
-          <Spacer height={50} />
-
-          <NicknameButton
-            nickname={myProfileQuery.data.profile.nickname}
-            editable={false}
-          />
-
-          <Spacer height={10} />
-
-          <Text style={styles.introduceText}>
-            {myProfileQuery.data.profile.introduce}
-          </Text>
-
-          <Spacer height={20} />
-          <Divider />
-          <Spacer height={20} />
-
-          <View style={styles.inputBox}>
-            <Text
-              style={
-                styles.label
-              }>{`현재 닉네임: ${myProfileQuery.data.profile.nickname}`}</Text>
-            <Spacer height={10} />
-            <TextInput
-              style={styles.input}
-              value={nickname}
-              onChangeText={setNickname}
-              placeholder="변경할 닉네임을 입력해주세요"
+          <View style={styles.inner}>
+            <ProfileImageButton
+              imageUri={myProfileQuery.data.profile.imageUrl}
             />
-          </View>
 
-          <Spacer height={20} />
+            <Spacer height={50} />
 
-          <View style={styles.inputBox}>
-            <Text style={styles.label}>
-              {`현재 소개글: ${myProfileQuery.data.profile.introduce}`}
+            <NicknameButton
+              nickname={myProfileQuery.data.profile.nickname}
+              editable={false}
+            />
+
+            <Spacer height={10} />
+
+            <Text style={styles.introduceText}>
+              {myProfileQuery.data.profile.introduce}
             </Text>
-            <Spacer height={10} />
-            <TextInput
-              style={styles.input}
-              value={introduce}
-              onChangeText={setIntroduce}
-              placeholder="나만의 자기 소개를 적어 주세요"
-              multiline
-              placeholderTextColor={colors.GRAY_300}
+
+            <Spacer height={20} />
+            <Divider />
+            <Spacer height={20} />
+
+            <View style={styles.inputBox}>
+              <Text
+                style={
+                  styles.label
+                }>{`현재 닉네임: ${myProfileQuery.data.profile.nickname}`}</Text>
+              <Spacer height={10} />
+              <TextInput
+                style={styles.input}
+                value={nickname}
+                onChangeText={setNickname}
+                placeholder="변경할 닉네임을 입력해주세요"
+              />
+            </View>
+
+            <Spacer height={20} />
+
+            <View style={styles.inputBox}>
+              <Text style={styles.label}>
+                {`현재 소개글: ${myProfileQuery.data.profile.introduce}`}
+              </Text>
+              <Spacer height={10} />
+              <TextInput
+                style={styles.input}
+                value={introduce}
+                onChangeText={setIntroduce}
+                placeholder="나만의 자기 소개를 적어 주세요"
+                multiline
+                placeholderTextColor={colors.GRAY_300}
+              />
+            </View>
+
+            <Spacer height={30} />
+
+            <CustomButton
+              containerstyle={[
+                {
+                  borderRadius: 10,
+                  padding: 10,
+                },
+                saveMutation.isPending && {opacity: 0.5},
+              ]}
+              onPress={save}
+              text="설정 완료"
+              disabled={saveMutation.isPending}
             />
           </View>
-
-          <Spacer height={30} />
-
-          <CustomButton
-            containerstyle={[
-              {
-                borderRadius: 10,
-                padding: 10,
-              },
-              saveMutation.isPending && {opacity: 0.5},
-            ]}
-            onPress={save}
-            text="설정 완료"
-            disabled={saveMutation.isPending}
-          />
         </IntroduceView>
       </DismissKeyboardView>
     </SafeAreaView>
@@ -171,6 +175,9 @@ const styles = StyleSheet.create({
   },
   introduceText: {
     color: colors.GRAY_400,
+  },
+  inner: {
+    padding: 20,
   },
   inputBox: {},
   label: {

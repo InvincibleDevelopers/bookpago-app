@@ -25,7 +25,7 @@ export const getProfile = async ({
   currentUserKakaoId: number;
 }) => {
   const body = await fetcher.get<GetProfileData>(
-    `/profile/${currentUserKakaoId}?kakaoId=${myKakaoId}&currentUserKakaoId=${currentUserKakaoId}`,
+    `/profile/${currentUserKakaoId}?currentUserKakaoId=${myKakaoId}`,
   );
   return body.data;
 };
@@ -81,8 +81,8 @@ export const postToggleFollow = async (
   otherKakaoId: number,
 ) => {
   const result = await fetcher.post<string>(`/profile/follow`, {
-    followerKakaoId: otherKakaoId, // 하는 사람
-    followeeKakaoId: myKakaoId, // 받는 사람
+    followerKakaoId: myKakaoId, // 하는 사람
+    followeeKakaoId: otherKakaoId, // 받는 사람
   });
 
   return result.data;
@@ -111,7 +111,7 @@ export const getFollowing = async (
   }
 
   const result = await fetcher.get<FollowResponse>(
-    `/profile/${otherKakaoId}/following?kakaoId=${myKakaoId}&page=${
+    `/profile/${otherKakaoId}/following?page=${
       page <= 0 ? 0 : page - 1
     }&size=${FOLLOW_PAGE_SIZE}`,
   );
@@ -129,10 +129,10 @@ export const getFollower = async (
   }
 
   const result = await fetcher.get<FollowResponse>(
-    `/profile/${otherKakaoId}/follower?kakaoId=${myKakaoId}&page=${
+    `/profile/${otherKakaoId}/follower?page=${
       page <= 0 ? 0 : page - 1
     }&size=${FOLLOW_PAGE_SIZE}`,
   );
-
+  console.log('result', result.data);
   return result.data;
 };

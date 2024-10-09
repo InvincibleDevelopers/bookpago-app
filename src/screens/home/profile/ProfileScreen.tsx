@@ -46,7 +46,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const rootNav = navigation.getParent<NavigationProp<RootStackParamList>>();
   const {kakaoId: myKakaoId} = useContext(MainContext);
-  const isMyProfile = profileKakaoId === myKakaoId;
+  const isMyProfile = profileKakaoId.toString() === myKakaoId?.toString();
 
   const [isShowParticipateModal, setIsShowParticipateModal] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -123,101 +123,118 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <MyHeader myKakaoid={myKakaoId!} profileKakaoId={profileKakaoId} />
 
           <IntroduceView>
-            <ProfileImageButton
-              onLongPress={longPressProfileImage}
-              disabled={!isMyProfile}
-              imageUri={profileQuery.data.profile.imageUrl}
-            />
-
-            <View style={styles.followBox}>
-              {isMyProfile ? (
-                <Pressable
-                  style={styles.dmButton}
-                  onPress={() => rootNav.navigate('DM')}>
-                  <Text style={{color: colors.THEME, fontSize: 16}}>
-                    DM 보내기
-                  </Text>
-                </Pressable>
-              ) : (
-                <TouchableOpacity
-                  style={styles.dmButton}
-                  onPress={onPressFollow}>
-                  <Text style={{color: colors.THEME, fontSize: 16}}>
-                    {profileQuery.data.isFollow ? '언팔로우' : '팔로우'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-
-            <Spacer height={20} />
-
-            <View style={styles.infoBox}>
-              <NicknameButton
-                nickname={profileQuery.data.profile.nickname}
-                onPress={() => navigation.navigate('Edit')}
-                editable={isMyProfile}
+            <View style={styles.inner}>
+              <ProfileImageButton
+                onLongPress={longPressProfileImage}
+                disabled={!isMyProfile}
+                imageUri={profileQuery.data.profile.imageUrl}
               />
 
-              <View style={styles.follow}>
-                <CustomButton
-                  onPress={() =>
-                    navigation.navigate('Follower', {kakaoId: profileKakaoId})
-                  }
-                  bApplyCommonStyle={false}
-                  text="팔로워"
-                  textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
-                />
-                <Divider type="vertical" style={{height: 15}} />
-                <CustomButton
-                  onPress={() =>
-                    navigation.navigate('Following', {kakaoId: profileKakaoId})
-                  }
-                  bApplyCommonStyle={false}
-                  text="팔로잉"
-                  textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
-                />
+              <View style={styles.followBox}>
+                {isMyProfile ? (
+                  <Pressable
+                    style={styles.dmButton}
+                    onPress={() => rootNav.navigate('DM')}>
+                    <Text style={{color: colors.THEME, fontSize: 16}}>
+                      메세지
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <>
+                    <TouchableOpacity onPress={() => rootNav.navigate('Chat')}>
+                      <Text
+                        style={{
+                          color: colors.THEME,
+                          fontSize: 16,
+                          marginRight: 7,
+                        }}>
+                        메세지
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.dmButton}
+                      onPress={onPressFollow}>
+                      <Text style={{color: colors.THEME, fontSize: 16}}>
+                        {profileQuery.data.isFollow ? '언팔로우' : '팔로우'}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
-            </View>
 
-            <Spacer height={20} />
+              <Spacer height={20} />
 
-            <CustomText
-              style={{
-                fontSize: 15,
-                color: colors.GRAY_400,
-                fontWeight: 'medium',
-              }}>
-              {profileQuery.data.profile.introduce === ''
-                ? '소개글을 입력해 주세요'
-                : profileQuery.data.profile.introduce}
-            </CustomText>
+              <View style={styles.infoBox}>
+                <NicknameButton
+                  nickname={profileQuery.data.profile.nickname}
+                  onPress={() => navigation.navigate('Edit')}
+                  editable={isMyProfile}
+                />
 
-            <Spacer height={20} />
-
-            <Divider type="horizontal" />
-
-            <Spacer height={20} />
-
-            <SectionButton onPress={openParticipateModal}>
-              참여중인 독서모임
-            </SectionButton>
-
-            <Spacer height={20} />
-
-            <ScrollView
-              horizontal
-              contentContainerStyle={{gap: 20}}
-              showsHorizontalScrollIndicator={false}>
-              {profileQuery.data.profile.readingClubDto.content
-                .slice(0, 6)
-                .map((club, index) => (
-                  <ClubCard
-                    data={club}
-                    key={`participate_${club.id}_${index}`}
-                    onPress={() => navigateClubDetail(club)}
+                <View style={styles.follow}>
+                  <CustomButton
+                    onPress={() =>
+                      navigation.navigate('Follower', {kakaoId: profileKakaoId})
+                    }
+                    bApplyCommonStyle={false}
+                    text="팔로워"
+                    textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
                   />
-                ))}
-            </ScrollView>
+                  <Divider type="vertical" style={{height: 15}} />
+                  <CustomButton
+                    onPress={() =>
+                      navigation.navigate('Following', {
+                        kakaoId: profileKakaoId,
+                      })
+                    }
+                    bApplyCommonStyle={false}
+                    text="팔로잉"
+                    textprops={{style: {fontSize: 15, color: colors.GRAY_400}}}
+                  />
+                </View>
+              </View>
+
+              <Spacer height={20} />
+
+              <CustomText
+                style={{
+                  fontSize: 15,
+                  color: colors.GRAY_400,
+                  fontWeight: 'medium',
+                }}>
+                {profileQuery.data.profile.introduce === ''
+                  ? '소개글을 입력해 주세요'
+                  : profileQuery.data.profile.introduce}
+              </CustomText>
+
+              <Spacer height={20} />
+
+              <Divider type="horizontal" />
+
+              <Spacer height={20} />
+
+              <SectionButton onPress={openParticipateModal}>
+                참여중인 독서모임
+              </SectionButton>
+
+              <Spacer height={20} />
+
+              <ScrollView
+                horizontal
+                contentContainerStyle={{gap: 20}}
+                showsHorizontalScrollIndicator={false}>
+                {profileQuery.data.profile.readingClubDto.content
+                  .slice(0, 6)
+                  .map((club, index) => (
+                    <ClubCard
+                      data={club}
+                      key={`participate_${club.id}_${index}`}
+                      onPress={() => navigateClubDetail(club)}
+                    />
+                  ))}
+              </ScrollView>
+            </View>
           </IntroduceView>
 
           <Spacer height={5} />
@@ -254,7 +271,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
+  inner: {
+    padding: 20,
+  },
   followBox: {
     flexDirection: 'row',
     justifyContent: 'flex-end',

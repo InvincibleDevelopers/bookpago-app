@@ -50,7 +50,7 @@ const FollowerScreen = ({navigation, route}: Props) => {
   const convertedData = useMemo(() => {
     if (!followerQuery.data) return [];
     return followerQuery.data.pages.map(d => d.content).flat();
-  }, []);
+  }, [followerQuery.data]);
 
   if (followerQuery.error) {
     const error = followerQuery.error as unknown as {error: string};

@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inner: {
-    padding: 20,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     backgroundColor: colors.WHITE,
