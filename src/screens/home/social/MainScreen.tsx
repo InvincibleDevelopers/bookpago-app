@@ -30,7 +30,7 @@ const MainScreen = ({navigation}: Props) => {
   const clubQuery = useInfiniteQuery<{content: SocialClub[]}, {error: string}>({
     queryKey: ['/social/clubs', 'infinity'],
     queryFn: ({pageParam}) => getClubs(pageParam as number),
-    initialPageParam: 0, //page가 0부터 시작
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
       // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
       return lastPage.content.length === CLUB_PAGE_SIZE
@@ -101,7 +101,7 @@ const MainScreen = ({navigation}: Props) => {
         keyExtractor={item => `club_${item.id.toString()}`}
         data={clubList}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={1}
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
         scrollIndicatorInsets={{right: 1}} //ios 스크롤바 버그방지

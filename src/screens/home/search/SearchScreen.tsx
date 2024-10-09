@@ -105,7 +105,6 @@ const SearchScreen = ({navigation}: Props) => {
     return (
       <SafeAreaView style={{flex: 1}}>
         <SearchHeader
-          aiButtonType="book"
           value={inputValue}
           onChangeText={onChangeText}
           onPressBack={() => navigation.goBack()}

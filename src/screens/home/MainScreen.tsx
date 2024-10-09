@@ -1,15 +1,19 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getBestsellers} from '@src/api/book';
+import {getBestsellers, getRecommendBooks} from '@src/api/book';
 import {getClubs} from '@src/api/club';
 import CustomText from '@src/components/CustomText';
+import Spacer from '@src/components/common/Spacer';
 import MypageButton from '@src/components/common/button/MypageButton';
 import BookCard from '@src/components/common/card/BookCard';
 import ClubCard from '@src/components/common/card/ClubCard';
+import WideBookCard from '@src/components/common/card/WideBookCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
 import {HomeTabParamList, MainStackParamList} from '@src/types';
+import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
+import {useContext} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -22,6 +26,7 @@ type Props = NativeStackScreenProps<MainStackParamList, 'Main'>;
 
 const MainScreen = ({navigation, route}: Props) => {
   const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
+  const {kakaoId} = useContext(MainContext);
 
   const bestsellerQuery = useQuery({
     queryKey: ['/books/bestsellers'],
@@ -30,7 +35,7 @@ const MainScreen = ({navigation, route}: Props) => {
 
   const socialClubQuery = useQuery({
     queryKey: ['/social/clubs'],
-    queryFn: async () => getClubs(0),
+    queryFn: async () => getClubs(1),
     select: datas => {
       return datas.content.map(data => ({
         ...data,
@@ -39,16 +44,28 @@ const MainScreen = ({navigation, route}: Props) => {
     },
   });
 
+  const recommendBooksQuery = useQuery({
+    queryKey: ['/books/recommend', kakaoId],
+    queryFn: async () => getRecommendBooks(kakaoId!, 5),
+    select: data => data.books,
+  });
+
+  const onPressRecommend = (isbn: number) => {
+    navigation.navigate('BookDetail', {isbn});
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
         buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
       />
-      <ScrollView style={styles.scrollBox} contentContainerStyle={styles.inner}>
+      <ScrollView style={styles.scrollBox}>
+        <Spacer height={20} />
         <View style={styles.section}>
           <CustomText style={styles.sectionTitle}>
             책파고가 소개하는 인기도서 리스트
           </CustomText>
+          <Spacer height={16} />
           {bestsellerQuery.isPending ? (
             <View style={{height: 195, justifyContent: 'center'}}>
               <ActivityIndicator size="large" color={colors.THEME} />
@@ -79,22 +96,40 @@ const MainScreen = ({navigation, route}: Props) => {
             </ScrollView>
           )}
         </View>
-        {/* <View style={styles.section}>
-            <CustomText style={styles.sectionTitle}>
-              사용자 맞춤 추천 도서
-            </CustomText>
+
+        <Spacer height={50} />
+
+        <View style={styles.section}>
+          <CustomText style={styles.sectionTitle}>
+            사용자 맞춤 추천 도서
+          </CustomText>
+          <Spacer height={16} />
+          {recommendBooksQuery.isPending ? (
+            <View style={{height: 165, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" color={colors.THEME} />
+            </View>
+          ) : (
             <ScrollView
-              style={{
-                marginBottom: 20,
-              }}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{gap: 7}}
               overScrollMode="never" // Android
               bounces={false} // iOS
               horizontal>
-              <WideBookCard />
+              {recommendBooksQuery.data?.map((item, index) => {
+                return (
+                  <WideBookCard
+                    item={item}
+                    key={`recommend_${item.isbn}_${index}`}
+                    onPress={() => onPressRecommend(item.isbn)}
+                  />
+                );
+              })}
             </ScrollView>
-          </View> */}
+          )}
+        </View>
+
+        <Spacer height={50} />
+
         {/* <View style={styles.section}>
             <CustomText style={styles.sectionTitle}>
               이달의 도서 카테고리
@@ -133,10 +168,12 @@ const MainScreen = ({navigation, route}: Props) => {
               })}
             </ScrollView>
           </View> */}
+
         <View style={styles.section}>
           <CustomText style={styles.sectionTitle}>
             현재 핫한 독서 모임
           </CustomText>
+          <Spacer height={16} />
           {socialClubQuery.isPending ? (
             <View style={{height: 150, justifyContent: 'center'}}>
               <ActivityIndicator size="large" color={colors.THEME} />
@@ -164,6 +201,8 @@ const MainScreen = ({navigation, route}: Props) => {
             </ScrollView>
           )}
         </View>
+
+        <Spacer height={20} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -178,19 +217,13 @@ const styles = StyleSheet.create({
   scrollBox: {
     flex: 1,
   },
-  inner: {
-    marginVertical: 20, // 안쪽 마진
-    gap: 20,
-  },
   section: {
-    paddingVertical: 10,
     paddingHorizontal: 20,
   },
   sectionTitle: {
     fontSize: 20,
     color: colors.BLACK,
-    marginBottom: 16,
-    fontWeight: 700,
+    fontWeight: 'bold',
   },
 });
 

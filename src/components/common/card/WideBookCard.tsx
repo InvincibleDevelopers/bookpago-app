@@ -1,30 +1,26 @@
 import CustomText from '@src/components/CustomText';
 import {colors} from '@src/constants';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import {BookItem} from '@src/types';
+import {Image, StyleSheet, View, Pressable} from 'react-native';
 
-const WideBookCard = () => {
+interface WideBookCardProps {
+  item: BookItem;
+  onPress: () => void;
+}
+
+const WideBookCard = ({item, onPress}: WideBookCardProps) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageBox}>
-        <Image
-          style={{
-            borderRadius: 3,
-            width: 80,
-            height: 120,
-          }}
-          source={{
-            uri: 'https://shopping-phinf.pstatic.net/main_3250690/32506900732.20230620100615.jpg',
-          }}
-        />
-      </View>
+    <Pressable style={styles.container} onPress={onPress}>
+      <Image style={styles.image} source={{uri: item.image}} />
       <View style={styles.descBox}>
         <CustomText
+          numberOfLines={1}
           style={{fontSize: 17, color: colors.BLACK, marginBottom: 7}}>
-          책 제목
+          {item.title}
         </CustomText>
         <CustomText
           style={{fontSize: 14, color: colors.GRAY_300, marginBottom: 7}}>
-          작가
+          {item.author}
         </CustomText>
         <CustomText
           style={{
@@ -44,7 +40,7 @@ const WideBookCard = () => {
           더보기
         </CustomText>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -54,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     flexDirection: 'row',
     padding: 20,
-    width: Dimensions.get('window').width - 30,
+    width: 350,
 
     borderWidth: 1,
     borderColor: colors.GRAY,
@@ -63,8 +59,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
-  imageBox: {
+  image: {
     marginRight: 20,
+    borderRadius: 3,
+    width: 80,
+    height: 120,
   },
   descBox: {
     flex: 1,

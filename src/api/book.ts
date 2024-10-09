@@ -27,3 +27,12 @@ export const postToggleLikes = async (isbn: number, kakaoId: number) => {
   const response = await fetcher.post(`/books/${isbn}/likes`, {kakaoId});
   return response.data;
 };
+
+export const getRecommendBooks = async (kakaoId: number, size: number) => {
+  const response = await fetcher.get<{
+    total: number;
+    books: BookItem[];
+  }>(`/books/recommend?kakaoId=${kakaoId}&size=${size}`);
+
+  return response.data;
+};
