@@ -3,14 +3,18 @@ import {useState} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import {Rating} from 'react-native-ratings';
 
-const Comment = () => {
+interface CommentProps {
+  onPress: () => void;
+}
+
+const Comment = ({onPress}: CommentProps) => {
   const [rating, setRating] = useState(5);
   const onFinishedRating = (e: number) => {
     setRating(() => e);
   };
 
   return (
-    <Pressable>
+    <Pressable onPress={onPress}>
       <Rating
         ratingTextColor={colors.BLACK}
         type="custom"

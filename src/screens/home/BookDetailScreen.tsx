@@ -15,6 +15,7 @@ import {
   BookDetail,
   HomeTabParamList,
   MainStackParamList,
+  MyStackParamList,
   SearchStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
@@ -33,7 +34,7 @@ import {
 } from 'react-native';
 
 type Props = NativeStackScreenProps<
-  SearchStackParamList & MainStackParamList,
+  SearchStackParamList & MainStackParamList & MyStackParamList,
   'BookDetail'
 >;
 
@@ -71,10 +72,6 @@ const BookDetailScreen = ({navigation, route}: Props) => {
     await detailQuery.refetch();
     setIsRefreshing(() => false);
   };
-
-  const renderItem = useCallback(() => {
-    return <></>;
-  }, []);
 
   if (detailQuery.error) {
     return (

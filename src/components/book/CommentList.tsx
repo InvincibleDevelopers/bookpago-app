@@ -5,19 +5,31 @@ import Comment from './Comment';
 
 const CommentList = () => {
   const [isShowCommentModal, setIsShowCommentModal] = useState(false);
-  const renderItem = useCallback(({item}: {item: any}) => {
-    return <Comment />;
-  }, []);
 
-  const openCommentModal = () => setIsShowCommentModal(() => true);
-  const closeCommentModal = () => setIsShowCommentModal(() => false);
+  const openCommentModal = useCallback(
+    () => setIsShowCommentModal(() => true),
+    [],
+  );
+  const closeCommentModal = useCallback(
+    () => setIsShowCommentModal(() => false),
+    [],
+  );
+
+  const renderItem = useCallback(
+    ({item}: {item: any}) => {
+      return <Comment onPress={openCommentModal} />;
+    },
+    [openCommentModal],
+  );
 
   return (
     <FlatList
       keyExtractor={(d, index) => `comment_${index}`}
       data={[1, 2, 3, 4]}
       renderItem={renderItem}
-      ListFooterComponent={<CommentModal />}
+      ListFooterComponent={
+        <CommentModal onClose={closeCommentModal} isShow={isShowCommentModal} />
+      }
     />
   );
 };

@@ -3,13 +3,21 @@ import {Image, TouchableOpacity, StyleSheet} from 'react-native';
 import CustomText from '../CustomText';
 
 interface SectionButtonProps {
-  onPress: () => void;
+  onPress?: () => void;
   children: string;
+  disabled?: boolean;
 }
 
-const SectionButton = ({onPress, children}: SectionButtonProps) => {
+const SectionButton = ({
+  onPress,
+  children,
+  disabled = false,
+}: SectionButtonProps) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      disabled={disabled}>
       <CustomText style={styles.text}>{children}</CustomText>
       <Image
         source={require('@src/assets/icons/next.png')}

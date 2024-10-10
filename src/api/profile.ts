@@ -1,5 +1,6 @@
 import {FOLLOW_PAGE_SIZE} from '@src/constants';
 import fetcher from './axios';
+import {BookItem} from '@src/types';
 
 export type GetProfileData = {
   isFollow: boolean;
@@ -8,10 +9,10 @@ export type GetProfileData = {
     nickname: string;
     introduce: string;
     imageUrl?: string;
-    wishIsbnList: number[];
     readingClubDto: {
       content: SocialClub[];
     };
+    wishBookDto: BookItem[];
   };
 };
 

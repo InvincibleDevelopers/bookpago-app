@@ -43,6 +43,8 @@ export type MyStackParamList = {
   Follower: {kakaoId: number};
   Following: {kakaoId: number};
   Setting: undefined;
+  WishBook: undefined;
   Edit: undefined;
   ClubDetail: {socialGrop: SocialClub};
+  BookDetail: {isbn: number};
 };

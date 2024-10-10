@@ -32,11 +32,13 @@ import {
   Text,
   View,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 import NicknameButton from '@src/components/profile/Nickname';
 import ProfileErrorScreen from './ProfileErrorScreen';
 import ProfileLoadingScreen from './ProfileLoadingScreent';
 import useFollow from '@src/hooks/useFollow';
+import BookCard from '@src/components/common/card/BookCard';
 
 type Props = NativeStackScreenProps<MyStackParamList, 'Profile'>;
 
@@ -239,21 +241,37 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
           <Spacer height={5} />
 
-          <View style={{backgroundColor: colors.WHITE, padding: 20}}>
-            <SectionButton onPress={openParticipateModal}>
-              찜 목록
+          <View style={{backgroundColor: colors.WHITE, paddingHorizontal: 20}}>
+            <Spacer height={20} />
+            <SectionButton onPress={() => navigation.navigate('WishBook')}>
+              찜목록
             </SectionButton>
-            <ScrollView
-              horizontal
-              contentContainerStyle={{gap: 20}}
-              showsHorizontalScrollIndicator={false}></ScrollView>
+            <Spacer height={20} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              {profileQuery.data.profile.wishBookDto
+                .slice(0, 3) // 최대 3개만 보여줌
+                .map((dto, index) => {
+                  return (
+                    <BookCard
+                      key={`wish_${dto.isbn}_${index}`}
+                      isbn={dto.isbn}
+                      image={dto.image}
+                      title={dto.title}
+                      author={dto.author}
+                      style={{flex: 1}}
+                      onPress={() =>
+                        navigation.navigate('BookDetail', {isbn: dto.isbn})
+                      }
+                    />
+                  );
+                })}
+            </View>
+            <Spacer height={20} />
           </View>
-
-          <Spacer height={50} backgroundColor={colors.WHITE} />
-
-          <Spacer height={50} backgroundColor={colors.WHITE} />
-
-          <Spacer height={50} backgroundColor={colors.WHITE} />
         </ScrollView>
       </SafeAreaView>
 

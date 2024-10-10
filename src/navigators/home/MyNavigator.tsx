@@ -12,6 +12,8 @@ import SettingScreen from '@src/screens/home/profile/SettingScreen';
 import EditScreen from '@src/screens/home/profile/EditScreen';
 import ClubDetailScreen from '@src/screens/home/ClubDetailScreen';
 import FollowingScreen from '@src/screens/home/profile/FollowingScreen';
+import WishBookScreen from '@src/screens/home/profile/WishBookScreen';
+import BookDetailScreen from '@src/screens/home/BookDetailScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'My'>;
 const Stack = createStackNavigator<MyStackParamList>();
@@ -54,6 +56,18 @@ const MyNavigator = ({navigation}: Props) => {
         name="Setting"
         options={{title: '설정'}}
         component={SettingScreen}
+      />
+
+      <Stack.Screen
+        name="WishBook"
+        options={{title: '찜목록'}}
+        component={WishBookScreen}
+      />
+
+      <Stack.Screen
+        name="BookDetail"
+        options={{title: '도서 상세'}}
+        component={BookDetailScreen}
       />
 
       <Stack.Screen
