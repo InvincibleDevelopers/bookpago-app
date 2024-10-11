@@ -3,7 +3,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getBookByIsbn} from '@src/api/book';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
-import CommentList from '@src/components/book/CommentList';
+import ReviewList from '@src/components/book/ReviewList';
 import Divider from '@src/components/common/Divider';
 import Spacer from '@src/components/common/Spacer';
 import MypageButton from '@src/components/common/button/MypageButton';
@@ -249,11 +249,10 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                 })}
               </ScrollView>
             </View>
-            <CommentList />
+            <ReviewList isbn={props.isbn} />
           </>
         }
       />
-      <ScrollView></ScrollView>
     </SafeAreaView>
   );
 };
