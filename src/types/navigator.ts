@@ -9,7 +9,8 @@ export type RootStackParamList = {
 export type AuthStackParamList = {
   AuthMain: undefined;
   Login: undefined;
-  Test: undefined;
+  Join: {kakaoId: number; kakaoOauthToken: string};
+  TestLogin: undefined;
 };
 
 export type HomeTabParamList = {

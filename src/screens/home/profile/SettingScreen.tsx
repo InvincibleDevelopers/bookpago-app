@@ -41,7 +41,7 @@ const SettingScreen = () => {
               source={require('@src/assets/icons/logout.png')}
               style={styles.rowImage}
             />
-            <Text style={{color: colors.BLACK}}>로그아웃</Text>
+            <Text style={styles.rowText}>로그아웃</Text>
           </TouchableOpacity>
         </IntroduceView>
       </ScrollView>
@@ -59,7 +59,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderBottomColor: colors.GRAY_300,
-    borderBottomWidth: 1,
+
+    alignItems: 'center',
+    borderBottomWidth: 0.5,
   },
   rowImage: {
     width: 20,

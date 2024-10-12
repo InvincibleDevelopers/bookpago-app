@@ -4,8 +4,9 @@ import {
 } from '@react-navigation/stack';
 import LoginScreen from '@src/screens/auth/LoginScreen';
 import AuthMainScreen from '@src/screens/auth/AuthMainScreen';
-import TestScreen from '@src/screens/auth/TestScreen';
+import TestLoginScreen from '@src/screens/auth/TestLoginScreen';
 import {AuthStackParamList} from '@src/types';
+import JoinScreen from '@src/screens/auth/JoinScreen';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
@@ -19,7 +20,8 @@ const AuthNavigator = () => {
       }}>
       <Stack.Screen name="AuthMain" component={AuthMainScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Test" component={TestScreen} />
+      <Stack.Screen name="Join" component={JoinScreen} />
+      <Stack.Screen name="TestLogin" component={TestLoginScreen} />
     </Stack.Navigator>
   );
 };

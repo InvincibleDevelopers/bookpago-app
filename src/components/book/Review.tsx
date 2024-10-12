@@ -37,8 +37,6 @@ const Review = ({onPress}: ReviewProps) => {
         break;
     }
   };
-  const openSelect = () => setIsShow(() => true);
-  const closeSelect = () => setIsShow(() => false);
 
   return (
     <Pressable onPress={onPress} style={styles.container}>
