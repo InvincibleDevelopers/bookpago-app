@@ -9,7 +9,6 @@ import {
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import LoadingView from '@src/components/LoadingView';
-import SelectModal, {SelectModalOptions} from '@src/components/SelectModal';
 import Spacer from '@src/components/common/Spacer';
 import MypageButton from '@src/components/common/button/MypageButton';
 import ClubMemberCard from '@src/components/common/card/ClubMemberCard';
@@ -25,7 +24,7 @@ import {
 import {MainContext} from '@src/utils/Context';
 import {getWeekdayText} from '@src/utils/helper';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {useContext, useMemo, useState} from 'react';
+import {useContext, useMemo} from 'react';
 import {
   Alert,
   Image,
@@ -36,30 +35,31 @@ import {
   View,
 } from 'react-native';
 import ErrorScreen from '../ErrorScreen';
+import ModalSelector from 'react-native-modal-selector';
 
-const MEMBER_OPTIONS: SelectModalOptions[] = [
+const MEMBER_OPTIONS = [
   {
-    value: '0',
-    text: '프로필 페이지로 이동',
+    key: 0,
+    label: '프로필 페이지로 이동',
   },
   {
-    value: '3',
-    text: '추방하기',
+    key: 3,
+    label: '추방하기',
   },
 ];
 
-const APPLICANT_OPTIONS: SelectModalOptions[] = [
+const APPLICANT_OPTIONS = [
   {
-    value: '0',
-    text: '프로필 페이지로 이동',
+    key: 0,
+    label: '프로필 페이지로 이동',
   },
   {
-    value: '1',
-    text: '수락하기',
+    key: 1,
+    label: '수락하기',
   },
   {
-    value: '2',
-    text: '거절하기',
+    key: 2,
+    label: '거절하기',
   },
 ];
 
@@ -68,19 +68,10 @@ type Props = NativeStackScreenProps<
   'ClubDetail'
 >;
 
-enum memberStatus {
-  MEMBER,
-  APPLICANT,
-}
-
 const ClubDetailScreen = ({navigation, route}: Props) => {
   const props = route.params.socialGrop;
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const {kakaoId} = useContext(MainContext);
-  const [selectedMember, setSelecteMember] = useState<{
-    kakaoId: number;
-    status: memberStatus;
-  } | null>(null);
 
   const clubQuery = useQuery({
     queryKey: ['/social/clubs/:clubId', props.id],
@@ -133,83 +124,57 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     });
   };
 
-  const onPressMember = (id: number) => {
-    setSelecteMember({kakaoId: id, status: memberStatus.MEMBER});
-  };
+  const onSelectUser = (
+    selectedKakaoId: number,
+    option: {key: number; label: string},
+  ) => {
+    if (isAdmin === false) return;
 
-  const onPressApplicant = (id: number) => {
-    setSelecteMember({kakaoId: id, status: memberStatus.APPLICANT});
-  };
-
-  const onCloseModal = () => {
-    setSelecteMember(() => null);
-  };
-
-  const onSelectModal = (value: string) => {
-    if (!selectedMember) {
-      return;
-    }
-
-    onCloseModal();
-
-    if (value === '0') {
+    if (option.key === 0) {
       // 프로필 페이지로 이동
       tabNav.navigate('My', {
         screen: 'Profile',
-        params: {kakaoId: selectedMember.kakaoId},
+        params: {kakaoId: selectedKakaoId},
       });
       return;
     }
 
-    if (selectedMember.status === memberStatus.MEMBER && isAdmin) {
-      // 멤버의 경우
+    if (option.key === 1) {
+      // 수락하기
+      acceptMember.mutate({
+        clubId: props.id,
+        adminKakaoId: kakaoId!,
+        memberKakaoId: selectedKakaoId,
+      });
+      return;
+    }
 
-      if (value === '3') {
-        // 추방하기
-        if (selectedMember.kakaoId === kakaoId) {
-          Alert.alert('자신을 추방할 수 없습니다.');
-          return;
-        }
+    if (option.key === 2) {
+      rejectMember.mutate({
+        clubId: props.id,
+        adminKakaoId: kakaoId!,
+        memberKakaoId: selectedKakaoId,
+      });
+      return;
+    }
 
-        kickMember.mutate({
-          clubId: props.id,
-          adminKakaoId: kakaoId!,
-          memberKakaoId: selectedMember.kakaoId,
-        });
+    if (option.key === 3) {
+      //추방하기
+      if (selectedKakaoId === kakaoId) {
+        Alert.alert('자신을 추방할 수 없습니다.');
+        return;
       }
-    } else {
-      // 신청자의 경우
-      if (value === '1') {
-        // 수락하기
-        acceptMember.mutate({
-          clubId: props.id,
-          adminKakaoId: kakaoId!,
-          memberKakaoId: selectedMember.kakaoId,
-        });
-      } else if (value === '2') {
-        // 거절하기
-        rejectMember.mutate({
-          clubId: props.id,
-          adminKakaoId: kakaoId!,
-          memberKakaoId: selectedMember.kakaoId,
-        });
-      }
+
+      kickMember.mutate({
+        clubId: props.id,
+        adminKakaoId: kakaoId!,
+        memberKakaoId: selectedKakaoId,
+      });
+      return;
     }
   };
 
   const weekdayText = getWeekdayText(props.weekDay);
-
-  const selectModalOption = useMemo(() => {
-    if (!selectedMember) {
-      return [];
-    }
-    const option =
-      selectedMember.status === memberStatus.MEMBER
-        ? MEMBER_OPTIONS
-        : APPLICANT_OPTIONS;
-
-    return isAdmin ? option : option.filter(o => o.value === '0');
-  }, [selectedMember]);
 
   if (clubQuery.error) {
     const error = clubQuery.error as unknown as {error: string};
@@ -230,149 +195,162 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
   }
 
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <BackHeader
-          imageProps={{onPress: () => navigation.goBack()}}
-          title="토론모임 상세"
-          buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
-        />
-        <ScrollView style={styles.scrollBox}>
-          <Spacer height={20} />
+    <SafeAreaView style={styles.container}>
+      <BackHeader
+        imageProps={{onPress: () => navigation.goBack()}}
+        title="토론모임 상세"
+        buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
+      />
+      <ScrollView style={styles.scrollBox}>
+        <Spacer height={20} />
 
-          <View style={{paddingHorizontal: 20}}>
-            <CustomText style={{fontSize: 20}}>{props.clubName}</CustomText>
-          </View>
+        <View style={{paddingHorizontal: 20}}>
+          <CustomText style={{fontSize: 20}}>{props.clubName}</CustomText>
+        </View>
 
-          <Spacer height={20} />
+        <Spacer height={20} />
 
-          <View style={styles.infoBox}>
+        <View style={styles.infoBox}>
+          <CustomText
+            style={{
+              fontSize: 14,
+              color: colors.GRAY_400,
+              marginBottom: 16,
+              fontWeight: 'light',
+            }}>
+            세부 모집 정보
+          </CustomText>
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/position.png')}
+              resizeMode="center"
+            />
             <CustomText
-              style={{
-                fontSize: 14,
-                color: colors.GRAY_400,
-                marginBottom: 16,
-                fontWeight: 'light',
-              }}>
-              세부 모집 정보
-            </CustomText>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/position.png')}
-                resizeMode="center"
-              />
-              <CustomText
-                style={[
-                  styles.text,
-                  {color: colors.THEME},
-                ]}>{`장소: ${props.location}`}</CustomText>
-            </View>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/human.png')}
-                resizeMode="center"
-              />
-              <CustomText style={styles.text}>
-                현재&nbsp;
-                <CustomText
-                  style={
-                    styles.highlightText
-                  }>{`${props.members}명`}</CustomText>
-                &nbsp;참여중
-              </CustomText>
-            </View>
-            <View style={styles.row}>
-              <Image
-                style={styles.icon}
-                source={require('@src/assets/icons/clock.png')}
-                resizeMode="center"
-              />
-              <CustomText style={styles.text}>
-                {`${CYCLE[props.repeatCycle]} (${weekdayText}) `}
-                <CustomText style={styles.highlightText}>
-                  {props.time}
-                </CustomText>
-              </CustomText>
-            </View>
-            <View style={[styles.row, {alignItems: 'flex-start'}]}>
-              <Image
-                style={[styles.icon, {marginTop: 4}]}
-                source={require('@src/assets/icons/dollar-sign.png')}
-                resizeMode="center"
-              />
-              <CustomText style={[styles.text, {flex: 1}]}>
-                {`주요 활동 ${props.description}`}
-              </CustomText>
-            </View>
+              style={[
+                styles.text,
+                {color: colors.THEME},
+              ]}>{`장소: ${props.location}`}</CustomText>
           </View>
-          <Spacer height={20} />
-          <View>
-            <Text style={styles.cardBoxText}>참여자 목록</Text>
-            <ScrollView
-              horizontal
-              contentContainerStyle={styles.cardBox}
-              showsHorizontalScrollIndicator={false}>
-              {clubQuery.data?.memberList.map((member, index) => (
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/human.png')}
+              resizeMode="center"
+            />
+            <CustomText style={styles.text}>
+              현재&nbsp;
+              <CustomText
+                style={styles.highlightText}>{`${props.members}명`}</CustomText>
+              &nbsp;참여중
+            </CustomText>
+          </View>
+          <View style={styles.row}>
+            <Image
+              style={styles.icon}
+              source={require('@src/assets/icons/clock.png')}
+              resizeMode="center"
+            />
+            <CustomText style={styles.text}>
+              {`${CYCLE[props.repeatCycle]} (${weekdayText}) `}
+              <CustomText style={styles.highlightText}>{props.time}</CustomText>
+            </CustomText>
+          </View>
+          <View style={[styles.row, {alignItems: 'flex-start'}]}>
+            <Image
+              style={[styles.icon, {marginTop: 4}]}
+              source={require('@src/assets/icons/dollar-sign.png')}
+              resizeMode="center"
+            />
+            <CustomText style={[styles.text, {flex: 1}]}>
+              {`주요 활동 ${props.description}`}
+            </CustomText>
+          </View>
+        </View>
+        <Spacer height={20} />
+        <View>
+          <Text style={styles.cardBoxText}>참여자 목록</Text>
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.cardBox}
+            showsHorizontalScrollIndicator={false}>
+            {clubQuery.data?.memberList.map((member, index) => (
+              <ModalSelector
+                key={`member_${member.kakaoId}_${index}`}
+                keyExtractor={item => item.key}
+                labelExtractor={item => item.label}
+                overlayStyle={styles.overlay}
+                optionContainerStyle={{backgroundColor: colors.WHITE}}
+                cancelStyle={{backgroundColor: colors.WHITE}}
+                data={MEMBER_OPTIONS}
+                onChange={option => onSelectUser(member.kakaoId, option)}
+                cancelText="취소"
+                disabled={isAdmin === false || kickMember.isPending}
+                accessible>
                 <ClubMemberCard
-                  key={`member_${member.kakaoId}_${index}`}
-                  onPress={() => onPressMember(member.kakaoId)}
                   kakaoId={member.kakaoId}
                   nickname={member.nickname}
                   profilUrl={member.imgUrl}
                   disabled={kickMember.isPending}
                 />
-              ))}
-            </ScrollView>
-          </View>
+              </ModalSelector>
+            ))}
+          </ScrollView>
+        </View>
 
-          <Spacer height={20} />
+        <Spacer height={20} />
 
-          <View>
-            <Text style={styles.cardBoxText}>대기자 목록</Text>
-            <ScrollView
-              horizontal
-              contentContainerStyle={styles.cardBox}
-              showsHorizontalScrollIndicator={false}>
-              {clubQuery.data?.applicantList.map((member, index) => (
+        <View>
+          <Text style={styles.cardBoxText}>대기자 목록</Text>
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.cardBox}
+            showsHorizontalScrollIndicator={false}>
+            {clubQuery.data?.applicantList.map((member, index) => (
+              <ModalSelector
+                key={`applicant_${member.kakaoId}_${index}`}
+                labelExtractor={item => item.label}
+                keyExtractor={item => item.key}
+                overlayStyle={styles.overlay}
+                optionContainerStyle={{backgroundColor: colors.WHITE}}
+                cancelStyle={{backgroundColor: colors.WHITE}}
+                data={APPLICANT_OPTIONS}
+                onChange={option => onSelectUser(member.kakaoId, option)}
+                cancelText="취소"
+                disabled={
+                  isAdmin === false ||
+                  acceptMember.isPending ||
+                  rejectMember.isPending
+                }
+                accessible>
                 <ClubMemberCard
-                  key={`applicant_${member.kakaoId}_${index}`}
-                  onPress={() => onPressApplicant(member.kakaoId)}
                   kakaoId={member.kakaoId}
                   nickname={member.nickname}
                   profilUrl={member.imgUrl}
-                  disabled={acceptMember.isPending || rejectMember.isPending}
                 />
-              ))}
-            </ScrollView>
+              </ModalSelector>
+            ))}
+          </ScrollView>
+        </View>
+
+        <Spacer height={20} />
+
+        {isAdmin === false && (
+          <View style={{paddingHorizontal: 20}}>
+            <CustomButton
+              containerstyle={[
+                styles.accessButton,
+                mutationJoinClub.isPending && styles.accessButtonLoading,
+              ]}
+              textstyle={{color: colors.WHITE}}
+              text={isIJoinded ? '나가기' : '참여하기'}
+              onPress={accessClub}
+            />
           </View>
-
-          <Spacer height={20} />
-
-          {isAdmin === false && (
-            <View style={{paddingHorizontal: 20}}>
-              <CustomButton
-                containerstyle={[
-                  styles.accessButton,
-                  mutationJoinClub.isPending && styles.accessButtonLoading,
-                ]}
-                textstyle={{color: colors.WHITE}}
-                text={isIJoinded ? '나가기' : '참여하기'}
-                onPress={accessClub}
-              />
-            </View>
-          )}
-          <Spacer height={20} />
-        </ScrollView>
-      </SafeAreaView>
-      <SelectModal
-        isShow={!!selectedMember}
-        options={selectModalOption}
-        onSelect={onSelectModal}
-        onClose={onCloseModal}
-      />
-    </>
+        )}
+        <Spacer height={20} />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -429,6 +407,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.BLACK,
     fontSize: 20,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });
 

@@ -1,15 +1,7 @@
 import {colors} from '@src/constants';
 import {useState} from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {Pressable, StyleSheet, View, Text, Image} from 'react-native';
 import {Rating} from 'react-native-ratings';
-import OutsidePressHandler from 'react-native-outside-press';
 import Spacer from '../common/Spacer';
 import ModalSelector from 'react-native-modal-selector';
 
@@ -86,21 +78,19 @@ const Review = ({onPress}: ReviewProps) => {
           overlayStyle={{
             flex: 1,
             justifyContent: 'flex-end',
-            backgroundColor: 'rgba(0,0,0,0.5)',
           }}
           keyExtractor={item => item.key}
           data={data}
           accessible
           onChange={onSelect}
-          scrollViewAccessibilityLabel={'Scrollable options'}
           labelExtractor={item => item.label}
+          optionContainerStyle={{backgroundColor: colors.WHITE}}
+          cancelStyle={{backgroundColor: colors.WHITE}}
           cancelText="취소">
-          {/* <TouchableOpacity style={{borderRadius: 9999, position: 'relative'}}> */}
           <Image
             source={require('@src/assets/icons/more.png')}
             style={{width: 18, height: 18}}
           />
-          {/* </TouchableOpacity> */}
         </ModalSelector>
       </View>
 

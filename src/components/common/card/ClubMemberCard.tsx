@@ -10,7 +10,7 @@ import Spacer from '../Spacer';
 import {colors} from '@src/constants';
 
 interface ClubMemberCardProps {
-  onPress: () => void;
+  onPress?: () => void;
   kakaoId: number;
   nickname: string;
   profilUrl: string;
