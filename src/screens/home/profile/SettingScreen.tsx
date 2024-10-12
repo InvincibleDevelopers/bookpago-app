@@ -20,6 +20,7 @@ import {
   View,
   ScrollView,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 
 const SettingScreen = () => {
@@ -35,13 +36,13 @@ const SettingScreen = () => {
       <ScrollView>
         <IntroduceView>
           <Spacer height={50} />
-          <View style={styles.rowBox}>
+          <TouchableOpacity style={styles.rowBox} onPress={logout}>
             <Image
               source={require('@src/assets/icons/logout.png')}
               style={styles.rowImage}
             />
-            <Text></Text>
-          </View>
+            <Text style={{color: colors.BLACK}}>로그아웃</Text>
+          </TouchableOpacity>
         </IntroduceView>
       </ScrollView>
     </SafeAreaView>
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   },
   rowBox: {
     backgroundColor: colors.WHITE,
-    // borderWidth: 3,
+    flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderBottomColor: colors.GRAY_300,

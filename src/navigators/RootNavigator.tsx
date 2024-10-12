@@ -21,6 +21,10 @@ const RootNavigator = () => {
     return <SplashScreen />;
   }
 
+  if (kakaoId === null) {
+    return <AuthNavigator />;
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -28,11 +32,7 @@ const RootNavigator = () => {
         presentation: 'card',
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      {kakaoId !== null ? (
-        <Stack.Screen name="HomeTab" component={HomeNavigator} />
-      ) : (
-        <Stack.Screen name="Auth" component={AuthNavigator} />
-      )}
+      <Stack.Screen name="HomeTab" component={HomeNavigator} />
       <Stack.Screen name="DM" component={DMScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>

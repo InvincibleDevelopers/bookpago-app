@@ -1,14 +1,13 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type RootStackParamList = {
-  Auth?: NavigatorScreenParams<AuthStackParamList>;
   HomeTab?: NavigatorScreenParams<HomeTabParamList>;
   DM: undefined;
   Chat: undefined;
 };
 
 export type AuthStackParamList = {
-  Main: undefined;
+  AuthMain: undefined;
   Login: undefined;
   Test: undefined;
 };
