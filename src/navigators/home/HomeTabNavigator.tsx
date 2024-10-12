@@ -5,11 +5,11 @@ import SearchNavigator from '@src/navigators/home/SearchNavigator';
 import SocialNavigator from '@src/navigators/home/SocialNavigator';
 import {HomeTabParamList} from '@src/types';
 import {StyleSheet} from 'react-native';
-import MainNavigator from './MainNavigator';
+import HomeStackNavigator from './HomeStackNavigator';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
-const HomeNavigator = () => {
+const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -18,12 +18,12 @@ const HomeNavigator = () => {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="Home"
+        name="HomeStack"
         options={{
           title: '홈 화면',
           tabBarIcon: TabIcon.HomeIcon,
         }}
-        component={MainNavigator}
+        component={HomeStackNavigator}
       />
       <Tab.Screen
         name="Search"
@@ -61,7 +61,7 @@ const HomeNavigator = () => {
   );
 };
 
-export default HomeNavigator;
+export default HomeTabNavigator;
 
 const styles = StyleSheet.create({
   container: {

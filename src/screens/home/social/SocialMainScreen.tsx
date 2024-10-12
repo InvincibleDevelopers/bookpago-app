@@ -21,9 +21,9 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SocialStackParamList, 'Main'>;
+type Props = NativeStackScreenProps<SocialStackParamList, 'SocialMain'>;
 
-const MainScreen = ({navigation}: Props) => {
+const SocialMainScreen = ({navigation}: Props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
 
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainScreen;
+export default SocialMainScreen;

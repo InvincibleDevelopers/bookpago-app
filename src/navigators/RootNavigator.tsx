@@ -6,7 +6,7 @@ import SplashScreen from '@src/screens/SplashScreen';
 import {RootStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import React, {useContext} from 'react';
-import HomeNavigator from './home/HomeNavigator';
+import HomeTabNavigator from './home/HomeTabNavigator';
 import AuthNavigator from './AuthNavigator';
 import ChatScreen from '@src/screens/ChatScreen';
 import DMScreen from '@src/screens/DMScreen';
@@ -32,7 +32,7 @@ const RootNavigator = () => {
         presentation: 'card',
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Stack.Screen name="HomeTab" component={HomeNavigator} />
+      <Stack.Screen name="HomeTab" component={HomeTabNavigator} />
       <Stack.Screen name="DM" component={DMScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>

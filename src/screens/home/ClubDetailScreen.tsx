@@ -17,7 +17,7 @@ import {CYCLE, colors} from '@src/constants';
 import useJoinClub from '@src/hooks/useJoinClub';
 import {
   HomeTabParamList,
-  MainStackParamList,
+  HomeStackParamList,
   MyStackParamList,
   SocialStackParamList,
 } from '@src/types';
@@ -64,7 +64,7 @@ const APPLICANT_OPTIONS = [
 ];
 
 type Props = NativeStackScreenProps<
-  MainStackParamList & SocialStackParamList & MyStackParamList,
+  HomeStackParamList & SocialStackParamList & MyStackParamList,
   'ClubDetail'
 >;
 

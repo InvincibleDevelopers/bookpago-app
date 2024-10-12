@@ -18,9 +18,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<SearchStackParamList, 'Main'>;
+type Props = NativeStackScreenProps<SearchStackParamList, 'SearchMain'>;
 
-const SearchScreen = ({navigation}: Props) => {
+const SearchMainScreen = ({navigation}: Props) => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [nonce, setNonce] = useState(0); // 검색 버튼을 누른 횟수
@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default SearchMainScreen;

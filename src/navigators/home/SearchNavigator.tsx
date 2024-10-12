@@ -4,7 +4,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import {HomeTabParamList, SearchStackParamList} from '@src/types';
-import SearchScreen from '../../screens/home/search/SearchScreen';
+import SearchMainScreen from '../../screens/home/search/SearchMainScreen';
 import BookDetailScreen from '@src/screens/home/BookDetailScreen';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'Search'>;
@@ -19,9 +19,9 @@ const SearchNavigator = ({navigation}: Props) => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen
-        name="Main"
+        name="SearchMain"
         options={{title: '프로필 페이지'}}
-        component={SearchScreen}
+        component={SearchMainScreen}
       />
       <Stack.Screen
         name="BookDetail"

@@ -14,26 +14,26 @@ export type AuthStackParamList = {
 };
 
 export type HomeTabParamList = {
-  Home?: NavigatorScreenParams<MainStackParamList>;
+  HomeStack?: NavigatorScreenParams<HomeStackParamList>;
   Search?: NavigatorScreenParams<SearchStackParamList>;
   Social?: NavigatorScreenParams<SocialStackParamList>;
   // Calendar: undefined;
   My?: NavigatorScreenParams<MyStackParamList>;
 };
 
-export type MainStackParamList = {
-  Main: undefined;
+export type HomeStackParamList = {
+  HomeMain: undefined;
   BookDetail: {isbn: number};
   ClubDetail: {socialGrop: SocialClub};
 };
 
 export type SearchStackParamList = {
-  Main: undefined;
+  SearchMain: undefined;
   BookDetail: {isbn: number};
 };
 
 export type SocialStackParamList = {
-  Main: undefined;
+  SocialMain: undefined;
   Form: undefined;
   ClubDetail: {socialGrop: SocialClub};
 };

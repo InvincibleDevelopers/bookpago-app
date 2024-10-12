@@ -14,7 +14,7 @@ import useBookFavorite from '@src/hooks/useBookFavorite';
 import {
   BookDetail,
   HomeTabParamList,
-  MainStackParamList,
+  HomeStackParamList,
   MyStackParamList,
   SearchStackParamList,
 } from '@src/types';
@@ -34,7 +34,7 @@ import {
 } from 'react-native';
 
 type Props = NativeStackScreenProps<
-  SearchStackParamList & MainStackParamList & MyStackParamList,
+  SearchStackParamList & HomeStackParamList & MyStackParamList,
   'BookDetail'
 >;
 
@@ -202,16 +202,16 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                     </CustomText>
                     <Spacer height={7} />
                   </View>
-                  <View style={styles.cell}>
+                  {/* <View style={styles.cell}>
                     <CustomText style={styles.cellTitle}>발행</CustomText>
                     <Spacer height={7} />
                     <CustomText style={styles.cellValue}>
                       {detailQuery.data?.publisher}
                     </CustomText>
                     <Spacer height={7} />
-                  </View>
+                  </View> */}
                 </View>
-                <View style={styles.row}>
+                {/* <View style={styles.row}>
                   <View style={styles.cell}>
                     <CustomText style={styles.cellTitle}>가격</CustomText>
                     <Spacer height={7} />
@@ -224,10 +224,10 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                     <CustomText style={styles.cellValue}>"미정"</CustomText>
                     <Spacer height={7} />
                   </View>
-                </View>
+                </View> */}
               </View>
             </View>
-            <View style={styles.smilerBox}>
+            {/* <View style={styles.smilerBox}>
               <CustomText style={{fontSize: 20, marginBottom: 20}}>
                 이 책과 비슷한 작품
               </CustomText>
@@ -248,7 +248,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                   );
                 })}
               </ScrollView>
-            </View>
+            </View> */}
             <ReviewList isbn={props.isbn} />
           </>
         }

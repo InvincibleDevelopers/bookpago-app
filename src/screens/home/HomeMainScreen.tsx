@@ -10,7 +10,7 @@ import ClubCard from '@src/components/common/card/ClubCard';
 import WideBookCard from '@src/components/common/card/WideBookCard';
 import Header from '@src/components/common/header/Header';
 import {colors} from '@src/constants/colors';
-import {HomeTabParamList, MainStackParamList} from '@src/types';
+import {HomeTabParamList, HomeStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
 import {useContext} from 'react';
@@ -22,9 +22,9 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Main'>;
+type Props = NativeStackScreenProps<HomeStackParamList, 'HomeMain'>;
 
-const MainScreen = ({navigation, route}: Props) => {
+const HomeMainScreen = ({navigation, route}: Props) => {
   const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const {kakaoId} = useContext(MainContext);
 
@@ -227,4 +227,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainScreen;
+export default HomeMainScreen;
