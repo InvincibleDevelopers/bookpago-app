@@ -1,8 +1,8 @@
 import {ReviewItem, getReview} from '@src/api/book';
-import {colors} from '@src/constants';
+import {REVIEW_PAGE_SIZE, colors} from '@src/constants';
 import {MainContext} from '@src/utils/Context';
-import {useQuery} from '@tanstack/react-query';
-import {useCallback, useContext} from 'react';
+import {useInfiniteQuery} from '@tanstack/react-query';
+import {useCallback, useContext, useMemo} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,6 +13,7 @@ import {
 import Divider from '../common/Divider';
 import Spacer from '../common/Spacer';
 import Review from './Review';
+import {checkIsEndPage} from '@src/api/queryClient';
 
 interface ReviewListProps {
   isbn: number;
@@ -21,9 +22,13 @@ interface ReviewListProps {
 const ReviewList = ({isbn}: ReviewListProps) => {
   const {kakaoId} = useContext(MainContext);
 
-  const reviewQuery = useQuery({
+  const reviewQuery = useInfiniteQuery({
     queryKey: ['/reviews/:isbn', isbn, kakaoId],
-    queryFn: () => getReview(isbn, kakaoId!, 1),
+    queryFn: ({pageParam}) => getReview(isbn, kakaoId!, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
+      return checkIsEndPage(lastPage, allPage, REVIEW_PAGE_SIZE);
+    },
   });
 
   const renderItem = useCallback(
@@ -44,6 +49,17 @@ const ReviewList = ({isbn}: ReviewListProps) => {
     },
     [kakaoId, isbn],
   );
+
+  const onEndReached = () => {
+    if (reviewQuery.hasNextPage && !reviewQuery.isFetchingNextPage) {
+      reviewQuery.fetchNextPage();
+    }
+  };
+
+  const reviewList = useMemo(() => {
+    if (!reviewQuery.data) return [];
+    return reviewQuery.data.pages.flat();
+  }, [reviewQuery.data]);
 
   if (reviewQuery.isError) {
     return (
@@ -68,7 +84,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
   return (
     <FlatList
       keyExtractor={(d, index) => `comment_${index}`}
-      data={reviewQuery.data}
+      data={reviewList}
       ItemSeparatorComponent={() => (
         <Divider type="horizontal" style={{height: 2}} />
       )}
@@ -85,6 +101,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
         </View>
       )}
       contentContainerStyle={{}}
+      onEndReached={onEndReached}
       ListFooterComponent={<Spacer height={20} />}
     />
   );

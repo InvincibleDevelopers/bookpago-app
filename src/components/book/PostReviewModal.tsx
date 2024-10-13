@@ -40,7 +40,8 @@ const PostReviewModal = ({
   const mutatePostReview = useMutation({
     mutationFn: postReview,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
+      // 리뷰 작성 성공시 캐시를 삭제, 댓글 전체를 다시 가져오도록 함
+      queryClient.removeQueries({
         queryKey: ['/reviews/:isbn', isbn, myKakaoId],
       });
       Alert.alert('리뷰 작성이 완료되었습니다.', '', [
@@ -55,8 +56,8 @@ const PostReviewModal = ({
     },
   });
 
-  const onFinishedRating = (e: number) => {
-    setRating(() => e);
+  const onFinishedRating = (rate: number) => {
+    setRating(() => rate);
   };
 
   const onSubmit = () => {
@@ -96,7 +97,7 @@ const PostReviewModal = ({
                     minValue={0}
                     startingValue={3}
                     ratingCount={5}
-                    fractions={1} // 분수
+                    fractions={2} // 분수
                     jumpValue={0.5}
                     tintColor={styles.rating.backgroundColor} // outer color
                     ratingColor="#FFB900" // selected color
@@ -128,7 +129,12 @@ const PostReviewModal = ({
 
               <Spacer height={20} />
 
-              <Pressable onPress={onSubmit} style={styles.submitButton}>
+              <Pressable
+                onPress={onSubmit}
+                style={[
+                  styles.submitButton,
+                  mutatePostReview.isPending && styles.sumitButtonLoading,
+                ]}>
                 <Text style={styles.submitButtonText}>댓글 작성</Text>
               </Pressable>
             </View>
@@ -196,6 +202,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.THEME,
     padding: 10,
     borderRadius: 9999,
+  },
+  sumitButtonLoading: {
+    opacity: 0.5,
   },
   submitButtonText: {
     textAlign: 'center',

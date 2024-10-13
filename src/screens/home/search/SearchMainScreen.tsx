@@ -1,5 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getSearchBooks} from '@src/api/book';
+import {checkIsEndPage} from '@src/api/queryClient';
 import LoadingView from '@src/components/LoadingView';
 import NodataView from '@src/components/NodataView';
 import SearchHeader from '@src/components/common/header/SearchHeader';
@@ -37,10 +38,7 @@ const SearchMainScreen = ({navigation}: Props) => {
     enabled: nonce !== 0, // 검색 버튼을 누르기 전까지는 쿼리를 실행하지 않음
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
-      // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
-      return lastPage.books.length === SEARCH_PAGE_SIZE
-        ? allPage.length + 1
-        : undefined;
+      return checkIsEndPage(lastPage.books, allPage, SEARCH_PAGE_SIZE);
     },
   });
 
