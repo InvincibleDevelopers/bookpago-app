@@ -87,6 +87,5 @@ export const postToggleReviewLikes = async (
     kakaoId: body.myKakaoId,
     reviewId: body.reviewId,
   });
-  console.log('response', response.data);
   return response.data;
 };

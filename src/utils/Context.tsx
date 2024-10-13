@@ -1,3 +1,4 @@
+import {getAuthenticated} from '@src/api/auth';
 import {KAKAO_ID_KEY} from '@src/constants';
 import {createContext, useEffect, useState} from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -43,22 +44,27 @@ const ContextProvider = ({children}: {children: React.ReactNode}) => {
     setKakaoId(() => null);
   };
 
+  const init = async () => {
+    try {
+      const value = await EncryptedStorage.getItem(KAKAO_ID_KEY);
+      const storedKakaoId = Number(value) || null;
+
+      if (storedKakaoId === null) {
+        return;
+      }
+
+      await getAuthenticated(storedKakaoId);
+      setKakaoId(() => storedKakaoId);
+    } catch (e) {
+      console.log('error', e);
+      await EncryptedStorage.removeItem('kakaoId');
+    } finally {
+      setLoading(() => false);
+    }
+  };
+
   useEffect(() => {
-    EncryptedStorage.getItem('kakaoId')
-      .then(value => {
-        const num = Number(value) || null;
-        if (num === null) {
-          return setLoading(() => false);
-        }
-        login({kakaoId: num}).finally(() => {
-          setLoading(() => false);
-        });
-      })
-      .catch(() => {
-        EncryptedStorage.removeItem('kakaoId').finally(() => {
-          setLoading(() => false);
-        });
-      });
+    init();
   }, []);
 
   return (
