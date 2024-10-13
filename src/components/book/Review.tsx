@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, View, Text, Image} from 'react-native';
 import {Rating} from 'react-native-ratings';
 import Spacer from '../common/Spacer';
 import ModalSelector from 'react-native-modal-selector';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const data = [
   {
@@ -108,9 +109,14 @@ const Review = ({
 
       <Spacer height={10} />
 
-      <View style={{flexDirection: 'row'}}>
-        <Pressable>
-          <Text>좋아요</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Pressable style={{marginRight: 7}}>
+          <Icon
+            // style={{alignItems: 'center', justifyContent: 'center'}}
+            size={14}
+            color="#FF0000"
+            name={isLiked ? 'heart' : 'heart-o'}
+          />
         </Pressable>
         <Text>{likes.toString()}</Text>
       </View>
