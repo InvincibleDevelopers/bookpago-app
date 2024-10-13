@@ -56,7 +56,9 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   const onPressStar = () => {
     const wishBook = detailQuery.data?.wishBook;
-    if (favoriteMutation.isPending || wishBook === undefined) return;
+    if (favoriteMutation.isPending || wishBook === undefined) {
+      return;
+    }
     favoriteMutation.mutate({
       isbn: props.isbn,
       isFavorite: wishBook,

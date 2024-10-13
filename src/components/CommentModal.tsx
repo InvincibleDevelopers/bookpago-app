@@ -7,21 +7,65 @@ import {
   Pressable,
   TextInput,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
-import DismissKeyboardView from './common/DismissKeyboardView';
 import {colors} from '@src/constants';
 import {Rating} from 'react-native-ratings';
 import {useState} from 'react';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {postReview} from '@src/api/book';
 
 interface CommentModalProps {
   isShow: boolean;
+  isbn: number;
+  myKakaoId: number;
   onClose: () => void;
 }
 
-const CommentModal = ({isShow, onClose}: CommentModalProps) => {
+const CommentModal = ({
+  isShow,
+  isbn,
+  myKakaoId,
+  onClose,
+}: CommentModalProps) => {
   const [rating, setRating] = useState(5);
+  const [content, setContent] = useState('');
+
+  const queryClient = useQueryClient();
+
+  const mutatePostReview = useMutation({
+    mutationFn: postReview,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['reviews', isbn, myKakaoId],
+      });
+      Alert.alert('리뷰 작성이 완료되었습니다.', '', [
+        {
+          text: '확인',
+          onPress: onClose,
+        },
+      ]);
+    },
+    onError: () => {
+      Alert.alert('리뷰 작성에 실패했습니다.', '잠시후 다시 시도해주세요.');
+    },
+  });
+
   const onFinishedRating = (e: number) => {
     setRating(() => e);
+  };
+
+  const onSubmit = () => {
+    if (mutatePostReview.isPending) {
+      return;
+    }
+
+    mutatePostReview.mutate({
+      isbn,
+      rating,
+      kakaoId: myKakaoId,
+      content,
+    });
   };
 
   return (
@@ -30,7 +74,7 @@ const CommentModal = ({isShow, onClose}: CommentModalProps) => {
         <View style={styles.box}>
           <KeyboardAvoidingView>
             <View style={styles.inner}>
-              <Pressable>
+              <Pressable onPress={onClose}>
                 <Text>닫기</Text>
               </Pressable>
               <Text>asdasdasdasd</Text>
@@ -52,10 +96,12 @@ const CommentModal = ({isShow, onClose}: CommentModalProps) => {
               <View>
                 <TextInput
                   multiline
+                  value={content}
+                  onChangeText={setContent}
                   numberOfLines={5}
                   style={{color: 'black', backgroundColor: colors.GRAY}}
                 />
-                <Pressable onPress={onClose}>
+                <Pressable onPress={onSubmit}>
                   <Text>댓글 작성</Text>
                 </Pressable>
               </View>

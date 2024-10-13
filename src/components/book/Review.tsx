@@ -1,5 +1,4 @@
 import {colors} from '@src/constants';
-import {useState} from 'react';
 import {Pressable, StyleSheet, View, Text, Image} from 'react-native';
 import {Rating} from 'react-native-ratings';
 import Spacer from '../common/Spacer';
@@ -18,15 +17,23 @@ const data = [
 
 interface ReviewProps {
   onPress: () => void;
+  reviewId: number;
+  nickname: string;
+  content: string;
+  rating: number;
+  isLiked: boolean;
+  likes: number;
 }
 
-const Review = ({onPress}: ReviewProps) => {
-  const [rating, setRating] = useState(5);
-  const [isShow, setIsShow] = useState(false);
-  const onFinishedRating = (e: number) => {
-    setRating(() => e);
-  };
-
+const Review = ({
+  reviewId,
+  nickname,
+  content,
+  rating,
+  isLiked,
+  likes,
+  onPress,
+}: ReviewProps) => {
   const onSelect = (option: (typeof data)[0]) => {
     switch (option.key) {
       case 1:
@@ -43,11 +50,9 @@ const Review = ({onPress}: ReviewProps) => {
       <Spacer height={20} />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Rating
-          ratingTextColor={colors.BLACK}
           type="custom"
-          onFinishRating={onFinishedRating}
           minValue={0}
-          startingValue={3}
+          startingValue={rating}
           ratingCount={5}
           fractions={1} // 분수
           jumpValue={0.5}
@@ -58,7 +63,10 @@ const Review = ({onPress}: ReviewProps) => {
           imageSize={25}
           readonly // control
         />
-        <Text style={{color: colors.BLACK, fontSize: 20}}>4.5</Text>
+        <Text style={{color: colors.BLACK, fontSize: 20}}>
+          {/* 소수점 첫째자리까지 */}
+          {rating.toFixed(1)}
+        </Text>
       </View>
 
       <Spacer height={10} />
@@ -69,7 +77,9 @@ const Review = ({onPress}: ReviewProps) => {
             source={require('@src/assets/user/profile.png')}
             style={{width: 20, height: 20, marginRight: 7}}
           />
-          <Text style={{color: colors.BLACK, fontWeight: 'bold'}}>작성자</Text>
+          <Text style={{color: colors.BLACK, fontWeight: 'bold'}}>
+            {nickname}
+          </Text>
         </View>
 
         <ModalSelector
@@ -94,9 +104,18 @@ const Review = ({onPress}: ReviewProps) => {
 
       <Spacer height={10} />
 
-      <Text style={{color: colors.BLACK}}>댓글 내용</Text>
+      <Text style={{color: colors.BLACK}}>{content}</Text>
 
-      <Spacer height={20} />
+      <Spacer height={10} />
+
+      <View style={{flexDirection: 'row'}}>
+        <Pressable>
+          <Text>좋아요</Text>
+        </Pressable>
+        <Text>{likes.toString()}</Text>
+      </View>
+
+      <Spacer height={10} />
     </Pressable>
   );
 };
