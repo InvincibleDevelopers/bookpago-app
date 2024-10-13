@@ -3,9 +3,10 @@ import TabIcon from './TabIcon';
 export const HomeIcon = ({focused}: {focused: boolean}) => {
   return (
     <TabIcon
+      text="홈"
       isFocus={focused}
-      focusIconProp={require('@src/assets/icons/home.png')}
-      unFocusIconProp={require('@src/assets/icons/nhome.png')}
+      focusIconProp={require('@src/assets/icons/home-active.png')}
+      unFocusIconProp={require('@src/assets/icons/home.png')}
     />
   );
 };
@@ -13,9 +14,10 @@ export const HomeIcon = ({focused}: {focused: boolean}) => {
 export const SearchIcon = ({focused}: {focused: boolean}) => {
   return (
     <TabIcon
+      text="도서 검색"
       isFocus={focused}
-      focusIconProp={require('@src/assets/icons/search.png')}
-      unFocusIconProp={require('@src/assets/icons/nsearch.png')}
+      focusIconProp={require('@src/assets/icons/search-active.png')}
+      unFocusIconProp={require('@src/assets/icons/search.png')}
     />
   );
 };
@@ -23,29 +25,31 @@ export const SearchIcon = ({focused}: {focused: boolean}) => {
 export const SocialIcon = ({focused}: {focused: boolean}) => {
   return (
     <TabIcon
+      text="소셜"
       isFocus={focused}
-      focusIconProp={require('@src/assets/icons/social.png')}
-      unFocusIconProp={require('@src/assets/icons/nsocial.png')}
+      focusIconProp={require('@src/assets/icons/social-active.png')}
+      unFocusIconProp={require('@src/assets/icons/social.png')}
     />
   );
 };
 
-export const CalendarIcon = ({focused}: {focused: boolean}) => {
-  return (
-    <TabIcon
-      isFocus={focused}
-      focusIconProp={require('@src/assets/icons/cal.png')}
-      unFocusIconProp={require('@src/assets/icons/ncal.png')}
-    />
-  );
-};
+// export const CalendarIcon = ({focused}: {focused: boolean}) => {
+//   return (
+//     <TabIcon
+//       isFocus={focused}
+//       focusIconProp={require('@src/assets/icons/cal.png')}
+//       unFocusIconProp={require('@src/assets/icons/ncal.png')}
+//     />
+//   );
+// };
 
 export const MyPageIcon = ({focused}: {focused: boolean}) => {
   return (
     <TabIcon
+      text="프로필"
       isFocus={focused}
-      focusIconProp={require('@src/assets/icons/my.png')}
-      unFocusIconProp={require('@src/assets/icons/nmy.png')}
+      focusIconProp={require('@src/assets/icons/profile-active.png')}
+      unFocusIconProp={require('@src/assets/icons/profile.png')}
     />
   );
 };

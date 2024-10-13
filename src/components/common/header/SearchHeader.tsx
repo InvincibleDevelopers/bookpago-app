@@ -52,7 +52,7 @@ const SearchHeader = ({
         )}
         <Pressable style={styles.button} onPress={onPressSearch}>
           <Image
-            source={require('@src/assets/icons/hsearch.png')}
+            source={require('@src/assets/icons/search.png')}
             style={styles.buttonImage}
             resizeMode="center"
           />
