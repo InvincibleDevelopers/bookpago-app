@@ -8,12 +8,16 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {colors} from '@src/constants';
 import {Rating} from 'react-native-ratings';
 import {useState} from 'react';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {postReview} from '@src/api/book';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Divider from './common/Divider';
+import Spacer from './common/Spacer';
 
 interface CommentModalProps {
   isShow: boolean;
@@ -71,40 +75,62 @@ const CommentModal = ({
   return (
     <Modal visible={isShow} animationType="fade" transparent>
       <View style={styles.background}>
-        <View style={styles.box}>
+        <View style={styles.outer}>
           <KeyboardAvoidingView>
             <View style={styles.inner}>
-              <Pressable onPress={onClose}>
-                <Text>닫기</Text>
-              </Pressable>
-              <Text>asdasdasdasd</Text>
-              <Rating
-                ratingTextColor={colors.BLACK}
-                type="custom"
-                onFinishRating={onFinishedRating}
-                minValue={0}
-                startingValue={3}
-                ratingCount={5}
-                fractions={1} // 분수
-                jumpValue={0.5}
-                tintColor={styles.rating.backgroundColor} // outer color
-                ratingColor="#FFB900" // selected color
-                ratingBackgroundColor="#D9D9D9" //unSelected color
-                style={styles.rating}
-                imageSize={40}
-              />
-              <View>
+              <View style={{flex: 1}}>
+                <View style={styles.titleBox}>
+                  <Text style={styles.title}>평점을 선택해주세요</Text>
+                  <TouchableOpacity onPress={onClose}>
+                    <Icon name="close" size={30} />
+                  </TouchableOpacity>
+                </View>
+
+                <Spacer height={14} />
+
+                <View style={styles.ratingBox}>
+                  <Rating
+                    ratingTextColor={colors.BLACK}
+                    type="custom"
+                    onFinishRating={onFinishedRating}
+                    minValue={0}
+                    startingValue={3}
+                    ratingCount={5}
+                    fractions={1} // 분수
+                    jumpValue={0.5}
+                    tintColor={styles.rating.backgroundColor} // outer color
+                    ratingColor="#FFB900" // selected color
+                    ratingBackgroundColor="#D9D9D9" //unSelected color
+                    style={styles.rating}
+                    imageSize={40}
+                  />
+                  <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
+                </View>
+
+                <Spacer height={14} />
+
+                <Divider type="horizontal" style={{height: 1}} />
+
+                <Spacer height={20} />
+
                 <TextInput
-                  multiline
+                  style={styles.input}
                   value={content}
                   onChangeText={setContent}
+                  placeholder={'댓글을 입력해주세요.'}
+                  placeholderTextColor={colors.GRAY_300}
                   numberOfLines={5}
-                  style={{color: 'black', backgroundColor: colors.GRAY}}
+                  returnKeyType="send"
+                  textAlignVertical="top" //android only
+                  multiline
                 />
-                <Pressable onPress={onSubmit}>
-                  <Text>댓글 작성</Text>
-                </Pressable>
               </View>
+
+              <Spacer height={20} />
+
+              <Pressable onPress={onSubmit} style={styles.submitButton}>
+                <Text style={styles.submitButtonText}>댓글 작성</Text>
+              </Pressable>
             </View>
           </KeyboardAvoidingView>
         </View>
@@ -118,7 +144,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  box: {
+  outer: {
+    // 중앙 정렬
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -127,10 +154,53 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width - 40,
     height: Dimensions.get('screen').width - 40,
     backgroundColor: colors.WHITE,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  titleBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.BLACK,
+  },
+  ratingBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   rating: {
     paddingVertical: 10,
-    backgroundColor: colors.BACKGROUND, // outer color
+    backgroundColor: colors.WHITE, // outer color
+  },
+  ratingText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.BLACK,
+  },
+  input: {
+    color: 'black',
+    backgroundColor: colors.GRAY,
+    borderRadius: 10,
+    padding: 10,
+  },
+  submitButton: {
+    backgroundColor: colors.THEME,
+    padding: 10,
+    borderRadius: 9999,
+  },
+  submitButtonText: {
+    textAlign: 'center',
+    color: colors.WHITE,
+    fontSize: 18,
   },
 });
 
