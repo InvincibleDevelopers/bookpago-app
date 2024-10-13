@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {JoinBody, postKakaoJoin} from '@src/api/auth';
+import {postKakaoJoin} from '@src/api/auth';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
 import {colors} from '@src/constants/colors';
@@ -68,7 +68,9 @@ const JoinScreen = ({navigation, route}: Props) => {
   };
 
   const onPress = () => {
-    if (mutateJoin.isPending) return;
+    if (mutateJoin.isPending) {
+      return;
+    }
 
     const numAge = Number(age);
 
@@ -94,7 +96,7 @@ const JoinScreen = ({navigation, route}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <DismissKeyboardView style={{flex: 1}}>
+      <DismissKeyboardView style={{flex: 1, padding: 20}}>
         <View>
           <Text style={styles.title}>회원님만의</Text>
           <Text style={styles.title}>
@@ -209,7 +211,6 @@ const JoinScreen = ({navigation, route}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: colors.WHITE,
   },
   title: {

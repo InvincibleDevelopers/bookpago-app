@@ -95,6 +95,8 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.GRAY,
     color: colors.BLACK,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   topBox: {
     flex: 1,

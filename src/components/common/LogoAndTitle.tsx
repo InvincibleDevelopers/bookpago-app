@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   titleImage: {
     width: 180,
     height: 55,
-    borderWidth: 2,
   },
 });
 
