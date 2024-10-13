@@ -74,3 +74,19 @@ export const postReview = async (body: PostReviewBody) => {
   }>(`/books/${body.isbn}`, body);
   return response.data;
 };
+
+export type PostToggleReviewLikesBody = {
+  reviewId: number;
+  myKakaoId: number;
+};
+
+export const postToggleReviewLikes = async (
+  body: PostToggleReviewLikesBody,
+) => {
+  const response = await fetcher.post(`/review/likes`, {
+    kakaoId: body.myKakaoId,
+    reviewId: body.reviewId,
+  });
+  console.log('response', response.data);
+  return response.data;
+};

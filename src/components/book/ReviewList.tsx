@@ -1,21 +1,19 @@
-import {useCallback, useState, useContext} from 'react';
+import {ReviewItem, getReview} from '@src/api/book';
+import {colors} from '@src/constants';
+import {MainContext} from '@src/utils/Context';
+import {useQuery} from '@tanstack/react-query';
+import {useCallback, useContext, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import CommentModal from '../CommentModal';
-import Review from './Review';
-import {useQuery} from '@tanstack/react-query';
-import fetcher from '@src/api/axios';
-import {MainContext} from '@src/utils/Context';
 import Divider from '../common/Divider';
-import {colors} from '@src/constants';
 import Spacer from '../common/Spacer';
-import {PostReviewBody, ReviewItem, getReview} from '@src/api/book';
+import Review from './Review';
 
 interface ReviewListProps {
   isbn: number;
@@ -38,12 +36,13 @@ const ReviewList = ({isbn}: ReviewListProps) => {
     () => setIsShowCommentModal(() => false),
     [],
   );
-  console.log(reviewQuery.data);
 
   const renderItem = useCallback(
     ({item}: {item: ReviewItem}) => {
       return (
         <Review
+          myKakaoId={kakaoId!}
+          isbn={isbn}
           reviewId={item.id}
           rating={item.rating}
           nickname={item.nickname}
@@ -55,7 +54,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
         />
       );
     },
-    [openCommentModal],
+    [openCommentModal, kakaoId, isbn],
   );
 
   if (reviewQuery.isError) {

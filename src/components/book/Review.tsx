@@ -4,6 +4,8 @@ import {Rating} from 'react-native-ratings';
 import Spacer from '../common/Spacer';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {ReviewItem, postToggleReviewLikes} from '@src/api/book';
 
 const data = [
   {
@@ -18,6 +20,8 @@ const data = [
 
 interface ReviewProps {
   onPress: () => void;
+  myKakaoId: number;
+  isbn: number;
   reviewId: number;
   nickname: string;
   content: string;
@@ -29,6 +33,8 @@ interface ReviewProps {
 
 const Review = ({
   reviewId,
+  myKakaoId,
+  isbn,
   nickname,
   profileImage,
   content,
@@ -37,6 +43,46 @@ const Review = ({
   likes,
   onPress,
 }: ReviewProps) => {
+  const queryClient = useQueryClient();
+
+  const mutateToggleLikes = useMutation({
+    onMutate: () => {
+      queryClient.setQueriesData<ReviewItem[]>(
+        {
+          queryKey: ['/reviews/:isbn', isbn, myKakaoId],
+        },
+        prev => {
+          if (!prev) {
+            return prev;
+          }
+
+          const newItems = prev.map(item => {
+            if (item.id !== reviewId) {
+              return item;
+            }
+            const currIsLiked = item.isLiked;
+            const currIsLikes = item.likes;
+            // 현재 좋아요 중이면 좋아요 해제후 1빼기
+            // 현재 좋아요 중아니면 좋아요 후 1더하기
+            return {
+              ...item,
+              isLiked: !currIsLiked,
+              likes: currIsLiked ? currIsLikes - 1 : currIsLikes + 1,
+            };
+          });
+
+          return newItems;
+        },
+      );
+    },
+    mutationFn: postToggleReviewLikes,
+    onError: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['/reviews/:isbn', isbn, myKakaoId],
+      });
+    },
+  });
+
   const onSelect = (option: (typeof data)[0]) => {
     switch (option.key) {
       case 1:
@@ -48,7 +94,16 @@ const Review = ({
     }
   };
 
-  console.log('profileImage', profileImage);
+  const onToggleLikes = () => {
+    if (mutateToggleLikes.isPending) {
+      return;
+    }
+
+    mutateToggleLikes.mutate({
+      reviewId,
+      myKakaoId,
+    });
+  };
 
   return (
     <Pressable onPress={onPress} style={styles.container}>
@@ -120,7 +175,7 @@ const Review = ({
       <Spacer height={10} />
 
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Pressable style={{marginRight: 7}}>
+        <Pressable style={{marginRight: 7}} onPress={onToggleLikes}>
           <Icon
             // style={{alignItems: 'center', justifyContent: 'center'}}
             size={14}
