@@ -44,6 +44,7 @@ export type ReviewItem = {
   nickname: string;
   isLiked: boolean;
   likes: number;
+  profileImage?: string | null;
 };
 
 export const getReview = async (
@@ -68,8 +69,8 @@ export type PostReviewBody = {
 };
 
 export const postReview = async (body: PostReviewBody) => {
-  console.log('body', body);
-  const response = await fetcher.post(`/books/${body.isbn}`, body);
-  console.log(response.data);
+  const response = await fetcher.post<{
+    reviewId: number;
+  }>(`/books/${body.isbn}`, body);
   return response.data;
 };

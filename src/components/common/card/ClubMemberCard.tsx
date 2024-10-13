@@ -13,7 +13,7 @@ interface ClubMemberCardProps {
   onPress?: () => void;
   kakaoId: number;
   nickname: string;
-  profilUrl: string;
+  profilUrl?: string;
   disabled?: boolean;
 }
 

@@ -17,7 +17,7 @@ export type GetClubDetailArg = {
 export type member = {
   kakaoId: number;
   nickname: string;
-  imgUrl: string;
+  imgUrl?: string;
 };
 
 export const getClubDetail = async ({clubId}: GetClubDetailArg) => {
@@ -66,7 +66,6 @@ export const deleteJoinClub = async ({clubId, kakaoId}: PostAccessClubArg) => {
     method: 'DELETE',
     data: {kakaoId},
   });
-  console.log('del', response.data);
   return response.data.success;
 };
 

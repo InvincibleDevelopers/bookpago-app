@@ -26,7 +26,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
   const {kakaoId} = useContext(MainContext);
 
   const reviewQuery = useQuery({
-    queryKey: ['reviews', isbn, kakaoId],
+    queryKey: ['/reviews/:isbn', isbn, kakaoId],
     queryFn: () => getReview(isbn, kakaoId!, 1),
   });
 
@@ -38,6 +38,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
     () => setIsShowCommentModal(() => false),
     [],
   );
+  console.log(reviewQuery.data);
 
   const renderItem = useCallback(
     ({item}: {item: ReviewItem}) => {
@@ -49,6 +50,7 @@ const ReviewList = ({isbn}: ReviewListProps) => {
           content={item.content}
           isLiked={item.isLiked}
           likes={item.likes}
+          profileImage={item.profileImage}
           onPress={openCommentModal}
         />
       );

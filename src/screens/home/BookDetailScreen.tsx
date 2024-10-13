@@ -19,7 +19,7 @@ import {
   SearchStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useContext, useState, useCallback} from 'react';
 import {
   ActivityIndicator,
@@ -44,6 +44,8 @@ const BookDetailScreen = ({navigation, route}: Props) => {
   const [isShow, setIsShow] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {kakaoId} = useContext(MainContext);
+
+  const queryClient = useQueryClient();
 
   const detailQuery = useQuery<BookDetail, {error: string}>({
     queryKey: ['/books/:isbn', props.isbn],
@@ -71,7 +73,12 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   const onRefresh = async () => {
     setIsRefreshing(() => true);
-    await detailQuery.refetch();
+    await Promise.all([
+      detailQuery.refetch(),
+      queryClient.invalidateQueries({
+        queryKey: ['/reviews/:isbn', props.isbn, kakaoId],
+      }),
+    ]);
     setIsRefreshing(() => false);
   };
 

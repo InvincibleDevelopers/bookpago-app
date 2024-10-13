@@ -24,11 +24,13 @@ interface ReviewProps {
   rating: number;
   isLiked: boolean;
   likes: number;
+  profileImage?: string | null;
 }
 
 const Review = ({
   reviewId,
   nickname,
+  profileImage,
   content,
   rating,
   isLiked,
@@ -45,6 +47,8 @@ const Review = ({
         break;
     }
   };
+
+  console.log('profileImage', profileImage);
 
   return (
     <Pressable onPress={onPress} style={styles.container}>
@@ -75,8 +79,14 @@ const Review = ({
       <View style={{flexDirection: 'row'}}>
         <View style={{flexDirection: 'row', flex: 1}}>
           <Image
-            source={require('@src/assets/user/profile.png')}
-            style={{width: 20, height: 20, marginRight: 7}}
+            source={
+              profileImage
+                ? {
+                    uri: profileImage,
+                  }
+                : require('@src/assets/user/profile.png')
+            }
+            style={{width: 20, height: 20, borderRadius: 9999, marginRight: 7}}
           />
           <Text style={{color: colors.BLACK, fontWeight: 'bold'}}>
             {nickname}

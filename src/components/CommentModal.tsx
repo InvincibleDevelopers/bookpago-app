@@ -37,7 +37,7 @@ const CommentModal = ({
     mutationFn: postReview,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['reviews', isbn, myKakaoId],
+        queryKey: ['/reviews/:isbn', isbn, myKakaoId],
       });
       Alert.alert('리뷰 작성이 완료되었습니다.', '', [
         {
