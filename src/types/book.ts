@@ -12,9 +12,3 @@ export interface BookDetail extends BookItem {
   average_rating: number;
   wishBook: boolean;
 }
-
-export interface RecentBookProps {
-  path: string;
-  title: string;
-  detail: string;
-}

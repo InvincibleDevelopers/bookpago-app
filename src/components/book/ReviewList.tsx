@@ -2,7 +2,7 @@ import {ReviewItem, getReview} from '@src/api/book';
 import {colors} from '@src/constants';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
-import {useCallback, useContext, useState} from 'react';
+import {useCallback, useContext} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -10,7 +10,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import CommentModal from '../CommentModal';
 import Divider from '../common/Divider';
 import Spacer from '../common/Spacer';
 import Review from './Review';
@@ -20,22 +19,12 @@ interface ReviewListProps {
 }
 
 const ReviewList = ({isbn}: ReviewListProps) => {
-  const [isShowCommentModal, setIsShowCommentModal] = useState(false);
   const {kakaoId} = useContext(MainContext);
 
   const reviewQuery = useQuery({
     queryKey: ['/reviews/:isbn', isbn, kakaoId],
     queryFn: () => getReview(isbn, kakaoId!, 1),
   });
-
-  const openCommentModal = useCallback(
-    () => setIsShowCommentModal(() => true),
-    [],
-  );
-  const closeCommentModal = useCallback(
-    () => setIsShowCommentModal(() => false),
-    [],
-  );
 
   const renderItem = useCallback(
     ({item}: {item: ReviewItem}) => {
@@ -50,11 +39,10 @@ const ReviewList = ({isbn}: ReviewListProps) => {
           isLiked={item.isLiked}
           likes={item.likes}
           profileImage={item.profileImage}
-          onPress={openCommentModal}
         />
       );
     },
-    [openCommentModal, kakaoId, isbn],
+    [kakaoId, isbn],
   );
 
   if (reviewQuery.isError) {
@@ -78,34 +66,27 @@ const ReviewList = ({isbn}: ReviewListProps) => {
   }
 
   return (
-    <>
-      <FlatList
-        keyExtractor={(d, index) => `comment_${index}`}
-        data={reviewQuery.data}
-        ItemSeparatorComponent={() => (
-          <Divider type="horizontal" style={{height: 2}} />
-        )}
-        renderItem={renderItem}
-        style={{
-          backgroundColor: colors.WHITE_200, // outer color
-          paddingHorizontal: 20,
-        }}
-        ListEmptyComponent={() => (
-          <View style={{alignItems: 'center'}}>
-            <Spacer height={20} />
-            <Text style={styles.grayText}>댓글이 없습니다.</Text>
-            <Spacer height={20} />
-          </View>
-        )}
-        contentContainerStyle={{}}
-      />
-      <CommentModal
-        myKakaoId={kakaoId!}
-        isbn={isbn}
-        onClose={closeCommentModal}
-        isShow={isShowCommentModal}
-      />
-    </>
+    <FlatList
+      keyExtractor={(d, index) => `comment_${index}`}
+      data={reviewQuery.data}
+      ItemSeparatorComponent={() => (
+        <Divider type="horizontal" style={{height: 2}} />
+      )}
+      renderItem={renderItem}
+      style={{
+        backgroundColor: colors.WHITE_200, // outer color
+        paddingHorizontal: 20,
+      }}
+      ListEmptyComponent={() => (
+        <View style={{alignItems: 'center'}}>
+          <Spacer height={20} />
+          <Text style={styles.grayText}>댓글이 없습니다.</Text>
+          <Spacer height={20} />
+        </View>
+      )}
+      contentContainerStyle={{}}
+      ListFooterComponent={<Spacer height={20} />}
+    />
   );
 };
 

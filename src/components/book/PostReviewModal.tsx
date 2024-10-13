@@ -16,22 +16,22 @@ import {useState} from 'react';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {postReview} from '@src/api/book';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Divider from './common/Divider';
-import Spacer from './common/Spacer';
+import Divider from '../common/Divider';
+import Spacer from '../common/Spacer';
 
-interface CommentModalProps {
+interface PostReviewModalProps {
   isShow: boolean;
   isbn: number;
   myKakaoId: number;
   onClose: () => void;
 }
 
-const CommentModal = ({
+const PostReviewModal = ({
   isShow,
   isbn,
   myKakaoId,
   onClose,
-}: CommentModalProps) => {
+}: PostReviewModalProps) => {
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState('');
 
@@ -82,7 +82,7 @@ const CommentModal = ({
                 <View style={styles.titleBox}>
                   <Text style={styles.title}>평점을 선택해주세요</Text>
                   <TouchableOpacity onPress={onClose}>
-                    <Icon name="close" size={30} />
+                    <Icon name="close" size={30} color={colors.GRAY_300} />
                   </TouchableOpacity>
                 </View>
 
@@ -204,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommentModal;
+export default PostReviewModal;

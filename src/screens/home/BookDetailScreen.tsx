@@ -1,6 +1,7 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getBookByIsbn} from '@src/api/book';
+import PostReviewModal from '@src/components/book/PostReviewModal';
 import CustomButton from '@src/components/CustomButton';
 import CustomText from '@src/components/CustomText';
 import ReviewList from '@src/components/book/ReviewList';
@@ -13,24 +14,24 @@ import {colors} from '@src/constants/colors';
 import useBookFavorite from '@src/hooks/useBookFavorite';
 import {
   BookDetail,
-  HomeTabParamList,
   HomeStackParamList,
+  HomeTabParamList,
   MyStackParamList,
   SearchStackParamList,
 } from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useContext, useState, useCallback} from 'react';
+import {useCallback, useContext, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
+  FlatList,
   Image,
   Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  Text,
   View,
-  FlatList,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<
@@ -41,8 +42,10 @@ type Props = NativeStackScreenProps<
 const BookDetailScreen = ({navigation, route}: Props) => {
   const props = route.params;
   const tabnav = navigation.getParent<NavigationProp<HomeTabParamList>>();
-  const [isShow, setIsShow] = useState(false);
+  const [isShowPlot, setIsShowPlot] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isShowPostReviewModal, setIsShowPostReviewModal] = useState(false);
+
   const {kakaoId} = useContext(MainContext);
 
   const queryClient = useQueryClient();
@@ -67,8 +70,17 @@ const BookDetailScreen = ({navigation, route}: Props) => {
     });
   };
 
-  const toggleShow = () => {
-    setIsShow(pre => !pre);
+  const openCommentModal = useCallback(
+    () => setIsShowPostReviewModal(() => true),
+    [],
+  );
+  const closeCommentModal = useCallback(
+    () => setIsShowPostReviewModal(() => false),
+    [],
+  );
+
+  const toggleShowPlot = () => {
+    setIsShowPlot(pre => !pre);
   };
 
   const onRefresh = async () => {
@@ -186,7 +198,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                     }}>
                     줄거리
                   </CustomText>
-                  <Pressable onPress={toggleShow}>
+                  <Pressable onPress={toggleShowPlot}>
                     <CustomText
                       style={{
                         fontSize: 14,
@@ -194,7 +206,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
                         color: colors.BLACK,
                         fontWeight: 500,
                       }}
-                      numberOfLines={isShow ? undefined : 2}>
+                      numberOfLines={isShowPlot ? undefined : 2}>
                       {detailQuery.data?.description}
                     </CustomText>
                   </Pressable>
@@ -262,6 +274,15 @@ const BookDetailScreen = ({navigation, route}: Props) => {
           </>
         }
       />
+      <Pressable style={styles.postButton} onPress={openCommentModal}>
+        <Text style={styles.postButtonText}>댓글 입력하기</Text>
+      </Pressable>
+      <PostReviewModal
+        isShow={isShowPostReviewModal}
+        myKakaoId={kakaoId!}
+        isbn={props.isbn}
+        onClose={closeCommentModal}
+      />
     </SafeAreaView>
   );
 };
@@ -314,6 +335,18 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 17,
     color: colors.GRAY_300,
+  },
+  postButton: {
+    backgroundColor: colors.THEME,
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    borderRadius: 9999,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+  },
+  postButtonText: {
+    color: colors.WHITE,
   },
 });
 

@@ -1,11 +1,11 @@
 import {colors} from '@src/constants';
-import {Pressable, StyleSheet, View, Text, Image} from 'react-native';
-import {Rating} from 'react-native-ratings';
-import Spacer from '../common/Spacer';
+import useReviewLikes from '@src/hooks/useReviewLikes';
+import {useQueryClient} from '@tanstack/react-query';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
+import {Rating} from 'react-native-ratings';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {ReviewItem, postToggleReviewLikes} from '@src/api/book';
+import Spacer from '../common/Spacer';
 
 const data = [
   {
@@ -19,7 +19,7 @@ const data = [
 ];
 
 interface ReviewProps {
-  onPress: () => void;
+  onPress?: () => void;
   myKakaoId: number;
   isbn: number;
   reviewId: number;
@@ -45,43 +45,7 @@ const Review = ({
 }: ReviewProps) => {
   const queryClient = useQueryClient();
 
-  const mutateToggleLikes = useMutation({
-    onMutate: () => {
-      queryClient.setQueriesData<ReviewItem[]>(
-        {
-          queryKey: ['/reviews/:isbn', isbn, myKakaoId],
-        },
-        prev => {
-          if (!prev) {
-            return prev;
-          }
-
-          const newItems = prev.map(item => {
-            if (item.id !== reviewId) {
-              return item;
-            }
-            const currIsLiked = item.isLiked;
-            const currIsLikes = item.likes;
-            // 현재 좋아요 중이면 좋아요 해제후 1빼기
-            // 현재 좋아요 중아니면 좋아요 후 1더하기
-            return {
-              ...item,
-              isLiked: !currIsLiked,
-              likes: currIsLiked ? currIsLikes - 1 : currIsLikes + 1,
-            };
-          });
-
-          return newItems;
-        },
-      );
-    },
-    mutationFn: postToggleReviewLikes,
-    onError: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['/reviews/:isbn', isbn, myKakaoId],
-      });
-    },
-  });
+  const mutateToggleLikes = useReviewLikes(reviewId, isbn, myKakaoId);
 
   const onSelect = (option: (typeof data)[0]) => {
     switch (option.key) {
@@ -175,15 +139,16 @@ const Review = ({
       <Spacer height={10} />
 
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Pressable style={{marginRight: 7}} onPress={onToggleLikes}>
+        <Pressable style={{marginRight: 5}} onPress={onToggleLikes}>
           <Icon
-            // style={{alignItems: 'center', justifyContent: 'center'}}
             size={14}
             color="#FF0000"
             name={isLiked ? 'heart' : 'heart-o'}
           />
         </Pressable>
-        <Text>{likes.toString()}</Text>
+        <Text style={{color: '#FF0000', fontSize: 14, fontWeight: 'bold'}}>
+          {likes.toString()}
+        </Text>
       </View>
 
       <Spacer height={10} />
