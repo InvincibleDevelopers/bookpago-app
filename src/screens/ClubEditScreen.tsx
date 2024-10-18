@@ -3,11 +3,13 @@ import {
   TenTapStartKit,
   Toolbar,
   useEditorBridge,
+  ImageBridge,
 } from '@10play/tentap-editor';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {postClub} from '@src/api/club';
 import ToggleButton from '@src/components/common/button/ToggleButton';
 import BackHeader from '@src/components/common/header/BackHeader';
+import {CUSTOM_TOOLBAR} from '@src/components/common/Toolbar';
 import {RootStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
@@ -24,11 +26,12 @@ const ClubEditScreen = ({navigation, route}: Props) => {
 
   const queryClient = useQueryClient();
 
+  // https://github.com/10play/10tap-editor/blob/main/example/src/Examples/CustomKeyboardExample.tsx
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
     initialContent: 'Start editing!',
-    bridgeExtensions: TenTapStartKit,
+    bridgeExtensions: [...TenTapStartKit, ImageBridge.configureExtension({})],
   });
 
   const mutation = useMutation({
@@ -96,9 +99,8 @@ const ClubEditScreen = ({navigation, route}: Props) => {
           width: '100%',
           left: 0,
           bottom: 0,
-        }}
-        keyboardVerticalOffset={-300}>
-        <Toolbar editor={editor} />
+        }}>
+        <Toolbar editor={editor} items={CUSTOM_TOOLBAR} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
