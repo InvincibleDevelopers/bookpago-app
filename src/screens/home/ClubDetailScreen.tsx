@@ -108,7 +108,10 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
 
   const isIJoinded = useMemo(() => {
     const data = clubQuery.data;
-    if (!data) return true;
+    if (!data) {
+      return true;
+    }
+
     const list = data.memberList.concat(data.applicantList);
     return list.some(member => member.kakaoId === kakaoId);
   }, [clubQuery.data, kakaoId]);
@@ -128,14 +131,16 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     selectedKakaoId: number,
     option: {key: number; label: string},
   ) => {
-    if (isAdmin === false) return;
-
     if (option.key === 0) {
       // 프로필 페이지로 이동
       tabNav.navigate('My', {
         screen: 'Profile',
         params: {kakaoId: selectedKakaoId},
       });
+      return;
+    }
+
+    if (isAdmin === false) {
       return;
     }
 
@@ -175,6 +180,18 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
   };
 
   const weekdayText = getWeekdayText(props.weekDay);
+
+  const memeberOption = useMemo(() => {
+    return isAdmin
+      ? MEMBER_OPTIONS
+      : MEMBER_OPTIONS.filter(option => option.key === 0);
+  }, [isAdmin]);
+
+  const applicantOption = useMemo(() => {
+    return isAdmin
+      ? APPLICANT_OPTIONS
+      : APPLICANT_OPTIONS.filter(option => option.key === 0);
+  }, [isAdmin]);
 
   if (clubQuery.error) {
     const error = clubQuery.error as unknown as {error: string};
@@ -282,10 +299,10 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
                 overlayStyle={styles.overlay}
                 optionContainerStyle={{backgroundColor: colors.WHITE}}
                 cancelStyle={{backgroundColor: colors.WHITE}}
-                data={MEMBER_OPTIONS}
+                data={memeberOption}
                 onChange={option => onSelectUser(member.kakaoId, option)}
                 cancelText="취소"
-                disabled={isAdmin === false || kickMember.isPending}
+                disabled={kickMember.isPending}
                 accessible>
                 <ClubMemberCard
                   kakaoId={member.kakaoId}
@@ -314,14 +331,10 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
                 overlayStyle={styles.overlay}
                 optionContainerStyle={{backgroundColor: colors.WHITE}}
                 cancelStyle={{backgroundColor: colors.WHITE}}
-                data={APPLICANT_OPTIONS}
+                data={applicantOption}
                 onChange={option => onSelectUser(member.kakaoId, option)}
                 cancelText="취소"
-                disabled={
-                  isAdmin === false ||
-                  acceptMember.isPending ||
-                  rejectMember.isPending
-                }
+                disabled={acceptMember.isPending || rejectMember.isPending}
                 accessible>
                 <ClubMemberCard
                   kakaoId={member.kakaoId}
