@@ -36,6 +36,7 @@ import {
 } from 'react-native';
 import ErrorScreen from '../ErrorScreen';
 import ModalSelector from 'react-native-modal-selector';
+import EditorViewer from '@src/components/common/EditorViewer';
 
 const MEMBER_OPTIONS = [
   {
@@ -273,15 +274,8 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
               <CustomText style={styles.highlightText}>{props.time}</CustomText>
             </CustomText>
           </View>
-          <View style={[styles.row, {alignItems: 'flex-start'}]}>
-            <Image
-              style={[styles.icon, {marginTop: 4}]}
-              source={require('@src/assets/icons/dollar-sign.png')}
-              resizeMode="center"
-            />
-            <CustomText style={[styles.text, {flex: 1}]}>
-              {`주요 활동 ${props.description}`}
-            </CustomText>
+          <View style={[]}>
+            <EditorViewer html={clubQuery.data.description} />
           </View>
         </View>
         <Spacer height={20} />
