@@ -148,7 +148,7 @@ const SearchMainScreen = ({navigation}: Props) => {
           returnKeyType="search"
           multiline={false}
         />
-        <NodataView text="검색 결과가 없습니다." />;
+        <NodataView text="검색 결과가 없습니다." />
       </SafeAreaView>
     );
   }
