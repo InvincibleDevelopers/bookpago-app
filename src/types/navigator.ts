@@ -2,6 +2,7 @@ import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type RootStackParamList = {
   HomeTab?: NavigatorScreenParams<HomeTabParamList>;
+  ClubForm: undefined;
   DM: undefined;
   Chat: undefined;
 };
@@ -34,7 +35,6 @@ export type SearchStackParamList = {
 
 export type SocialStackParamList = {
   SocialMain: undefined;
-  Form: undefined;
   ClubDetail: {socialGrop: SocialClub};
 };
 

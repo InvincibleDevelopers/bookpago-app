@@ -5,7 +5,7 @@ import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {CYCLE, WEEKDAYS, colors} from '@src/constants';
-import {SocialStackParamList} from '@src/types';
+import {RootStackParamList, SocialStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useContext, useState} from 'react';
@@ -20,11 +20,20 @@ import {
   View,
   Alert,
   ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
 import dayjs from 'dayjs';
 import {postClub} from '@src/api/club';
+import {
+  RichText,
+  TenTapStartKit,
+  Toolbar,
+  useEditorBridge,
+} from '@10play/tentap-editor';
 
 interface WeekdayButtonProps {
   children: string;
@@ -56,9 +65,9 @@ const ToggleButton = ({
   );
 };
 
-type Props = NativeStackScreenProps<SocialStackParamList, 'Form'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'ClubForm'>;
 
-const FormScreen = ({navigation}: Props) => {
+const ClubFormScreen = ({navigation}: Props) => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [isShowPostcode, setIsShowPostcode] = useState(false);
@@ -70,6 +79,12 @@ const FormScreen = ({navigation}: Props) => {
   const {kakaoId} = useContext(MainContext);
 
   const queryClient = useQueryClient();
+
+  const editor = useEditorBridge({
+    avoidIosKeyboard: true,
+    initialContent: 'Start editing!',
+    bridgeExtensions: TenTapStartKit,
+  });
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -93,13 +108,15 @@ const FormScreen = ({navigation}: Props) => {
 
       return {...body, clubId: body.id};
     },
+
     onSuccess: async result => {
       if (!result) {
         return;
       }
       navigation.pop();
-      navigation.navigate('ClubDetail', {
-        socialGrop: result,
+      navigation.navigate('HomeTab', {
+        screen: 'Social',
+        params: {screen: 'ClubDetail', params: {socialGrop: result}},
       });
       await queryClient.invalidateQueries({queryKey: ['/social/clubs']});
     },
@@ -131,111 +148,117 @@ const FormScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <DismissKeyboardView style={{flex: 1}}>
-        <BackHeader
-          title="모임 만들기"
-          buttons={[
-            <ToggleButton
-              value={0}
-              isActive
-              onPress={() => mutation.mutate()}
-              isLoading={mutation.isPending}>
-              완료
-            </ToggleButton>,
-          ]}
-        />
-        <ScrollView contentContainerStyle={styles.scrollViewBox}>
-          <View style={styles.titleInputBox}>
-            <TextInput
-              style={styles.titleInput}
-              value={title}
-              onChangeText={onChangeTitle}
-              placeholder="제목을 입력해주세요"
-              placeholderTextColor={colors.GRAY_300}
-            />
-          </View>
-          <Spacer height={10} />
-          <Pressable onPress={showPostcode}>
-            <View style={styles.locationInputBox}>
-              <Image
-                source={require('@src/assets/icons/position.png')}
-                style={styles.icon}
-              />
-              <Text
-                style={[
-                  styles.locationInputText,
-                  location && styles.locationInputTextActive,
-                ]}>
-                {location ? location : '장소를 입력해주세요'}
-              </Text>
-            </View>
-          </Pressable>
-          <Spacer height={10} />
-          <Pressable onPress={showDatePicker}>
-            <View style={styles.locationInputBox}>
-              <Image
-                source={require('@src/assets/icons/clock.png')}
-                style={styles.icon}
-              />
-              <Text
-                style={[
-                  styles.locationInputText,
-                  location && styles.locationInputTextActive,
-                ]}>
-                {dayjs(date).format('HH:mm')}
-              </Text>
-            </View>
-          </Pressable>
-          <Spacer height={20} />
-          <View style={styles.weekdayBox}>
-            <Text style={{color: colors.BLACK}}>모임 요일을 선택해 주세요</Text>
-            <Spacer height={10} />
-            <View style={styles.weekdayButtonBox}>
-              {WEEKDAYS.map((day, index) => (
-                <ToggleButton
-                  isActive={weekdays.includes(index)}
-                  key={index}
-                  value={index}
-                  onPress={seleteWeekdays}>
-                  {day}
-                </ToggleButton>
-              ))}
-            </View>
-            <Spacer height={45} />
-            <Text style={{color: colors.BLACK}}>모임 주기을 선택해 주세요</Text>
-            <Spacer height={20} />
-            <View style={styles.weekdayButtonBox}>
-              {CYCLE.map((c, index) => (
-                <ToggleButton
-                  isActive={index === repeatCycle}
-                  key={index}
-                  value={index}
-                  onPress={seleteRepeatCycle}>
-                  {c}
-                </ToggleButton>
-              ))}
-            </View>
-          </View>
-          <Spacer height={20} />
-          <View style={styles.descBox}>
+      <BackHeader
+        title="모임 만들기"
+        buttons={[
+          <ToggleButton
+            value={0}
+            isActive
+            onPress={() => mutation.mutate()}
+            isLoading={mutation.isPending}>
+            완료
+          </ToggleButton>,
+        ]}
+        imageProps={{
+          onPress: () => navigation.goBack(),
+        }}
+      />
+      <ScrollView contentContainerStyle={styles.scrollViewBox}>
+        <View style={styles.titleInputBox}>
+          <TextInput
+            style={styles.titleInput}
+            value={title}
+            onChangeText={onChangeTitle}
+            placeholder="제목을 입력해주세요"
+            placeholderTextColor={colors.GRAY_300}
+          />
+        </View>
+        <Spacer height={10} />
+        <Pressable onPress={showPostcode}>
+          <View style={styles.locationInputBox}>
             <Image
-              source={require('@src/assets/icons/dollar-sign.png')}
+              source={require('@src/assets/icons/position.png')}
               style={styles.icon}
             />
-            <View>
-              <TextInput
-                value={desc}
-                onChangeText={setDesc}
-                placeholder="주요활동 설명을 입력해 주세요"
-                placeholderTextColor={colors.GRAY_300}
-                style={{color: colors.GRAY_400}}
-                multiline
-              />
-            </View>
+            <Text
+              style={[
+                styles.locationInputText,
+                location && styles.locationInputTextActive,
+              ]}>
+              {location ? location : '장소를 입력해주세요'}
+            </Text>
           </View>
+        </Pressable>
+        <Spacer height={10} />
+        <Pressable onPress={showDatePicker}>
+          <View style={styles.locationInputBox}>
+            <Image
+              source={require('@src/assets/icons/clock.png')}
+              style={styles.icon}
+            />
+            <Text
+              style={[
+                styles.locationInputText,
+                location && styles.locationInputTextActive,
+              ]}>
+              {dayjs(date).format('HH:mm')}
+            </Text>
+          </View>
+        </Pressable>
+        <Spacer height={20} />
+        <View style={styles.weekdayBox}>
+          <Text style={{color: colors.BLACK}}>모임 요일을 선택해 주세요</Text>
+          <Spacer height={10} />
+          <View style={styles.weekdayButtonBox}>
+            {WEEKDAYS.map((day, index) => (
+              <ToggleButton
+                isActive={weekdays.includes(index)}
+                key={index}
+                value={index}
+                onPress={seleteWeekdays}>
+                {day}
+              </ToggleButton>
+            ))}
+          </View>
+          <Spacer height={45} />
+          <Text style={{color: colors.BLACK}}>모임 주기을 선택해 주세요</Text>
           <Spacer height={20} />
-        </ScrollView>
-      </DismissKeyboardView>
+          <View style={styles.weekdayButtonBox}>
+            {CYCLE.map((c, index) => (
+              <ToggleButton
+                isActive={index === repeatCycle}
+                key={index}
+                value={index}
+                onPress={seleteRepeatCycle}>
+                {c}
+              </ToggleButton>
+            ))}
+          </View>
+        </View>
+        <Spacer height={20} />
+        <View style={styles.descBox}>
+          <Image
+            source={require('@src/assets/icons/dollar-sign.png')}
+            style={styles.icon}
+          />
+          <View style={{borderWidth: 2, flex: 1}}>
+            <RichText editor={editor} />
+          </View>
+        </View>
+        <Spacer height={20} />
+      </ScrollView>
+
+      <KeyboardAvoidingView
+        style={{
+          position: 'absolute',
+          width: Dimensions.get('screen').width,
+          left: 0,
+          bottom: 0,
+          borderWidth: 2,
+        }}
+        keyboardVerticalOffset={-300}>
+        <Toolbar editor={editor} />
+      </KeyboardAvoidingView>
       <PostcodeModal
         isShow={isShowPostcode}
         onClose={closePostcode}
@@ -325,4 +348,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormScreen;
+export default ClubFormScreen;

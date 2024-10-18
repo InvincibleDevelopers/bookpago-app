@@ -1,9 +1,8 @@
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeTabParamList, SocialStackParamList} from '@src/types';
-import SocialMainScreen from '@src/screens/home/social/SocialMainScreen';
-import FormScreen from '@src/screens/home/social/FormScreen';
 import ClubDetailScreen from '@src/screens/home/ClubDetailScreen';
+import SocialMainScreen from '@src/screens/home/social/SocialMainScreen';
+import {HomeTabParamList, SocialStackParamList} from '@src/types';
 
 type Props = BottomTabScreenProps<HomeTabParamList, 'Social'>;
 
@@ -16,13 +15,6 @@ const SocialNavigator = ({navigation}: Props) => {
         name="SocialMain"
         options={{headerShown: false}}
         component={SocialMainScreen}
-      />
-      <Stack.Screen
-        name="Form"
-        options={{
-          headerShown: false,
-        }}
-        component={FormScreen}
       />
       <Stack.Screen
         name="ClubDetail"
