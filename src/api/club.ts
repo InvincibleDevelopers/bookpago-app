@@ -41,6 +41,7 @@ export type PostClubBody = {
   location: string;
   clubName: string;
   weekDay: number[];
+  repeatCycle: number;
   description: string;
   time: string;
 };

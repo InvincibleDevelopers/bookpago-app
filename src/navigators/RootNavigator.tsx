@@ -11,6 +11,7 @@ import AuthNavigator from './AuthNavigator';
 import ChatScreen from '@src/screens/ChatScreen';
 import DMScreen from '@src/screens/DMScreen';
 import ClubFormScreen from '@src/screens/ClubFormScreen';
+import ClubEditScreen from '@src/screens/ClubEditScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -35,6 +36,7 @@ const RootNavigator = () => {
       }}>
       <Stack.Screen name="HomeTab" component={HomeTabNavigator} />
       <Stack.Screen name="ClubForm" component={ClubFormScreen} />
+      <Stack.Screen name="ClubEdit" component={ClubEditScreen} />
       <Stack.Screen name="DM" component={DMScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
     </Stack.Navigator>
