@@ -1,8 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {getAuthenticated} from '@src/api/auth';
-import fetcher from '@src/api/axios';
-import CustomText from '@src/components/CustomText';
-import InputField from '@src/components/InputField';
 import Spacer from '@src/components/common/Spacer';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {colors} from '@src/constants/colors';
@@ -11,12 +8,15 @@ import {MainContext} from '@src/utils/Context';
 import {useContext, useState} from 'react';
 import {
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 
@@ -50,30 +50,35 @@ const TestLoginScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <BackHeader imageProps={{onPress: navigation.goBack}} />
-      <Spacer height={40} />
-      <KeyboardAvoidingView style={styles.keybordeAvoidingView}>
-        <View style={styles.topBox}>
-          <Text style={[styles.text, {textAlign: 'center'}]}>
-            카카오 아이디
-          </Text>
+      <Pressable
+        accessible={false}
+        onPress={Keyboard.dismiss}
+        style={{flex: 1}}>
+        <BackHeader imageProps={{onPress: navigation.goBack}} />
+        <Spacer height={40} />
+        <KeyboardAvoidingView style={styles.keybordeAvoidingView}>
+          <View style={styles.topBox}>
+            <Text style={[styles.text, {textAlign: 'center'}]}>
+              카카오 아이디
+            </Text>
+            <Spacer height={20} />
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              onChangeText={onChangeKakaoId}
+              multiline={false}
+              placeholder="카카오 아이디를 입력해주세요"
+              placeholderTextColor={colors.GRAY_400}
+            />
+          </View>
+          <TouchableOpacity onPress={testLogin} style={styles.loginButton}>
+            <Text style={styles.loginButtonText} disabled={isLoading}>
+              로그인
+            </Text>
+          </TouchableOpacity>
           <Spacer height={20} />
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            onChangeText={onChangeKakaoId}
-            multiline={false}
-            placeholder="카카오 아이디를 입력해주세요"
-            placeholderTextColor={colors.GRAY_400}
-          />
-        </View>
-        <TouchableOpacity onPress={testLogin} style={styles.loginButton}>
-          <Text style={styles.loginButtonText} disabled={isLoading}>
-            로그인
-          </Text>
-        </TouchableOpacity>
-        <Spacer height={20} />
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Pressable>
     </SafeAreaView>
   );
 };

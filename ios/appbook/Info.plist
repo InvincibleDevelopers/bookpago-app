@@ -2,24 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	
-	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
-  <key>NSCameraUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to use your camera</string>
-
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -45,14 +27,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao68e9cdf1bb299f964372f53f91c7d7dc</string>
+				<string>kakao99326480c84f0c90de4390eb378e7ca8</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>KAKAO_APP_KEY</key>
-	<string>68e9cdf1bb299f964372f53f91c7d7dc</string>
+	<string>99326480c84f0c90de4390eb378e7ca8</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
@@ -63,27 +45,33 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>52.79.225.186</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>arm64</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<key>NSMotionUsageDescription</key>
+	<string>위치 확인을 위해서 위치 접근 권한 동의가 필요합니다. 동의하면, 현재 위치의 장소를 등록하는데 사용됩니다. 설정에서 이를 변경할 수 있습니다. 위치는 서버에 전송되지 않습니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>게시글 등록시 사진 선택을 위해 라이브러리 접근 권한이 필요합니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -103,5 +91,19 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
