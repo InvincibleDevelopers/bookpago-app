@@ -10,7 +10,7 @@ import {CLUB_PAGE_SIZE, colors} from '@src/constants';
 import ErrorScreen from '@src/screens/ErrorScreen';
 import {HomeTabParamList, SocialStackParamList} from '@src/types';
 import {useInfiniteQuery} from '@tanstack/react-query';
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -20,6 +20,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import GeoLocation from '@react-native-community/geolocation';
 
 type Props = NativeStackScreenProps<SocialStackParamList, 'SocialMain'>;
 
@@ -38,6 +39,16 @@ const SocialMainScreen = ({navigation}: Props) => {
         : undefined;
     },
   });
+
+  useEffect(() => {
+    GeoLocation.getCurrentPosition(
+      info => {
+        console.log(info.coords);
+      },
+      () => {},
+      {enableHighAccuracy: true},
+    );
+  }, []);
 
   const renderItem = useCallback(({item}: {item: SocialClub}) => {
     return (
