@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "android:bundle": "react-native bundle --platform android --dev false --entry-file index.js --assets-dest android/app/src/main/res/ --bundle-output android/app/src/main/assets/index.android.bundle",
     "ios:bundle": "react-native bundle --platform ios --dev false --entry-file index.js --assets-dest ./ios --bundle-output ios/main.jsbundle ",
-    "start": "react-native start --experimental-debugger",
+    "start": "react-native start",
     "test": "jest",
     "type-check": "tsc",
     "apk:android": "yarn install --frozen-lockfile && cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a && cd .."
