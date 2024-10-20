@@ -113,7 +113,10 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
     }
 
     const list = data.memberList.concat(data.applicantList);
-    return list.some(member => member.kakaoId === kakaoId);
+    return list.some(
+      // BUG: number끼리 비교시에 true만 되는 버그
+      member => member.kakaoId.toString() === kakaoId?.toString(),
+    );
   }, [clubQuery.data, kakaoId]);
 
   const accessClub = () => {
