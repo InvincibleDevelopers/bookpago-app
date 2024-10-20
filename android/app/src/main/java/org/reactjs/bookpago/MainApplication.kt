@@ -1,4 +1,4 @@
-package com.app.book
+package org.reactjs.bookpago
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "appbook.app"
-               BlueprintName = "appbook"
-               ReferencedContainer = "container:appbook.xcodeproj">
+               BuildableName = "bookpago.app"
+               BlueprintName = "bookpago"
+               ReferencedContainer = "container:bookpago.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "appbookTests.xctest"
-               BlueprintName = "appbookTests"
-               ReferencedContainer = "container:appbook.xcodeproj">
+               BuildableName = "bookpagoTests.xctest"
+               BlueprintName = "bookpagoTests"
+               ReferencedContainer = "container:bookpago.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "appbook.app"
-            BlueprintName = "appbook"
-            ReferencedContainer = "container:appbook.xcodeproj">
+            BuildableName = "bookpago.app"
+            BlueprintName = "bookpago"
+            ReferencedContainer = "container:bookpago.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "appbook.app"
-            BlueprintName = "appbook"
-            ReferencedContainer = "container:appbook.xcodeproj">
+            BuildableName = "bookpago.app"
+            BlueprintName = "bookpago"
+            ReferencedContainer = "container:bookpago.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

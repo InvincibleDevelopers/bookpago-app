@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>appbook</string>
+	<string>북파고</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,14 +27,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao99326480c84f0c90de4390eb378e7ca8</string>
+				<string>kakao68e9cdf1bb299f964372f53f91c7d7dc</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>KAKAO_APP_KEY</key>
-	<string>99326480c84f0c90de4390eb378e7ca8</string>
+	<string>68e9cdf1bb299f964372f53f91c7d7dc</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>

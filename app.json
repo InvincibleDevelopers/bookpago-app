@@ -1,11 +1,4 @@
 {
-  "name": "appbook",
-  "displayName": "appbook",
-  "expo": {
-    "extra": {
-      "eas": {
-        "projectId": "cf5182f7-1932-4d5e-af57-38a1fee56f28"
-      }
-    }
-  }
+  "name": "bookpago",
+  "displayName": "북파고"
 }
