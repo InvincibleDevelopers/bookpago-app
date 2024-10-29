@@ -3,7 +3,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import PostcodeModal from '@src/components/PostcodeModal';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
-import ToggleButton from '@src/components/common/button/ToggleButton';
+import ChipButton from '@src/components/common/Chip';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {CYCLE, WEEKDAYS, colors} from '@src/constants';
 import {RootStackParamList} from '@src/types';
@@ -70,37 +70,38 @@ const ClubFormScreen = ({navigation}: Props) => {
       clubName: title,
       weekdays,
       repeatCycle: repeatCycle,
-      time: date,
+      time: dayjs(date).format('HH:mm'),
     });
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <DismissKeyboardView style={{flex: 1}}>
         <BackHeader
           title="모임 만들기"
           buttons={[
-            <ToggleButton value={0} isActive onPress={submit}>
+            <ChipButton value={0} isActive onPress={submit}>
               다음
-            </ToggleButton>,
+            </ChipButton>,
           ]}
           imageProps={{
             onPress: () => navigation.goBack(),
           }}
         />
-        <Spacer height={50} />
         <ScrollView contentContainerStyle={styles.scrollViewBox}>
-          <View style={styles.titleInputBox}>
+          <Spacer height={30} />
+          <Text style={{color: colors.BLACK}}>모임</Text>
+          <View style={styles.underLineInputBox}>
             <TextInput
-              style={styles.titleInput}
               value={title}
               onChangeText={onChangeTitle}
-              placeholder="제목을 입력해주세요"
+              placeholder="모임을 입력해주세요"
               placeholderTextColor={colors.GRAY_300}
             />
           </View>
-          <Spacer height={10} />
-          <Pressable onPress={showPostcode}>
+          <Spacer height={30} />
+          <Text style={{color: colors.BLACK}}>장소</Text>
+          <Pressable onPress={showPostcode} style={styles.underLineInputBox}>
             <View style={styles.locationInputBox}>
               <Image
                 source={require('@src/assets/icons/position.png')}
@@ -115,8 +116,9 @@ const ClubFormScreen = ({navigation}: Props) => {
               </Text>
             </View>
           </Pressable>
-          <Spacer height={10} />
-          <Pressable onPress={showDatePicker}>
+          <Spacer height={30} />
+          <Text style={{color: colors.BLACK}}>시간</Text>
+          <Pressable onPress={showDatePicker} style={styles.underLineInputBox}>
             <View style={styles.locationInputBox}>
               <Image
                 source={require('@src/assets/icons/clock.png')}
@@ -131,37 +133,37 @@ const ClubFormScreen = ({navigation}: Props) => {
               </Text>
             </View>
           </Pressable>
-          <Spacer height={20} />
+          <Spacer height={45} />
           <View style={styles.weekdayBox}>
             <Text style={{color: colors.BLACK}}>모임 요일을 선택해 주세요</Text>
             <Spacer height={10} />
             <View style={styles.weekdayButtonBox}>
               {WEEKDAYS.map((day, index) => (
-                <ToggleButton
+                <ChipButton
                   isActive={weekdays.includes(index)}
                   key={index}
                   value={index}
                   onPress={seleteWeekdays}>
                   {day}
-                </ToggleButton>
+                </ChipButton>
               ))}
             </View>
             <Spacer height={45} />
             <Text style={{color: colors.BLACK}}>모임 주기을 선택해 주세요</Text>
-            <Spacer height={20} />
+            <Spacer height={10} />
             <View style={styles.weekdayButtonBox}>
               {CYCLE.map((c, index) => (
-                <ToggleButton
+                <ChipButton
                   isActive={index === repeatCycle}
                   key={index}
                   value={index}
                   onPress={seleteRepeatCycle}>
                   {c}
-                </ToggleButton>
+                </ChipButton>
               ))}
             </View>
           </View>
-          <Spacer height={20} />
+          <Spacer height={30} />
         </ScrollView>
       </DismissKeyboardView>
       <PostcodeModal
@@ -175,8 +177,8 @@ const ClubFormScreen = ({navigation}: Props) => {
         open={isShowDatePicker}
         date={date}
         mode="time"
-        onConfirm={date => {
-          setDate(date);
+        onConfirm={d => {
+          setDate(d);
           closeDatePicker();
         }}
         onCancel={closeDatePicker}
@@ -186,21 +188,22 @@ const ClubFormScreen = ({navigation}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+  },
   scrollViewBox: {
     padding: 10,
   },
-  titleInputBox: {},
-  titleInput: {
+  underLineInputBox: {
     borderBottomWidth: 1,
     borderBottomColor: colors.GRAY_300,
     color: colors.BLACK,
   },
   locationInputBox: {
     flexDirection: 'row',
-    backgroundColor: colors.WHITE,
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderRadius: 10,
   },
   locationInputText: {
     color: colors.GRAY_300,
@@ -210,11 +213,6 @@ const styles = StyleSheet.create({
   },
   weekdayBox: {
     alignItems: 'center',
-    backgroundColor: colors.WHITE,
-    paddingVertical: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.GRAY,
   },
   weekdayButtonBox: {
     flexDirection: 'row',

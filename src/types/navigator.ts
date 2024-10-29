@@ -9,7 +9,7 @@ export type RootStackParamList = {
     clubName: string;
     weekdays: number[];
     repeatCycle: number;
-    time: Date;
+    time: string;
   };
   DM: undefined;
   Chat: undefined;

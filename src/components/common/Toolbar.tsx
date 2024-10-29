@@ -55,15 +55,15 @@ export const CUSTOM_TOOLBAR: ToolbarItem[] = [
     disabled: ({editorState}) => !editorState.canToggleTaskList,
     image: () => Images.checkList,
   },
-  {
-    onPress:
-      ({editor, editorState}) =>
-      () =>
-        editor.setImage(''),
-    active: () => false,
-    disabled: () => false,
-    image: () => require('@src/assets/icons/image.png'),
-  },
+  // {
+  //   onPress:
+  //     ({editor, editorState}) =>
+  //     () =>
+  //       editor.setImage(''),
+  //   active: () => false,
+  //   disabled: () => false,
+  //   image: () => require('@src/assets/icons/image.png'),
+  // },
   {
     onPress:
       ({setToolbarContext}) =>

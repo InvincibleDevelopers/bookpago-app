@@ -1,7 +1,7 @@
 import {colors} from '@src/constants';
 import {Pressable, StyleSheet, Text} from 'react-native';
 
-interface ToggleButtonProps {
+interface ChipProps {
   children: string;
   isActive: boolean;
   onPress: (value: number) => void;
@@ -9,13 +9,13 @@ interface ToggleButtonProps {
   isLoading?: boolean;
 }
 
-const ToggleButton = ({
+const ChipButton = ({
   children,
   isActive,
   onPress,
   value,
   isLoading = false,
-}: ToggleButtonProps) => {
+}: ChipProps) => {
   return (
     <Pressable
       style={[styles.button, isActive && styles.buttonActive]}
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ToggleButton;
+export default ChipButton;

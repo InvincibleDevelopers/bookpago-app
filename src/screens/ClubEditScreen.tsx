@@ -3,19 +3,24 @@ import {
   TenTapStartKit,
   Toolbar,
   useEditorBridge,
-  ImageBridge,
+  PlaceholderBridge,
 } from '@10play/tentap-editor';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {postClub} from '@src/api/club';
-import ToggleButton from '@src/components/common/button/ToggleButton';
+import Chip from '@src/components/common/Chip';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {CUSTOM_TOOLBAR} from '@src/components/common/Toolbar';
+import {colors} from '@src/constants';
 import {RootStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import {useContext} from 'react';
-import {KeyboardAvoidingView, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubEdit'>;
 
@@ -30,8 +35,14 @@ const ClubEditScreen = ({navigation, route}: Props) => {
   const editor = useEditorBridge({
     autofocus: true,
     avoidIosKeyboard: true,
-    initialContent: 'Start editing!',
-    bridgeExtensions: [...TenTapStartKit, ImageBridge.configureExtension({})],
+    initialContent: '',
+    bridgeExtensions: [
+      ...TenTapStartKit,
+      // ImageBridge.configureExtension({}),
+      PlaceholderBridge.configureExtension({
+        placeholder: '내용을 입력해주세요.',
+      }),
+    ],
   });
 
   const mutation = useMutation({
@@ -40,7 +51,7 @@ const ClubEditScreen = ({navigation, route}: Props) => {
       location: string;
       weekdays: number[];
       repeatCycle: number;
-      time: Date;
+      time: string;
     }) => {
       if (mutation.isPending || !kakaoId) {
         return;
@@ -54,7 +65,6 @@ const ClubEditScreen = ({navigation, route}: Props) => {
         clubName: arg.title,
         weekDay: arg.weekdays,
         description: html,
-        time: dayjs(arg.time).format('HH:mm'),
       });
 
       return {...body, clubId: body.id};
@@ -76,36 +86,49 @@ const ClubEditScreen = ({navigation, route}: Props) => {
   });
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <BackHeader
-        title="모임 만들기"
+        title="활동내역"
         buttons={[
-          <ToggleButton
+          <Chip
             value={0}
             isActive
             onPress={() => mutation.mutate(props)}
             isLoading={mutation.isPending}>
             완료
-          </ToggleButton>,
+          </Chip>,
         ]}
         imageProps={{
           onPress: () => navigation.goBack(),
         }}
       />
-      <RichText editor={editor} />
-      <KeyboardAvoidingView
-        style={{
-          position: 'absolute',
-          width: '100%',
-          left: 0,
-          bottom: 0,
-        }}>
+      <View style={styles.richTextBox}>
+        <RichText editor={editor} />
+      </View>
+      <KeyboardAvoidingView style={styles.toolbarBox}>
         <Toolbar editor={editor} items={CUSTOM_TOOLBAR} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+  },
+  richTextBox: {
+    padding: 10,
+    flex: 1,
+    borderColor: colors.GRAY_300,
+    borderWidth: 1,
+  },
+  toolbarBox: {
+    position: 'absolute',
+    width: '100%',
+    left: 0,
+    bottom: 0,
+  },
+});
 
 export default ClubEditScreen;
