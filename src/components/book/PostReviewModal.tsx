@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     color: colors.BLACK,
   },
   input: {
+    flex: 1,
     color: 'black',
     backgroundColor: colors.GRAY,
     borderRadius: 10,

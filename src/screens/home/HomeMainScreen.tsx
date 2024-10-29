@@ -14,13 +14,7 @@ import {HomeTabParamList, HomeStackParamList} from '@src/types';
 import {MainContext} from '@src/utils/Context';
 import {useQuery} from '@tanstack/react-query';
 import {useContext} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'HomeMain'>;
 

@@ -28,7 +28,6 @@ import {
   FlatList,
   Image,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -96,7 +95,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
 
   if (detailQuery.error) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Header
           buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
         />
@@ -115,25 +114,25 @@ const BookDetailScreen = ({navigation, route}: Props) => {
             onPress={() => navigation.goBack()}
           />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (detailQuery.isPending) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Header
           buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
         />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={[]}
         renderItem={null}
@@ -283,7 +282,7 @@ const BookDetailScreen = ({navigation, route}: Props) => {
         isbn={props.isbn}
         onClose={closeCommentModal}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

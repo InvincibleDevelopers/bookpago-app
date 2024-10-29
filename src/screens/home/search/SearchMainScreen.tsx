@@ -17,6 +17,7 @@ import {
   Keyboard,
   SafeAreaView,
   StyleSheet,
+  View,
 } from 'react-native';
 
 type Props = NativeStackScreenProps<SearchStackParamList, 'SearchMain'>;
@@ -101,7 +102,7 @@ const SearchMainScreen = ({navigation}: Props) => {
   if (nonce === 0) {
     // 검색하기 전
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <SearchHeader
           value={inputValue}
           onChangeText={onChangeText}
@@ -111,14 +112,14 @@ const SearchMainScreen = ({navigation}: Props) => {
           returnKeyType="search"
           multiline={false}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (searchQuery.isPending) {
     // 검색중
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <SearchHeader
           aiButtonType="book"
           value={inputValue}
@@ -130,14 +131,14 @@ const SearchMainScreen = ({navigation}: Props) => {
           multiline={false}
         />
         <LoadingView />
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (nonce > 0 && bookItemList.length === 0) {
     // 검색 결과가 없을때
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <SearchHeader
           aiButtonType="book"
           value={inputValue}
@@ -149,12 +150,12 @@ const SearchMainScreen = ({navigation}: Props) => {
           multiline={false}
         />
         <NodataView text="검색 결과가 없습니다." />
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <FlatList
         ListHeaderComponent={
           <>
@@ -184,7 +185,7 @@ const SearchMainScreen = ({navigation}: Props) => {
         overScrollMode="never" // Android
         bounces={false} // iOS
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
