@@ -90,9 +90,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.GRAY,
     shadowColor: '#000000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.05,
+    elevation: 0.5,
   },
   longContainer: {
     width: ROW2_WIDTH,

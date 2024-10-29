@@ -6,15 +6,17 @@ import SocialNavigator from '@src/navigators/home/SocialNavigator';
 import {HomeTabParamList} from '@src/types';
 import {StyleSheet} from 'react-native';
 import HomeStackNavigator from './HomeStackNavigator';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeTabNavigator = () => {
+  const inset = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarStyle: styles.container,
+        tabBarStyle: [styles.container, {height: inset.bottom + 65}],
         headerShown: false,
       }}>
       <Tab.Screen
@@ -65,9 +67,7 @@ export default HomeTabNavigator;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-    height: 80,
   },
 });

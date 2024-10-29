@@ -55,7 +55,7 @@ const HomeMainScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header
         buttons={[<MypageButton onPress={() => tabnav.navigate('My')} />]}
       />
@@ -204,7 +204,7 @@ const HomeMainScreen = ({navigation, route}: Props) => {
 
         <Spacer height={20} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
