@@ -3,13 +3,14 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import PostcodeModal from '@src/components/PostcodeModal';
 import DismissKeyboardView from '@src/components/common/DismissKeyboardView';
 import Spacer from '@src/components/common/Spacer';
+import ToggleButton from '@src/components/common/button/ToggleButton';
 import BackHeader from '@src/components/common/header/BackHeader';
 import {CYCLE, WEEKDAYS, colors} from '@src/constants';
-import {SocialStackParamList} from '@src/types';
-import {MainContext} from '@src/utils/Context';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {useContext, useState} from 'react';
+import {RootStackParamList} from '@src/types';
+import dayjs from 'dayjs';
+import {useState} from 'react';
 import {
+  Alert,
   Dimensions,
   Image,
   Pressable,
@@ -17,93 +18,21 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
-  Alert,
-  ActivityIndicator,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
-import dayjs from 'dayjs';
-import {postClub} from '@src/api/club';
 
-interface WeekdayButtonProps {
-  children: string;
-  isActive: boolean;
-  onPress: (value: number) => void;
-  value: number;
-  isLoading?: boolean;
-}
+type Props = NativeStackScreenProps<RootStackParamList, 'ClubForm'>;
 
-const ToggleButton = ({
-  children,
-  isActive,
-  onPress,
-  value,
-  isLoading = false,
-}: WeekdayButtonProps) => {
-  return (
-    <Pressable
-      style={[styles.button, isActive && styles.buttonActive]}
-      onPress={() => onPress(value)}>
-      {isLoading ? (
-        <ActivityIndicator size="small" color={colors.WHITE} />
-      ) : (
-        <Text style={[styles.buttonText, isActive && styles.buttonTextActive]}>
-          {children}
-        </Text>
-      )}
-    </Pressable>
-  );
-};
-
-type Props = NativeStackScreenProps<SocialStackParamList, 'Form'>;
-
-const FormScreen = ({navigation}: Props) => {
+const ClubFormScreen = ({navigation}: Props) => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [isShowPostcode, setIsShowPostcode] = useState(false);
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
   const [weekdays, setWeekdays] = useState<number[]>([]);
   const [repeatCycle, setRepeatCycle] = useState(0);
-  const [desc, setDesc] = useState('');
   const [date, setDate] = useState(new Date());
-  const {kakaoId} = useContext(MainContext);
-
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async () => {
-      if (mutation.isPending || !kakaoId) {
-        return;
-      }
-
-      if (!title || !location || !weekdays.length || !desc) {
-        Alert.alert('입력되지 않은 항목이 있습니다.');
-        return;
-      }
-
-      const body = await postClub({
-        kakaoId,
-        location,
-        clubName: title,
-        weekDay: weekdays,
-        description: desc,
-        time: dayjs(date).format('HH:mm'),
-      });
-
-      return {...body, clubId: body.id};
-    },
-    onSuccess: async result => {
-      if (!result) {
-        return;
-      }
-      navigation.pop();
-      navigation.navigate('ClubDetail', {
-        socialGrop: result,
-      });
-      await queryClient.invalidateQueries({queryKey: ['/social/clubs']});
-    },
-  });
 
   const showPostcode = () => setIsShowPostcode(() => true);
   const closePostcode = () => setIsShowPostcode(() => false);
@@ -129,21 +58,37 @@ const FormScreen = ({navigation}: Props) => {
     setRepeatCycle(() => value);
   };
 
+  const submit = () => {
+    if (!title || !location || !weekdays.length) {
+      Alert.alert('입력되지 않은 항목이 있습니다.');
+      return;
+    }
+
+    navigation.navigate('ClubEdit', {
+      title,
+      location,
+      clubName: title,
+      weekdays,
+      repeatCycle: repeatCycle,
+      time: date,
+    });
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <DismissKeyboardView style={{flex: 1}}>
         <BackHeader
           title="모임 만들기"
           buttons={[
-            <ToggleButton
-              value={0}
-              isActive
-              onPress={() => mutation.mutate()}
-              isLoading={mutation.isPending}>
-              완료
+            <ToggleButton value={0} isActive onPress={submit}>
+              다음
             </ToggleButton>,
           ]}
+          imageProps={{
+            onPress: () => navigation.goBack(),
+          }}
         />
+        <Spacer height={50} />
         <ScrollView contentContainerStyle={styles.scrollViewBox}>
           <View style={styles.titleInputBox}>
             <TextInput
@@ -217,23 +162,6 @@ const FormScreen = ({navigation}: Props) => {
             </View>
           </View>
           <Spacer height={20} />
-          <View style={styles.descBox}>
-            <Image
-              source={require('@src/assets/icons/dollar-sign.png')}
-              style={styles.icon}
-            />
-            <View>
-              <TextInput
-                value={desc}
-                onChangeText={setDesc}
-                placeholder="주요활동 설명을 입력해 주세요"
-                placeholderTextColor={colors.GRAY_300}
-                style={{color: colors.GRAY_400}}
-                multiline
-              />
-            </View>
-          </View>
-          <Spacer height={20} />
         </ScrollView>
       </DismissKeyboardView>
       <PostcodeModal
@@ -295,15 +223,6 @@ const styles = StyleSheet.create({
     gap: 7,
     flexWrap: 'wrap',
   },
-  descBox: {
-    backgroundColor: colors.WHITE,
-    padding: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.GRAY,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   icon: {width: 18, height: 18, marginRight: 7},
   button: {
     backgroundColor: colors.WHITE,
@@ -325,4 +244,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormScreen;
+export default ClubFormScreen;

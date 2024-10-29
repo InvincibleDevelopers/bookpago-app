@@ -8,7 +8,11 @@ import ClubCard from '@src/components/common/card/ClubCard';
 import Header from '@src/components/common/header/Header';
 import {CLUB_PAGE_SIZE, colors} from '@src/constants';
 import ErrorScreen from '@src/screens/ErrorScreen';
-import {HomeTabParamList, SocialStackParamList} from '@src/types';
+import {
+  HomeTabParamList,
+  RootStackParamList,
+  SocialStackParamList,
+} from '@src/types';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
@@ -27,6 +31,7 @@ type Props = NativeStackScreenProps<SocialStackParamList, 'SocialMain'>;
 const SocialMainScreen = ({navigation}: Props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
+  const rootNav = tabNav.getParent<NavigationProp<RootStackParamList>>();
 
   const clubQuery = useInfiniteQuery<{content: SocialClub[]}, {error: string}>({
     queryKey: ['/social/clubs', 'infinity'],
@@ -119,7 +124,7 @@ const SocialMainScreen = ({navigation}: Props) => {
       />
       <Pressable
         style={styles.postButton}
-        onPress={() => navigation.navigate('Form')}>
+        onPress={() => rootNav.navigate('ClubForm')}>
         <Text style={styles.postButtonText}>모임 만들기</Text>
       </Pressable>
     </SafeAreaView>
