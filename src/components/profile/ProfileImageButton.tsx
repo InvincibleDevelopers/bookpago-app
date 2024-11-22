@@ -34,10 +34,12 @@ const styles = StyleSheet.create({
     left: 20,
     borderRadius: 9999,
     overflow: 'hidden',
-  },
-  profileImage: {
     width: 100,
     height: 100,
+  },
+  profileImage: {
+    width: '100%',
+    height: '100%',
   },
 });
 

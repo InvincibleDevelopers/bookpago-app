@@ -22,8 +22,6 @@ const ChatList = ({receiverId, senderId}: Props) => {
       createdAt,
     });
 
-    console.log('SEND', createdAt, bodyString);
-    // console.log('socket.client', socket.client);
     socketRef.current?.publish({
       destination: MESSAGE_PUB,
       body: bodyString,

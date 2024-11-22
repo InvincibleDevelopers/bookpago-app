@@ -134,6 +134,6 @@ export const getFollower = async (
       page <= 0 ? 0 : page - 1
     }&size=${FOLLOW_PAGE_SIZE}`,
   );
-  console.log('result', result.data);
+
   return result.data;
 };

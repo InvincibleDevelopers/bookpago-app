@@ -251,7 +251,7 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
               style={[
                 styles.text,
                 {color: colors.THEME},
-              ]}>{`장소: ${props.location}`}</CustomText>
+              ]}>{`장소: ${props.address}`}</CustomText>
           </View>
           <View style={styles.row}>
             <Image

@@ -1,5 +1,4 @@
 import {RichText, TenTapStartKit, useEditorBridge} from '@10play/tentap-editor';
-import {useEffect, useState} from 'react';
 
 interface EditorViewerProps {
   html: string;
@@ -10,6 +9,7 @@ const EditorViewer = ({html}: EditorViewerProps) => {
     initialContent: html,
     bridgeExtensions: TenTapStartKit,
     dynamicHeight: true,
+    editable: false,
   });
 
   return <RichText editor={editor} />;

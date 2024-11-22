@@ -48,7 +48,9 @@ const ClubEditScreen = ({navigation, route}: Props) => {
   const mutation = useMutation({
     mutationFn: async (arg: {
       title: string;
-      location: string;
+      street: string;
+      longitude: number;
+      latitude: number;
       weekdays: number[];
       repeatCycle: number;
       time: string;
@@ -60,11 +62,15 @@ const ClubEditScreen = ({navigation, route}: Props) => {
       const html = await editor.getHTML();
 
       const body = await postClub({
-        ...arg,
         kakaoId,
         clubName: arg.title,
         weekDay: arg.weekdays,
         description: html,
+        address: arg.street,
+        repeatCycle: arg.repeatCycle,
+        time: arg.time,
+        longitude: arg.longitude,
+        latitude: arg.latitude,
       });
 
       return {...body, clubId: body.id};

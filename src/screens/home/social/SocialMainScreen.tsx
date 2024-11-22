@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {getClubs} from '@src/api/club';
+import {getClubs, getClubsWithLocation} from '@src/api/club';
 import ClubListHeader from '@src/components/club/ClubListHeader';
 import Spacer from '@src/components/common/Spacer';
 import MypageButton from '@src/components/common/button/MypageButton';
@@ -17,6 +17,7 @@ import {useInfiniteQuery} from '@tanstack/react-query';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Pressable,
   SafeAreaView,
@@ -32,14 +33,35 @@ const SocialMainScreen = ({navigation}: Props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const tabNav = navigation.getParent<NavigationProp<HomeTabParamList>>();
   const rootNav = tabNav.getParent<NavigationProp<RootStackParamList>>();
+  const [order, setOrder] = useState(1);
+  const [location, setLocation] = useState<{
+    latitude: number | null;
+    longitude: number | null;
+  }>({
+    latitude: null,
+    longitude: null,
+  });
 
   const clubQuery = useInfiniteQuery<{content: SocialClub[]}, {error: string}>({
-    queryKey: ['/social/clubs', 'infinity'],
-    queryFn: ({pageParam}) => getClubs(pageParam as number),
+    queryKey: [
+      '/social/clubs',
+      'infinity',
+      order,
+      location.latitude,
+      location.longitude,
+    ],
+    queryFn: ({pageParam}) =>
+      order === 1
+        ? getClubs(pageParam as number)
+        : getClubsWithLocation(
+            pageParam as number,
+            location.latitude,
+            location.longitude,
+          ),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage, _lastPageParam, _allPageParams) => {
       // 마지막 페이지가 PAGE_SIZE만큼 데이터를 가지고 있으면 다음 페이지를 요청
-      return lastPage.content.length === CLUB_PAGE_SIZE
+      return lastPage.content?.length === CLUB_PAGE_SIZE
         ? allPage.length + 1
         : undefined;
     },
@@ -48,7 +70,10 @@ const SocialMainScreen = ({navigation}: Props) => {
   useEffect(() => {
     GeoLocation.getCurrentPosition(
       info => {
-        console.log(info.coords);
+        setLocation({
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude,
+        });
       },
       () => {},
       {enableHighAccuracy: true},
@@ -80,6 +105,17 @@ const SocialMainScreen = ({navigation}: Props) => {
     setIsRefreshing(() => false);
   };
 
+  const onSelectOrder = (value: number) => {
+    const failedGetLocation =
+      location.latitude === null || location.longitude === null;
+    if (value === 2 && failedGetLocation) {
+      Alert.alert('위치 정보를 가져오지 못했습니다.');
+      return;
+    }
+
+    setOrder(() => value);
+  };
+
   const clubList = useMemo(
     () => clubQuery.data?.pages.map(d => d.content).flat() || [],
     [clubQuery.data],
@@ -95,7 +131,7 @@ const SocialMainScreen = ({navigation}: Props) => {
         <Header
           buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
         />
-        <ClubListHeader />
+        <ClubListHeader order={order} onSelectOrder={onSelectOrder} />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.THEME} />
         </View>
@@ -109,7 +145,9 @@ const SocialMainScreen = ({navigation}: Props) => {
         buttons={[<MypageButton onPress={() => tabNav.navigate('My')} />]}
       />
       <FlatList
-        ListHeaderComponent={() => <ClubListHeader />}
+        ListHeaderComponent={
+          <ClubListHeader order={order} onSelectOrder={onSelectOrder} />
+        }
         ItemSeparatorComponent={() => <Spacer height={10} />}
         ListFooterComponent={() => <Spacer height={20} />}
         renderItem={renderItem}

@@ -1,11 +1,33 @@
 import {CLUB_PAGE_SIZE} from '@src/constants';
 import fetcher from './axios';
+import {Alert} from 'react-native';
 
 /** page는 0부터 시작  */
 export const getClubs = async (page: number) => {
   const response = await fetcher.get<{content: SocialClub[]}>(
     `/social/clubs?page=${page <= 0 ? 0 : page - 1}&size=${CLUB_PAGE_SIZE}`,
   );
+
+  return response.data;
+};
+
+/** page는 0부터 시작  */
+export const getClubsWithLocation = async (
+  page: number,
+  latitude: number | null,
+  longitude: number | null,
+) => {
+  if (latitude === null || longitude === null) {
+    Alert.alert('위치 정보를 가져오지 못했습니다.');
+    return {content: []};
+  }
+
+  const response = await fetcher.get<{content: SocialClub[]}>(
+    `/social/clubs/nearby?latitude=${latitude}&longitude=${longitude}&page=${
+      page <= 0 ? 0 : page - 1
+    }&size=${CLUB_PAGE_SIZE}`,
+  );
+
   return response.data;
 };
 
@@ -20,15 +42,38 @@ export type member = {
   imgUrl?: string;
 };
 
-export const getClubDetail = async ({clubId}: GetClubDetailArg) => {
-  const response = await fetcher.get<
-    {
-      adminId: number;
-      memberList: member[];
-      applicantList: member[];
-    } & SocialClub
-  >(`/social/clubs/${clubId}`);
-  return response.data;
+export const getClubDetail = async ({clubId, kakaoId}: GetClubDetailArg) => {
+  const response = await fetcher.get<{
+    adminId: number;
+    memberList: member[];
+    applicantList: member[];
+    isAdmin: boolean;
+    readingClub: {
+      address: string | null;
+      clubName: string;
+      description: string;
+      id: number;
+      latitude: number;
+      longitude: number;
+      members: number;
+      repeatCycle: number;
+      time: string;
+      weekDay: number[];
+    };
+  }>(`/social/clubs/${clubId}?kakaoId=${kakaoId}`);
+
+  const data: {
+    adminId: number;
+    memberList: member[];
+    applicantList: member[];
+    isAdmin: boolean;
+  } & SocialClub = {
+    ...response.data.readingClub,
+    ...response.data,
+    address: response.data.readingClub.address || '', // 예외처리
+  };
+
+  return data;
 };
 
 export type PostAccessClubArg = {
@@ -38,7 +83,9 @@ export type PostAccessClubArg = {
 
 export type PostClubBody = {
   kakaoId: number;
-  location: string;
+  address: string;
+  longitude: number;
+  latitude: number;
   clubName: string;
   weekDay: number[];
   repeatCycle: number;
@@ -82,7 +129,9 @@ export const postAcceptMember = async ({
   adminKakaoId,
   memberKakaoId,
 }: ClubAdminArg) => {
-  console.log('postAcceptMember', clubId, adminKakaoId, memberKakaoId);
+  console.log('clubId', clubId);
+  console.log('adminKakaoId', adminKakaoId);
+  console.log('memberKakaoId', memberKakaoId);
   const response = await fetcher.post<{success: boolean}>(
     `/social/clubs/${clubId}/applicants`,
     {

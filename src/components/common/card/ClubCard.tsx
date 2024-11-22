@@ -56,7 +56,7 @@ const ClubCard = ({style, data, row = 1, onPress}: ClubCardProps) => {
             source={require('@src/assets/icons/position.png')}
           />
           <CustomText style={[styles.subText]} numberOfLines={1}>
-            {data.location}
+            {data.address}
           </CustomText>
         </View>
         {row === 2 && (

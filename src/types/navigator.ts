@@ -5,7 +5,9 @@ export type RootStackParamList = {
   ClubForm: undefined;
   ClubEdit: {
     title: string;
-    location: string;
+    street: string;
+    longitude: number;
+    latitude: number;
     clubName: string;
     weekdays: number[];
     repeatCycle: number;

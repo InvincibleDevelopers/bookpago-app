@@ -5,18 +5,23 @@ import CustomText from '../CustomText';
 import Spacer from '../common/Spacer';
 import BorderButton from '../common/button/BorderButton';
 
-const ClubListHeader = () => {
+interface ClubListHeaderProps {
+  order: number;
+  onSelectOrder: (value: number) => void;
+}
+
+const ClubListHeader = ({order, onSelectOrder}: ClubListHeaderProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.pickerBox}>
         <Picker
-          selectedValue={0}
-          onValueChange={() => {}}
+          selectedValue={order}
+          onValueChange={onSelectOrder}
           style={styles.picker}
           dropdownIconColor={colors.THEME}>
-          <Picker.Item label="인기순" value={0} />
           <Picker.Item label="최신순" value={1} />
-          <Picker.Item label="가까운 위치" value={2} />
+          <Picker.Item label="위치순" value={2} />
+          {/* <Picker.Item label="인기순" value={0} /> */}
         </Picker>
       </View>
       <Spacer height={10} />

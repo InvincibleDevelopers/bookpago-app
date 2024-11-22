@@ -24,10 +24,19 @@ import {
 import DatePicker from 'react-native-date-picker';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubForm'>;
+type Location = {
+  street: string;
+  latitude: number | null;
+  longitude: number | null;
+};
 
 const ClubFormScreen = ({navigation}: Props) => {
   const [title, setTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState<Location>({
+    street: '',
+    latitude: null,
+    longitude: null,
+  });
   const [isShowPostcode, setIsShowPostcode] = useState(false);
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
   const [weekdays, setWeekdays] = useState<number[]>([]);
@@ -42,7 +51,17 @@ const ClubFormScreen = ({navigation}: Props) => {
   const onChangeTitle = (text: string) => setTitle(text);
 
   const selectLocation = (data: OnCompleteParams) => {
-    setLocation(data.address);
+    //TODO: Daum GeoCoding API를 이용하여 주소를 위도, 경도로 변환
+
+    const ramdomLatitude = Math.random() * 10 + 37;
+    const randomLongitude = Math.random() * 10 + 127;
+
+    setLocation(() => ({
+      street: data.address,
+      latitude: ramdomLatitude,
+      longitude: randomLongitude,
+    }));
+
     setIsShowPostcode(() => false);
   };
 
@@ -59,14 +78,22 @@ const ClubFormScreen = ({navigation}: Props) => {
   };
 
   const submit = () => {
-    if (!title || !location || !weekdays.length) {
+    if (
+      !title ||
+      !location ||
+      !weekdays.length ||
+      !location.latitude ||
+      !location.longitude
+    ) {
       Alert.alert('입력되지 않은 항목이 있습니다.');
       return;
     }
 
     navigation.navigate('ClubEdit', {
       title,
-      location,
+      street: location.street,
+      longitude: location.longitude,
+      latitude: location.latitude,
       clubName: title,
       weekdays,
       repeatCycle: repeatCycle,
@@ -112,7 +139,9 @@ const ClubFormScreen = ({navigation}: Props) => {
                   styles.locationInputText,
                   location && styles.locationInputTextActive,
                 ]}>
-                {location ? location : '장소를 입력해주세요'}
+                {location.street !== ''
+                  ? location.street
+                  : '장소를 입력해주세요'}
               </Text>
             </View>
           </Pressable>
