@@ -96,113 +96,115 @@ const JoinScreen = ({navigation, route}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <DismissKeyboardView style={{flex: 1, padding: 20}}>
-        <View>
-          <Text style={styles.title}>회원님만의</Text>
-          <Text style={styles.title}>
-            <Text style={styles.titleAccent}>계정</Text>을 만들어주세요.
-          </Text>
-          <Spacer height={60} />
-        </View>
-
-        <Text style={styles.label}>닉네임</Text>
-        <Spacer height={12} />
-        <TextInput
-          style={styles.input}
-          value={nickname}
-          onChangeText={setNickname}
-          // onSubmitEditing={() => genderRef.current?.open()}
-          placeholderTextColor={colors.GRAY_300}
-          placeholder="닉네임을 입력해주세요."
-          returnKeyType="next"
-        />
-
-        <Spacer height={24} />
-
-        <Text style={styles.label}>성별</Text>
-        <Spacer height={12} />
-        <ModalSelector
-          ref={genderRef}
-          overlayStyle={{
-            flex: 1,
-            justifyContent: 'flex-end',
-          }}
-          keyExtractor={item => item.key}
-          data={data}
-          accessible
-          onChange={onSelect}
-          labelExtractor={item => item.label}
-          optionContainerStyle={{backgroundColor: colors.WHITE}}
-          cancelStyle={{backgroundColor: colors.WHITE}}
-          cancelText="취소">
-          <View style={[styles.input, {justifyContent: 'center'}]}>
-            <Text
-              style={{color: gender ? styles.input.color : colors.GRAY_300}}>
-              {!gender
-                ? '성별을 선택해주세요.'
-                : gender === 'M'
-                ? '남자'
-                : '여자'}
+      <DismissKeyboardView style={{flex: 1}}>
+        <View style={styles.inner}>
+          <View>
+            <Text style={styles.title}>회원님만의</Text>
+            <Text style={styles.title}>
+              <Text style={styles.titleAccent}>계정</Text>을 만들어주세요.
             </Text>
+            <Spacer height={60} />
           </View>
-        </ModalSelector>
 
-        <Spacer height={24} />
+          <Text style={styles.label}>닉네임</Text>
+          <Spacer height={12} />
+          <TextInput
+            style={styles.input}
+            value={nickname}
+            onChangeText={setNickname}
+            // onSubmitEditing={() => genderRef.current?.open()}
+            placeholderTextColor={colors.GRAY_300}
+            placeholder="닉네임을 입력해주세요."
+            returnKeyType="next"
+          />
 
-        <Text style={styles.label}>나이</Text>
-        <Spacer height={12} />
-        <TextInput
-          ref={ageRef}
-          style={styles.input}
-          keyboardType="number-pad"
-          placeholder="나이를 입력해주세요."
-          placeholderTextColor={colors.GRAY_300}
-          returnKeyType="next"
-          value={age}
-          onChangeText={onChangeAge}
-          onSubmitEditing={() => genreRef.current?.focus()}
-        />
+          <Spacer height={24} />
 
-        <Spacer height={24} />
+          <Text style={styles.label}>성별</Text>
+          <Spacer height={12} />
+          <ModalSelector
+            ref={genderRef}
+            overlayStyle={{
+              flex: 1,
+              justifyContent: 'flex-end',
+            }}
+            keyExtractor={item => item.key}
+            data={data}
+            accessible
+            onChange={onSelect}
+            labelExtractor={item => item.label}
+            optionContainerStyle={{backgroundColor: colors.WHITE}}
+            cancelStyle={{backgroundColor: colors.WHITE}}
+            cancelText="취소">
+            <View style={[styles.input, {justifyContent: 'center'}]}>
+              <Text
+                style={{color: gender ? styles.input.color : colors.GRAY_300}}>
+                {!gender
+                  ? '성별을 선택해주세요.'
+                  : gender === 'M'
+                  ? '남자'
+                  : '여자'}
+              </Text>
+            </View>
+          </ModalSelector>
 
-        <Text style={styles.label}>장르</Text>
-        <Spacer height={12} />
-        <TextInput
-          ref={genreRef}
-          style={styles.input}
-          value={genre}
-          placeholder="선호하는 장르를 입력해주세요."
-          placeholderTextColor={colors.GRAY_300}
-          onChangeText={setGenre}
-          onSubmitEditing={() => introduceRef.current?.focus()}
-          returnKeyType="next"
-        />
+          <Spacer height={24} />
 
-        <Spacer height={24} />
+          <Text style={styles.label}>나이</Text>
+          <Spacer height={12} />
+          <TextInput
+            ref={ageRef}
+            style={styles.input}
+            keyboardType="number-pad"
+            placeholder="나이를 입력해주세요."
+            placeholderTextColor={colors.GRAY_300}
+            returnKeyType="next"
+            value={age}
+            onChangeText={onChangeAge}
+            onSubmitEditing={() => genreRef.current?.focus()}
+          />
 
-        <Text style={styles.label}>자기소개</Text>
-        <Spacer height={12} />
-        <TextInput
-          ref={introduceRef}
-          style={[styles.input, {justifyContent: 'flex-start'}]}
-          value={introduce}
-          onChangeText={setIntroduce}
-          placeholder={'자기소개를 입력해주세요.'}
-          placeholderTextColor={colors.GRAY_300}
-          returnKeyType="send"
-          numberOfLines={5}
-          textAlignVertical="top" //android only
-          multiline
-        />
+          <Spacer height={24} />
 
-        <Spacer height={60} />
+          <Text style={styles.label}>장르</Text>
+          <Spacer height={12} />
+          <TextInput
+            ref={genreRef}
+            style={styles.input}
+            value={genre}
+            placeholder="선호하는 장르를 입력해주세요."
+            placeholderTextColor={colors.GRAY_300}
+            onChangeText={setGenre}
+            onSubmitEditing={() => introduceRef.current?.focus()}
+            returnKeyType="next"
+          />
 
-        <Pressable
-          onPress={onPress}
-          style={styles.button}
-          disabled={mutateJoin.isPending}>
-          <Text style={styles.buttonText}>가입하기</Text>
-        </Pressable>
+          <Spacer height={24} />
+
+          <Text style={styles.label}>자기소개</Text>
+          <Spacer height={12} />
+          <TextInput
+            ref={introduceRef}
+            style={[styles.input, {justifyContent: 'flex-start'}]}
+            value={introduce}
+            onChangeText={setIntroduce}
+            placeholder={'자기소개를 입력해주세요.'}
+            placeholderTextColor={colors.GRAY_300}
+            returnKeyType="send"
+            numberOfLines={5}
+            textAlignVertical="top" //android only
+            multiline
+          />
+
+          <Spacer height={60} />
+
+          <Pressable
+            onPress={onPress}
+            style={styles.button}
+            disabled={mutateJoin.isPending}>
+            <Text style={styles.buttonText}>가입하기</Text>
+          </Pressable>
+        </View>
       </DismissKeyboardView>
     </SafeAreaView>
   );
@@ -212,6 +214,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.WHITE,
+  },
+  inner: {
+    padding: 20,
   },
   title: {
     fontSize: 24,
