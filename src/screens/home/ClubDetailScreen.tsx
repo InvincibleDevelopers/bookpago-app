@@ -169,11 +169,10 @@ const ClubDetailScreen = ({navigation, route}: Props) => {
 
     if (option.key === 3) {
       //추방하기
-      if (selectedKakaoId === kakaoId) {
+      if (selectedKakaoId.toString() === kakaoId?.toString()) {
         Alert.alert('자신을 추방할 수 없습니다.');
         return;
       }
-
       kickMember.mutate({
         clubId: props.id,
         adminKakaoId: kakaoId!,

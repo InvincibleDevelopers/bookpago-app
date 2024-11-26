@@ -7,7 +7,6 @@ export const getClubs = async (page: number) => {
   const response = await fetcher.get<{content: SocialClub[]}>(
     `/social/clubs?page=${page <= 0 ? 0 : page - 1}&size=${CLUB_PAGE_SIZE}`,
   );
-
   return response.data;
 };
 
