@@ -58,7 +58,8 @@ react-native-image-picker
     위 가지 정보를 한눈에 볼 수 있도록 구성하였습니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki">Workflow - Home</a>
   </div>
 </details>
@@ -72,7 +73,8 @@ react-native-image-picker
     책마다 가지고 있는 isbn값을 전달하여 책 상세 페이지로 이동합니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%EC%B1%85-%EA%B2%80%EC%83%89">Workflow - Search</a>
   </div>
   </div>
@@ -88,7 +90,8 @@ react-native-image-picker
     태그별 검색기능은 미구현 되었습니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%EB%8F%85%EC%84%9C%EB%AA%A8%EC%9E%84-%EC%9E%91%EC%84%B1">Workflow - Edit</a>
   </div>
 </details>
@@ -103,7 +106,8 @@ react-native-image-picker
     또한 설정페이지로 이동할 수 있는 버튼이 위치해 있습니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%ED%94%84%EB%A1%9C%ED%95%84-%EC%88%98%EC%A0%95">Workflow - Edit</a>
     <br />
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%ED%8C%94%EB%A1%9C%EC%9A%B0">Workflow - Follow</a>
@@ -119,7 +123,8 @@ react-native-image-picker
     책 정보를 조회하고, 즐겨찾기, 리뷰작성과 조회를 할 수 있습니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%EC%A6%90%EA%B2%A8%EC%B0%BE%EA%B8%B0">Workflow - Favorites</a>
     <br />
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%EC%B1%85-%ED%8F%89%EC%A0%90-%EC%9E%91%EC%84%B1">Workflow - Rating</a>
@@ -136,7 +141,8 @@ react-native-image-picker
     참여자가 신청을 하고 모임장이 수락 또는 거절하는 흐름으로 진행됩니다.
   </desc>
   <br/>
-  <div align="center">
+  <br/>
+  <div>
     <a href="https://github.com/InvincibleDevelopers/bookpago-app/wiki/%EB%8F%85%EC%84%9C%EB%AA%A8%EC%9E%84-%EC%B0%B8%EA%B0%80%EC%8B%A0%EC%B2%AD-%EB%B0%8F-%EC%88%98%EB%9D%BD">Workflow - Join</a>
   </div>
 </details>
